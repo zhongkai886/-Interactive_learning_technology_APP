@@ -12,6 +12,6 @@ public class FeedBackWayRepository {
     Context context;
     public FeedBackWayRepository(Context context){
         this.context=context;
-        feedBackWayDatabase= Room.databaseBuilder(context,FeedBackWayDatabase.class,DB_NAME).build();
+//        feedBackWayDatabase= Room.databaseBuilder(context,FeedBackWayDatabase.class,DB_NAME).build();
     }
 }
