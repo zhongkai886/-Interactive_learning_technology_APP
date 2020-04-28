@@ -17,7 +17,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.user.interactive_learning_technology_app.R;
+import com.example.user.interactive_learning_technology_app.database.SettingDBContract;
 import com.example.user.interactive_learning_technology_app.database.SettingDBHelper;
+
+import java.util.List;
 
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionFeedBackWay;
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionHigh;
@@ -39,7 +42,7 @@ import static com.example.user.interactive_learning_technology_app.database.Sett
  */
 public class AddFeedbackFrameSetting extends Fragment {
     public SQLiteDatabase mDatabase;
-
+    public List<String> list;
 
     public AddFeedbackFrameSetting() {
         // Required empty public constructor
@@ -71,6 +74,8 @@ public class AddFeedbackFrameSetting extends Fragment {
 
 
         SubmitButton.setOnClickListener(new View.OnClickListener() {
+            SettingDBContract settingDBContract;
+            private SettingAdapter mAdapter;
             @Override
             public void onClick(View view) {
                 SettingDBHelper dbHelper = new SettingDBHelper(getActivity());
@@ -95,6 +100,8 @@ public class AddFeedbackFrameSetting extends Fragment {
                 cv.put(COLUMN_FeedBackWaySecond,edtFbwSecText);
                 cv.put(COLUMN_FeedBackWayStopTipSecond,edtFbwSecTipsText);
                 mDatabase.insert(TABLE_NAME,null,cv);
+                mAdapter.swapCursor(getAllItems());
+
 
                 Cursor c = mDatabase.query(TABLE_NAME,                                         // 資料表名字
                         new String[]{COLUMN_ID,
@@ -121,6 +128,7 @@ public class AddFeedbackFrameSetting extends Fragment {
                     String name = c.getString(c.getColumnIndex(COLUMN_Name));
                     String attenhigh = c.getString(c.getColumnIndex(COLUMN_AttentionHigh));
                     Log.v("7788",id+"//////"+name+"////"+attenhigh);
+
                 }
                 final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -131,5 +139,15 @@ public class AddFeedbackFrameSetting extends Fragment {
             }
         });
         return view;
+    }
+    private Cursor getAllItems(){
+        return mDatabase.query(TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                COLUMN_ID + " DESC"
+        );
     }
 }
