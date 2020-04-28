@@ -78,19 +78,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/AddDelButtonGuideLine"
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/recyclerView"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:clipToPadding="false"-->
-<!--        android:padding="0dp"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/guideline3"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/guideline6"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/guideline5"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/guideline2"-->
-<!--        app:layout_constraintVertical_bias="0.0"-->
-<!--        tools:listitem="@layout/feedback_setting_item" />-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:padding="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline3"
+        app:layout_constraintEnd_toStartOf="@+id/guideline6"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline5"
+        app:layout_constraintTop_toTopOf="@+id/guideline2"
+        app:layout_constraintVertical_bias="0.0"
+        tools:listitem="@layout/Item_feedback_setting" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"
