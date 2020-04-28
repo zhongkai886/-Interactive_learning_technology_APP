@@ -20,11 +20,6 @@ import com.example.user.interactive_learning_technology_app.R;
 import com.example.user.interactive_learning_technology_app.database.SettingDBContract;
 import com.example.user.interactive_learning_technology_app.database.SettingDBHelper;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FeedbackFrameSettingsActivity#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FeedbackFrameSettingsActivity extends Fragment {
     public SQLiteDatabase mDatabase;
     public FeedbackFrameSettingsActivity() {

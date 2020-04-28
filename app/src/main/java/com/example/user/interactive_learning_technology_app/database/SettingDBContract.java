@@ -6,8 +6,8 @@ public class SettingDBContract {
     private SettingDBContract(){}
     public static final class SettingDataEntry implements BaseColumns{
         public static final String  TABLE_NAME ="settingDataList";
-        public static final String  COLUMN_ID ="_id";
-        public static final String  COLUMN_Name ="_name";
+        public static final String  COLUMN_ID ="id";
+        public static final String  COLUMN_Name ="name";
         public static final String  COLUMN_Item ="item";
         public static final String  COLUMN_AttentionHigh ="attention_High";
         public static final String  COLUMN_AttentionLow ="attention_Low";

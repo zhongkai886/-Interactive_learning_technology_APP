@@ -17,6 +17,19 @@ import com.example.user.interactive_learning_technology_app.Experiment_Setting.L
 import com.example.user.interactive_learning_technology_app.R;
 import com.example.user.interactive_learning_technology_app.database.SettingDBHelper;
 
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionFeedBackWay;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionHigh;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionLow;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_FeedBackWaySecond;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_FeedBackWayStopTipSecond;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_ID;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_Item;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_Name;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationFeedBackWay;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationHigh;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationLow;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.TABLE_NAME;
+
 public class MainActivity extends AppCompatActivity {
     public SQLiteDatabase mDatabase;
     @Override
@@ -64,33 +77,6 @@ public class MainActivity extends AppCompatActivity {
     private void addItem(){
         SettingDBHelper dbHelper = new SettingDBHelper(this);
         mDatabase = dbHelper.getWritableDatabase();
-
-
-        ContentValues cv = new ContentValues();
-        cv.put("_MusicName","12313123");
-
-//        cv.put(SettingDBContract.SettingDataEntry.COLUMN_ID,"1");
-//        cv.put("_name","a");
-//        cv.put(SettingDBContract.SettingDataEntry.COLUMN_Item,"relaxation");
-//        cv.put(SettingDBContract.SettingDataEntry.COLUMN_FeedBackWaySecond,"3");
-//        cv.put(SettingDBContract.SettingDataEntry.COLUMN_FeedBackWayStopTipSecond,"2");
-        mDatabase.insert("TableName",null,cv);
-        Log.d("yo",""+cv);
-        Cursor c = mDatabase.query("TableName",                                         // 資料表名字
-                new String[]{"_id", "_MusicName", "_MusicPath", "_musicUri" , "_musicLong"},  // 要取出的欄位資料
-                null,                                              // 查詢條件式
-                null,                                              // 查詢條件值字串陣列
-                null,                                              // Group By字串語法
-                null,                                              // Having字串法
-                "_id",                                            // Order By字串語法(排序)
-                null);                                             // Limit字串語法
-
-        while(c.moveToNext())
-        {
-            String id = c.getString(c.getColumnIndex("_id"));    // 取出名字欄位資料
-            Log.v("777",id);
-            Toast.makeText(this,"yoyoyo"+id,Toast.LENGTH_SHORT).show();
-        }
 
     }
 }

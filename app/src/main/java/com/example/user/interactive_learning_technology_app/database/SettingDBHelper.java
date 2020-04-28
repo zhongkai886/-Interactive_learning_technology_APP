@@ -4,10 +4,22 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionFeedBackWay;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionHigh;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionLow;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_FeedBackWaySecond;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_FeedBackWayStopTipSecond;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_ID;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_Item;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_Name;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationFeedBackWay;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationHigh;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationLow;
+import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.TABLE_NAME;
+
 public class SettingDBHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "musicDBt.db";
-    private static final String TableName = "TableName";
+    private static final String DATABASE_NAME = "123.db";
     private static final int DATABASE_VERSION = 1;
 
     public SettingDBHelper(Context context) {
@@ -15,18 +27,25 @@ public class SettingDBHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        final String SQL = "CREATE TABLE IF NOT EXISTS " + TableName + "( " +
-                "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "_MusicName VARCHAR(50), " +
-                "_MusicPath VARCHAR(50)," +
-                "_musicUri VARCHAR(50)," +
-                "_musicLong LONG" +
+        final String SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_Name + " VARCHAR(50), " +
+                COLUMN_Item + " VARCHAR(50)," +
+                COLUMN_AttentionHigh + " VARCHAR(50)," +
+                COLUMN_AttentionLow + " VARCHAR(50)," +
+                COLUMN_AttentionFeedBackWay + " VARCHAR(50)," +
+                COLUMN_RelaxationHigh + " VARCHAR(50)," +
+                COLUMN_RelaxationLow + " VARCHAR(50)," +
+                COLUMN_RelaxationFeedBackWay + " VARCHAR(50)," +
+                COLUMN_FeedBackWaySecond + " VARCHAR(50)," +
+                COLUMN_FeedBackWayStopTipSecond + " VARCHAR(50)" +
                 ");";
         db.execSQL(SQL);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        final String SQL = "DROP TABLE " + TableName;
-        db.execSQL(SQL);
+//        final String SQL = "DROP TABLE " + TABLE_NAME;
+//        db.execSQL(SQL);
     }
+
 }
