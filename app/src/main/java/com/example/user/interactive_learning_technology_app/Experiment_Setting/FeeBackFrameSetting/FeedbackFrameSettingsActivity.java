@@ -23,6 +23,9 @@ import com.example.user.interactive_learning_technology_app.R;
 import com.example.user.interactive_learning_technology_app.database.SettingDBContract;
 import com.example.user.interactive_learning_technology_app.database.SettingDBHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionFeedBackWay;
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionHigh;
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionLow;
@@ -39,6 +42,7 @@ import static com.example.user.interactive_learning_technology_app.database.Sett
 public class FeedbackFrameSettingsActivity extends Fragment {
     public SQLiteDatabase mDatabase;
     private SettingAdapter mAdapter;
+    public ArrayList<FeebackData> feedbackDataList = new ArrayList<FeebackData>();
     public FeedbackFrameSettingsActivity() {
         // Required empty public constructor
     }
@@ -60,14 +64,21 @@ public class FeedbackFrameSettingsActivity extends Fragment {
 //        SettingDBHelper dbHelper = new SettingDBHelper(this.getContext());
 //        mDatabase = dbHelper.getWritableDatabase();
 //        addItem();
+        SettingDBHelper dbHelper = new SettingDBHelper(getActivity());
+        mDatabase = dbHelper.getWritableDatabase();
+
+
+        test();
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new SettingAdapter(getActivity(),getAllItems());
+
+        mAdapter = new SettingAdapter(feedbackDataList,this);
         recyclerView.setAdapter(mAdapter);
+
         final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         final AddFeedbackFrameSetting addFragment = new  AddFeedbackFrameSetting();
+
         Button mFeedBackAdd = (Button) view.findViewById(R.id.FeedBackAdd);
         mFeedBackAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,4 +131,27 @@ public class FeedbackFrameSettingsActivity extends Fragment {
 //
 //
 //    }
+    public void test(){
+
+        Cursor  cursor =mDatabase.rawQuery("SELECT * FROM settingDataList",null);
+        while (cursor.moveToNext()){
+            String id = cursor.getString(cursor.getColumnIndex(COLUMN_ID));
+            String name = cursor.getString(cursor.getColumnIndex(COLUMN_Name));
+            String item = cursor.getString(cursor.getColumnIndex(COLUMN_Item));
+            String attentionHigh = cursor.getString(cursor.getColumnIndex(COLUMN_AttentionHigh));
+            String attentionLow = cursor.getString(cursor.getColumnIndex(COLUMN_AttentionLow));
+            String attentionFeedBackWay = cursor.getString(cursor.getColumnIndex(COLUMN_AttentionFeedBackWay));
+            String relaxationHigh = cursor.getString(cursor.getColumnIndex(COLUMN_RelaxationHigh));
+            String relaxationLow = cursor.getString(cursor.getColumnIndex(COLUMN_RelaxationLow));
+            String relaxationFeedBackWay = cursor.getString(cursor.getColumnIndex(COLUMN_RelaxationFeedBackWay));
+            String feedBackWaySecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWaySecond));
+            String feedBackWayStopTipSecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWayStopTipSecond));
+
+            FeebackData feebackData =new FeebackData(id,name,item,attentionHigh,attentionLow,attentionFeedBackWay,
+                    relaxationHigh,relaxationLow,relaxationFeedBackWay,feedBackWaySecond,feedBackWayStopTipSecond);
+            feedbackDataList.add(feebackData);
+        }
+
+        cursor.close();
+    }
 }

@@ -13,9 +13,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.user.interactive_learning_technology_app.Experiment_Setting.FeeBackFrameSetting.FeebackData;
+import com.example.user.interactive_learning_technology_app.Experiment_Setting.FeeBackFrameSetting.SettingAdapter;
 import com.example.user.interactive_learning_technology_app.Experiment_Setting.Login.LoginActivity;
 import com.example.user.interactive_learning_technology_app.R;
 import com.example.user.interactive_learning_technology_app.database.SettingDBHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionFeedBackWay;
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionHigh;
@@ -32,6 +37,9 @@ import static com.example.user.interactive_learning_technology_app.database.Sett
 
 public class MainActivity extends AppCompatActivity {
     public SQLiteDatabase mDatabase;
+    public ArrayList<FeebackData> mFeedbackData = new ArrayList<FeebackData>();
+    public Cursor data;
+    public SettingAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +48,9 @@ public class MainActivity extends AppCompatActivity {
         final Button mExperimentSearchButton = (Button) mBottomView.findViewById(R.id.ExperimentSearchButton);
         final Button mExperimentSettingButton = (Button) mBottomView.findViewById(R.id.ExperimentSettingButton);
         final Button mBackHomeButton = (Button) mBottomView.findViewById(R.id.BackHomeButton);
-        addItem();
+
+//        addItem();
+
         final FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         MainFragment fragment = new MainFragment();
@@ -77,6 +87,23 @@ public class MainActivity extends AppCompatActivity {
     private void addItem(){
         SettingDBHelper dbHelper = new SettingDBHelper(this);
         mDatabase = dbHelper.getWritableDatabase();
+//        data = mDatabase.rawQuery("SELECT * FROM settingDataList",null);
+//        data.moveToFirst();
+////        mFeedbackData.clear();
+//        for (int i=0 ; i==5;i++){
+//            mFeedbackData.add(
+//                    new FeebackData(
+//                            data.getString(0),data.getString(1),data.getString(2),
+//                            data.getString(3),data.getString(4),data.getString(5),
+//                            data.getString(6),data.getString(7),data.getString(8),
+//                            data.getString(9),data.getString(10))
+//            );
+//            Log.d("幾次了","////"+i+"////"+mFeedbackData.get(i).getId());
+//            data.moveToNext();
+//            adapter.notifyDataSetChanged();
+//        }
+
+
 
     }
 }

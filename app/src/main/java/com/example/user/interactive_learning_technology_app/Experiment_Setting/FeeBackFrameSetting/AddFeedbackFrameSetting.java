@@ -100,7 +100,7 @@ public class AddFeedbackFrameSetting extends Fragment {
                 cv.put(COLUMN_FeedBackWaySecond,edtFbwSecText);
                 cv.put(COLUMN_FeedBackWayStopTipSecond,edtFbwSecTipsText);
                 mDatabase.insert(TABLE_NAME,null,cv);
-                mAdapter.swapCursor(getAllItems());
+//                mAdapter.swapCursor(getAllItems());
 
 
                 Cursor c = mDatabase.query(TABLE_NAME,                                         // 資料表名字
