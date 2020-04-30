@@ -76,7 +76,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
             public void onClick(View view) {
 
                 final FragmentManager fragmentManager = feedbackFrameSettingsActivity.getActivity().getSupportFragmentManager();
-                final aaa aaa = new  aaa("5");
+                final aaa aaa = new  aaa("55555");
 
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.center, aaa);
