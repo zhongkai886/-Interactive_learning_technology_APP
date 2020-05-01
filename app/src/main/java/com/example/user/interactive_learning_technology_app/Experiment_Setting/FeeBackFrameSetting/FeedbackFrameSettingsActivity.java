@@ -61,8 +61,7 @@ public class FeedbackFrameSettingsActivity extends Fragment {
         SettingDBHelper dbHelper = new SettingDBHelper(getActivity());
         mDatabase = dbHelper.getWritableDatabase();
 
-
-        test();
+        LoadData();
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -80,6 +79,7 @@ public class FeedbackFrameSettingsActivity extends Fragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.center, addFragment);
                 fragmentTransaction.commit();
+                DeleteData();
 
             }
         });
@@ -125,8 +125,7 @@ public class FeedbackFrameSettingsActivity extends Fragment {
 //
 //
 //    }
-    public void test(){
-
+    public void LoadData(){
         Cursor  cursor =mDatabase.rawQuery("SELECT * FROM settingDataList",null);
         while (cursor.moveToNext()){
             String id = cursor.getString(cursor.getColumnIndex(COLUMN_ID));
@@ -145,7 +144,11 @@ public class FeedbackFrameSettingsActivity extends Fragment {
                     relaxationHigh,relaxationLow,relaxationFeedBackWay,feedBackWaySecond,feedBackWayStopTipSecond);
             feedbackDataList.add(feedbackData);
         }
-
         cursor.close();
+    }
+
+    private void DeleteData(){
+        String id = "1"; //刪除id為1的資料
+        mDatabase.delete(TABLE_NAME, COLUMN_ID + "=" + id, null);
     }
 }
