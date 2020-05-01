@@ -10,6 +10,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.LoginFilter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +21,7 @@ import com.example.user.interactive_learning_technology_app.R;
 import com.example.user.interactive_learning_technology_app.database.SettingDBHelper;
 
 import java.util.ArrayList;
-
+import com.example.user.interactive_learning_technology_app.Experiment_Setting.FeeBackFrameSetting.SettingAdapter.SettingViewHolder.*;
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionFeedBackWay;
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionHigh;
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionLow;
@@ -35,16 +37,22 @@ import static com.example.user.interactive_learning_technology_app.database.Sett
 
 public class FeedbackFrameSettingsActivity extends Fragment {
     public SQLiteDatabase mDatabase;
-    private SettingAdapter mAdapter;
+    public SettingAdapter mAdapter;
+    public ArrayList<String> mCheckBoxDataList = new ArrayList<String>();
+    public ArrayList<String> aa = new ArrayList<String>();
     public ArrayList<FeedbackData> feedbackDataList = new ArrayList<FeedbackData>();
-    public FeedbackFrameSettingsActivity() {
-        // Required empty public constructor
+    public FeedbackFrameSettingsActivity(ArrayList<String> id) {
+        this.mCheckBoxDataList=id;
+        aa=mCheckBoxDataList;
+        Log.d("yoman",""+id);
+        Log.d("yoyo",""+aa);
+//        DeleteData(mCheckBoxDataList);
+
     }
 
-    public static FeedbackFrameSettingsActivity newInstance() {
-        FeedbackFrameSettingsActivity fragment = new FeedbackFrameSettingsActivity();
-        return fragment;
+    public FeedbackFrameSettingsActivity() {
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -71,16 +79,24 @@ public class FeedbackFrameSettingsActivity extends Fragment {
 
         final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         final AddFeedbackFrameSetting addFragment = new  AddFeedbackFrameSetting();
+        final FeedbackFrameSettingsActivity Fragment = new  FeedbackFrameSettingsActivity();
 
         Button mFeedBackAdd = (Button) view.findViewById(R.id.FeedBackAdd);
+        Button mFeedBackDel = (Button) view.findViewById(R.id.FeedBackDel);
         mFeedBackAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.center, addFragment);
                 fragmentTransaction.commit();
-                DeleteData();
 
+
+            }
+        });
+        mFeedBackDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DeleteData();
             }
         });
 
@@ -148,7 +164,13 @@ public class FeedbackFrameSettingsActivity extends Fragment {
     }
 
     private void DeleteData(){
-        String id = "1"; //刪除id為1的資料
-        mDatabase.delete(TABLE_NAME, COLUMN_ID + "=" + id, null);
+
+        Log.d("list","mcheckbox"+mCheckBoxDataList.size());
+        for (int i=0 ;i<mCheckBoxDataList.size();i++){
+            mDatabase.delete(TABLE_NAME, COLUMN_ID + "=" + mCheckBoxDataList.get(i), null);
+            Log.d("fed","mcheckbox"+mCheckBoxDataList.get(i));
+        }
+        LoadData();
+
     }
 }

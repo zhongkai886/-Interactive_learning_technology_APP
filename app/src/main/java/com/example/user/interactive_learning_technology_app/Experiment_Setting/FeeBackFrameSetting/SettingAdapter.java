@@ -29,7 +29,8 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
     private Context mContext;
     private Cursor mCursor;
 
-    public SettingAdapter(ArrayList<FeedbackData> feedbackData, FeedbackFrameSettingsActivity feedbackFrameSettingsActivity){
+    public SettingAdapter(ArrayList<FeedbackData> feedbackData,
+                          FeedbackFrameSettingsActivity feedbackFrameSettingsActivity){
         this.mFeedbackData =  feedbackData;
         this.feedbackFrameSettingsActivity = feedbackFrameSettingsActivity;
     }
@@ -61,41 +62,39 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final SettingViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final SettingViewHolder holder, final int position) {
 //        if(!mCursor.move(position)){
 //            return;
 //        }
-        final FeedbackData mFeedbackData = this.mFeedbackData.get(position);
-
-        holder.mId.setText(mFeedbackData.getId());
-        holder.mItem.setText(mFeedbackData.getItem());
+        final FeedbackData mFeedbackData1 = this.mFeedbackData.get(position);
+        holder.mId.setText(mFeedbackData.get(position).getId());
+        holder.mItem.setText(mFeedbackData.get(position).getItem());
+        holder.mCheckbox.setTag(position);
         holder.mCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (holder.mCheckbox.isChecked()){
-                    mCheckBoxDataList.add(mFeedbackData.getId());
-                } else{
-                    mCheckBoxDataList.remove(mFeedbackData.getId());
-                }
+                Object position1 = compoundButton.getTag();
+                Log.d("yoyo",""+position1);
             }
         });
+
         holder.mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 FragmentManager fragmentManager = feedbackFrameSettingsActivity.getActivity().getSupportFragmentManager();
                 Edit_FeedbackWay edit_FeedbackWay = new Edit_FeedbackWay(
-                        mFeedbackData.getId(),
-                        mFeedbackData.getName(),
-                        mFeedbackData.getItem(),
-                        mFeedbackData.getAttentionHigh(),
-                        mFeedbackData.getAttentionLow(),
-                        mFeedbackData.getAttentionWay(),
-                        mFeedbackData.getRelaxationHigh(),
-                        mFeedbackData.getRelaxationLow(),
-                        mFeedbackData.getRelaxationWay(),
-                        mFeedbackData.getWaySecond(),
-                        mFeedbackData.getWayStopTipSecond());
+                        mFeedbackData1.getId(),
+                        mFeedbackData1.getName(),
+                        mFeedbackData1.getItem(),
+                        mFeedbackData1.getAttentionHigh(),
+                        mFeedbackData1.getAttentionLow(),
+                        mFeedbackData1.getAttentionWay(),
+                        mFeedbackData1.getRelaxationHigh(),
+                        mFeedbackData1.getRelaxationLow(),
+                        mFeedbackData1.getRelaxationWay(),
+                        mFeedbackData1.getWaySecond(),
+                        mFeedbackData1.getWayStopTipSecond());
 
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.center, edit_FeedbackWay);
@@ -130,6 +129,5 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
 //        }
 
 //    }
-
 
 }
