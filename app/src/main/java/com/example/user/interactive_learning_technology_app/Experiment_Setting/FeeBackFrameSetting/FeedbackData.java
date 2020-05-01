@@ -1,6 +1,6 @@
 package com.example.user.interactive_learning_technology_app.Experiment_Setting.FeeBackFrameSetting;
 
-public class FeebackData {
+public class FeedbackData {
     private String Id;
     private String Name;
     private String Item;
@@ -13,10 +13,10 @@ public class FeebackData {
     private String WaySecond;
     private String WayStopTipSecond;
 
-    public FeebackData(String Id , String Name , String Item,
-                       String AttentionHigh, String AttentionLow, String AttentionWay,
-                       String RelaxationHigh, String RelaxationLow, String RelaxationWay,
-                       String WaySecond, String WayStopTipSecond){
+    public FeedbackData(String Id , String Name , String Item,
+                        String AttentionHigh, String AttentionLow, String AttentionWay,
+                        String RelaxationHigh, String RelaxationLow, String RelaxationWay,
+                        String WaySecond, String WayStopTipSecond){
         this.Id=Id;
         this.Name=Name;
         this.Item=Item;

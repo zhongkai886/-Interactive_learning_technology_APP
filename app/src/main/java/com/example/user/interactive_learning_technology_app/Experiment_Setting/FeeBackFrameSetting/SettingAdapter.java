@@ -2,7 +2,6 @@ package com.example.user.interactive_learning_technology_app.Experiment_Setting.
 
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,19 +15,17 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.user.interactive_learning_technology_app.R;
-import com.example.user.interactive_learning_technology_app.database.SettingDBContract;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingViewHolder> {
-    private ArrayList<FeebackData> mFeedbackData;
+    private ArrayList<FeedbackData> mFeedbackData;
     FeedbackFrameSettingsActivity feedbackFrameSettingsActivity;
 
     private Context mContext;
     private Cursor mCursor;
-    public SettingAdapter(ArrayList<FeebackData> feedbackData,FeedbackFrameSettingsActivity feedbackFrameSettingsActivity){
+    public SettingAdapter(ArrayList<FeedbackData> feedbackData, FeedbackFrameSettingsActivity feedbackFrameSettingsActivity){
         this.mFeedbackData =  feedbackData;
         this.feedbackFrameSettingsActivity = feedbackFrameSettingsActivity;
     }
@@ -56,8 +53,8 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
             @Override
             public void onClick(View view) {
                 int position = holder.getAdapterPosition();
-                FeebackData feebackData = mFeedbackData.get(position);
-                Toast.makeText(view.getContext(),"點點"+feebackData.getId(),Toast.LENGTH_LONG);
+                FeedbackData feedbackData = mFeedbackData.get(position);
+                Toast.makeText(view.getContext(),"點點"+ feedbackData.getId(),Toast.LENGTH_LONG);
             }
         });
         return holder;
@@ -68,18 +65,29 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
 //        if(!mCursor.move(position)){
 //            return;
 //        }
-        FeebackData mFeebackData = mFeedbackData.get(position);
-        holder.mId.setText(mFeebackData.getId());
-        holder.mItem.setText(mFeebackData.getItem());
+        final FeedbackData mFeedbackData = this.mFeedbackData.get(position);
+        holder.mId.setText(mFeedbackData.getId());
+        holder.mItem.setText(mFeedbackData.getItem());
         holder.mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                final FragmentManager fragmentManager = feedbackFrameSettingsActivity.getActivity().getSupportFragmentManager();
-                final aaa aaa = new  aaa("55555");
+                FragmentManager fragmentManager = feedbackFrameSettingsActivity.getActivity().getSupportFragmentManager();
+                Edit_FeedbackWay edit_FeedbackWay = new Edit_FeedbackWay(
+                        mFeedbackData.getId(),
+                        mFeedbackData.getName(),
+                        mFeedbackData.getItem(),
+                        mFeedbackData.getAttentionHigh(),
+                        mFeedbackData.getAttentionLow(),
+                        mFeedbackData.getAttentionWay(),
+                        mFeedbackData.getRelaxationHigh(),
+                        mFeedbackData.getRelaxationLow(),
+                        mFeedbackData.getRelaxationWay(),
+                        mFeedbackData.getWaySecond(),
+                        mFeedbackData.getWayStopTipSecond());
 
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.center, aaa);
+                fragmentTransaction.replace(R.id.center, edit_FeedbackWay);
                 fragmentTransaction.commit();
             }
         });

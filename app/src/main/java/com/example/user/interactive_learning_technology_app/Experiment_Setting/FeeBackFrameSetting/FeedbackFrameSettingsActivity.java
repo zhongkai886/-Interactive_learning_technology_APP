@@ -1,6 +1,5 @@
 package com.example.user.interactive_learning_technology_app.Experiment_Setting.FeeBackFrameSetting;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -11,20 +10,15 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.example.user.interactive_learning_technology_app.Experiment_Setting.FeeBackFrameSetting.AddFeedbackFrameSetting;
-import com.example.user.interactive_learning_technology_app.Main.MainFragment;
 import com.example.user.interactive_learning_technology_app.R;
-import com.example.user.interactive_learning_technology_app.database.SettingDBContract;
 import com.example.user.interactive_learning_technology_app.database.SettingDBHelper;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionFeedBackWay;
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionHigh;
@@ -42,7 +36,7 @@ import static com.example.user.interactive_learning_technology_app.database.Sett
 public class FeedbackFrameSettingsActivity extends Fragment {
     public SQLiteDatabase mDatabase;
     private SettingAdapter mAdapter;
-    public ArrayList<FeebackData> feedbackDataList = new ArrayList<FeebackData>();
+    public ArrayList<FeedbackData> feedbackDataList = new ArrayList<FeedbackData>();
     public FeedbackFrameSettingsActivity() {
         // Required empty public constructor
     }
@@ -147,9 +141,9 @@ public class FeedbackFrameSettingsActivity extends Fragment {
             String feedBackWaySecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWaySecond));
             String feedBackWayStopTipSecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWayStopTipSecond));
 
-            FeebackData feebackData =new FeebackData(id,name,item,attentionHigh,attentionLow,attentionFeedBackWay,
+            FeedbackData feedbackData =new FeedbackData(id,name,item,attentionHigh,attentionLow,attentionFeedBackWay,
                     relaxationHigh,relaxationLow,relaxationFeedBackWay,feedBackWaySecond,feedBackWayStopTipSecond);
-            feedbackDataList.add(feebackData);
+            feedbackDataList.add(feedbackData);
         }
 
         cursor.close();
