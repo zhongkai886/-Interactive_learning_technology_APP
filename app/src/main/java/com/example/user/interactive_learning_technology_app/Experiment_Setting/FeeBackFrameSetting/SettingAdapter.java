@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 
 public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingViewHolder> {
-    private ArrayList<FeedbackData> mFeedbackData;
+    private ArrayList<FeedbackData> mFeedbackDataList;
     FeedbackFrameSettingsActivity feedbackFrameSettingsActivity;
     public ArrayList<String> mCheckBoxDataList = new ArrayList<String>();
     private Context mContext;
@@ -31,7 +31,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
 
     public SettingAdapter(ArrayList<FeedbackData> feedbackData,
                           FeedbackFrameSettingsActivity feedbackFrameSettingsActivity){
-        this.mFeedbackData =  feedbackData;
+        this.mFeedbackDataList =  feedbackData;
         this.feedbackFrameSettingsActivity = feedbackFrameSettingsActivity;
     }
 
@@ -66,17 +66,29 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
 //        if(!mCursor.move(position)){
 //            return;
 //        }
-        final FeedbackData mFeedbackData1 = this.mFeedbackData.get(position);
-        holder.mId.setText(mFeedbackData.get(position).getId());
-        holder.mItem.setText(mFeedbackData.get(position).getItem());
+        final FeedbackData mFeedbackData = this.mFeedbackDataList.get(position);
+
+        holder.mId.setText(mFeedbackDataList.get(position).getId());
+        holder.mItem.setText(mFeedbackDataList.get(position).getItem());
         holder.mCheckbox.setTag(position);
         holder.mCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 Object position1 = compoundButton.getTag();
-                Log.d("yoyo",""+position1);
+
+                if (holder.mCheckbox.isChecked()){
+                    mCheckBoxDataList.add(mFeedbackData.getId());
+                    Log.d("yoyo",""+position1);
+                    Log.d("yoyoCheck",""+mCheckBoxDataList);
+                } else{
+                    mCheckBoxDataList.remove(position1.toString());
+                    Log.d("yoyo",""+position1);
+                    Log.d("yoyoCheck",""+mCheckBoxDataList);
+
+                }
             }
         });
+
 
         holder.mButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,17 +96,17 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
 
                 FragmentManager fragmentManager = feedbackFrameSettingsActivity.getActivity().getSupportFragmentManager();
                 Edit_FeedbackWay edit_FeedbackWay = new Edit_FeedbackWay(
-                        mFeedbackData1.getId(),
-                        mFeedbackData1.getName(),
-                        mFeedbackData1.getItem(),
-                        mFeedbackData1.getAttentionHigh(),
-                        mFeedbackData1.getAttentionLow(),
-                        mFeedbackData1.getAttentionWay(),
-                        mFeedbackData1.getRelaxationHigh(),
-                        mFeedbackData1.getRelaxationLow(),
-                        mFeedbackData1.getRelaxationWay(),
-                        mFeedbackData1.getWaySecond(),
-                        mFeedbackData1.getWayStopTipSecond());
+                        mFeedbackData.getId(),
+                        mFeedbackData.getName(),
+                        mFeedbackData.getItem(),
+                        mFeedbackData.getAttentionHigh(),
+                        mFeedbackData.getAttentionLow(),
+                        mFeedbackData.getAttentionWay(),
+                        mFeedbackData.getRelaxationHigh(),
+                        mFeedbackData.getRelaxationLow(),
+                        mFeedbackData.getRelaxationWay(),
+                        mFeedbackData.getWaySecond(),
+                        mFeedbackData.getWayStopTipSecond());
 
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.center, edit_FeedbackWay);
@@ -112,10 +124,13 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
 
 
     }
+    public ArrayList<String> getId(){
+        return  mCheckBoxDataList;
+    }
 
     @Override
     public int getItemCount() {
-        return mFeedbackData.size();
+        return mFeedbackDataList.size();
 
     }
 

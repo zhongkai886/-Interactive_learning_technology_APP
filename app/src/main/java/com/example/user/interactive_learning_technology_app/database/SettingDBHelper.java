@@ -44,8 +44,8 @@ public class SettingDBHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-//        final String SQL = "DROP TABLE " + TABLE_NAME;
-//        db.execSQL(SQL);
+        final String SQL = "DROP TABLE " + TABLE_NAME;
+        db.execSQL(SQL);
     }
 
 }

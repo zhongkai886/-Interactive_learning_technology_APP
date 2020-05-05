@@ -16,12 +16,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 
 import com.example.user.interactive_learning_technology_app.R;
 import com.example.user.interactive_learning_technology_app.database.SettingDBHelper;
 
 import java.util.ArrayList;
+
 import com.example.user.interactive_learning_technology_app.Experiment_Setting.FeeBackFrameSetting.SettingAdapter.SettingViewHolder.*;
+
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionFeedBackWay;
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionHigh;
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionLow;
@@ -39,29 +42,25 @@ public class FeedbackFrameSettingsActivity extends Fragment {
     public SQLiteDatabase mDatabase;
     public SettingAdapter mAdapter;
     public ArrayList<String> mCheckBoxDataList = new ArrayList<String>();
-    public ArrayList<String> aa = new ArrayList<String>();
     public ArrayList<FeedbackData> feedbackDataList = new ArrayList<FeedbackData>();
-    public FeedbackFrameSettingsActivity(ArrayList<String> id) {
-        this.mCheckBoxDataList=id;
-        aa=mCheckBoxDataList;
-        Log.d("yoman",""+id);
-        Log.d("yoyo",""+aa);
-//        DeleteData(mCheckBoxDataList);
 
-    }
+
 
     public FeedbackFrameSettingsActivity() {
+
     }
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_feedback_frame_settings_activity, container, false);
 //        SettingDBHelper dbHelper = new SettingDBHelper(this.getContext());
 //        mDatabase = dbHelper.getWritableDatabase();
@@ -74,12 +73,12 @@ public class FeedbackFrameSettingsActivity extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mAdapter = new SettingAdapter(feedbackDataList,this);
+        mAdapter = new SettingAdapter(feedbackDataList, this);
         recyclerView.setAdapter(mAdapter);
 
         final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        final AddFeedbackFrameSetting addFragment = new  AddFeedbackFrameSetting();
-        final FeedbackFrameSettingsActivity Fragment = new  FeedbackFrameSettingsActivity();
+        final AddFeedbackFrameSetting addFragment = new AddFeedbackFrameSetting();
+        final FeedbackFrameSettingsActivity Fragment = new FeedbackFrameSettingsActivity();
 
         Button mFeedBackAdd = (Button) view.findViewById(R.id.FeedBackAdd);
         Button mFeedBackDel = (Button) view.findViewById(R.id.FeedBackDel);
@@ -97,6 +96,7 @@ public class FeedbackFrameSettingsActivity extends Fragment {
             @Override
             public void onClick(View view) {
                 DeleteData();
+                Log.d("click", "" + mAdapter.getId());
             }
         });
 
@@ -104,12 +104,12 @@ public class FeedbackFrameSettingsActivity extends Fragment {
         return view;
     }
 
-    private Cursor getAllItems(){
+    private Cursor getAllItems() {
         return mDatabase.query(TABLE_NAME,                                         // 資料表名字
                 new String[]{COLUMN_ID,
                         COLUMN_Name,
                         COLUMN_Item,
-                        COLUMN_AttentionHigh ,
+                        COLUMN_AttentionHigh,
                         COLUMN_AttentionLow,
                         COLUMN_AttentionFeedBackWay,
                         COLUMN_RelaxationHigh,
@@ -124,7 +124,8 @@ public class FeedbackFrameSettingsActivity extends Fragment {
                 COLUMN_ID,                                            // Order By字串語法(排序)
                 null);
     }
-//    private void addItem(){
+
+    //    private void addItem(){
 //        SettingDBHelper dbHelper = new SettingDBHelper(this.getContext());
 //        mDatabase = dbHelper.getWritableDatabase();
 //
@@ -141,9 +142,10 @@ public class FeedbackFrameSettingsActivity extends Fragment {
 //
 //
 //    }
-    public void LoadData(){
-        Cursor  cursor =mDatabase.rawQuery("SELECT * FROM settingDataList",null);
-        while (cursor.moveToNext()){
+    public void LoadData() {
+
+        Cursor cursor = mDatabase.rawQuery("SELECT * FROM settingDataList", null);
+        while (cursor.moveToNext()) {
             String id = cursor.getString(cursor.getColumnIndex(COLUMN_ID));
             String name = cursor.getString(cursor.getColumnIndex(COLUMN_Name));
             String item = cursor.getString(cursor.getColumnIndex(COLUMN_Item));
@@ -155,22 +157,23 @@ public class FeedbackFrameSettingsActivity extends Fragment {
             String relaxationFeedBackWay = cursor.getString(cursor.getColumnIndex(COLUMN_RelaxationFeedBackWay));
             String feedBackWaySecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWaySecond));
             String feedBackWayStopTipSecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWayStopTipSecond));
-
-            FeedbackData feedbackData =new FeedbackData(id,name,item,attentionHigh,attentionLow,attentionFeedBackWay,
-                    relaxationHigh,relaxationLow,relaxationFeedBackWay,feedBackWaySecond,feedBackWayStopTipSecond);
+            FeedbackData feedbackData = new FeedbackData(id, name, item, attentionHigh, attentionLow, attentionFeedBackWay,
+                    relaxationHigh, relaxationLow, relaxationFeedBackWay, feedBackWaySecond, feedBackWayStopTipSecond);
             feedbackDataList.add(feedbackData);
+            Log.d("刷新",""+feedbackData);
         }
         cursor.close();
     }
 
-    private void DeleteData(){
-
-        Log.d("list","mcheckbox"+mCheckBoxDataList.size());
+    private void DeleteData() {
+        mCheckBoxDataList=mAdapter.getId();
+        Log.d("list", "mcheckbox" + mCheckBoxDataList);
         for (int i=0 ;i<mCheckBoxDataList.size();i++){
-            mDatabase.delete(TABLE_NAME, COLUMN_ID + "=" + mCheckBoxDataList.get(i), null);
+            mDatabase.delete(TABLE_NAME, COLUMN_ID + "=" +mCheckBoxDataList.get(i)  , null);
             Log.d("fed","mcheckbox"+mCheckBoxDataList.get(i));
         }
         LoadData();
+
 
     }
 }
