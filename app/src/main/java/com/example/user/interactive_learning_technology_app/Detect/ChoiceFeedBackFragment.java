@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
@@ -21,13 +22,15 @@ import com.example.user.interactive_learning_technology_app.database.SettingDBHe
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.widget.ArrayAdapter.createFromResource;
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_ID;
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_Item;
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_Name;
 
 public class ChoiceFeedBackFragment extends Fragment {
     private Button button;
-    private Spinner spinner;
+    private Spinner spinnerFeedBack;
+    private Spinner spinnerTime;
     private SettingDBHelper settingDBHelper;
     private SQLiteDatabase  mDatabase;
     private ArrayList<String> ListId = new ArrayList<String>();
@@ -54,8 +57,11 @@ public class ChoiceFeedBackFragment extends Fragment {
         final DetectLoginFragment detectLoginFragment = new DetectLoginFragment();
 
         button = view.findViewById(R.id.enterButton);
-        spinner = view.findViewById(R.id.FeedBackSpinner);
-        spinner.setAdapter(new SpinnerAdapter(view.getContext(),ListId,ListName,ListItem));
+        spinnerFeedBack = view.findViewById(R.id.FeedBackSpinner);
+        spinnerTime = view.findViewById(R.id.TimeSpinner);
+        ArrayAdapter<CharSequence> adapterTime = new ArrayAdapter.createFromResource(getActivity(),R.array.timeArray,R.layout.item_spinner_time_choice);
+        spinnerTime.setAdapter(adapterTime);
+        spinnerFeedBack.setAdapter(new SpinnerAdapter(view.getContext(),ListId,ListName,ListItem));
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
