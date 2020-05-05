@@ -1,8 +1,15 @@
 package com.example.user.interactive_learning_technology_app.database;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import com.example.user.interactive_learning_technology_app.Experiment_Setting.FeeBackFrameSetting.FeedbackData;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionFeedBackWay;
 import static com.example.user.interactive_learning_technology_app.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionHigh;
@@ -21,6 +28,7 @@ public class SettingDBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "123.db";
     private static final int DATABASE_VERSION = 1;
+    public SQLiteDatabase mDatabase;
 
     public SettingDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -47,5 +55,19 @@ public class SettingDBHelper extends SQLiteOpenHelper {
         final String SQL = "DROP TABLE " + TABLE_NAME;
         db.execSQL(SQL);
     }
+
+//    public List<String> getDataList(){
+//        List<String> List = new ArrayList<String>();
+//        String selectQuery = "SELECT * FROM " +  TABLE_NAME;
+//        Cursor c = mDatabase.rawQuery(selectQuery,null);
+//        if (c.moveToFirst()) {
+//            do {
+//                List.add(c.getString(1));
+//
+//            } while (c.moveToNext());
+//        }
+//        return List;
+//    }
+//
 
 }

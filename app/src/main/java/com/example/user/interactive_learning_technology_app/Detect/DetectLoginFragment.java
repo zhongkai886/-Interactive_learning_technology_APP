@@ -1,4 +1,4 @@
-package com.example.user.interactive_learning_technology_app.Main;
+package com.example.user.interactive_learning_technology_app.Detect;
 
 import android.os.Bundle;
 
@@ -10,17 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 
-import com.example.user.interactive_learning_technology_app.Detect.ChoiceFeedBackFragment;
 import com.example.user.interactive_learning_technology_app.R;
 
-public class MainFragment extends Fragment {
-    private ImageButton detectButton;
-
-    public MainFragment() {
+public class DetectLoginFragment extends Fragment {
+    private Button button;
+    public DetectLoginFragment() {
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,19 +25,18 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_detect_loginfragment, container, false);
         final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        final ChoiceFeedBackFragment choiceFeedBackFragment = new ChoiceFeedBackFragment();
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        detectButton = (ImageButton) view.findViewById(R.id.detectButton);
-        detectButton.setOnClickListener(new View.OnClickListener() {
+        final DetectTestFragment detectTestFragment = new DetectTestFragment();
+        button = (Button) view.findViewById(R.id.enterButton);
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.center, choiceFeedBackFragment);
+                fragmentTransaction.replace(R.id.center, detectTestFragment);
                 fragmentTransaction.commit();
             }
         });
-
         return view;
     }
 }

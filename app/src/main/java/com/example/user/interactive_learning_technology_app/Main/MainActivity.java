@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
         final Button mExperimentSettingButton = (Button) mBottomView.findViewById(R.id.ExperimentSettingButton);
         final Button mBackHomeButton = (Button) mBottomView.findViewById(R.id.BackHomeButton);
 
-//        addItem();
-
         final FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         MainFragment fragment = new MainFragment();
