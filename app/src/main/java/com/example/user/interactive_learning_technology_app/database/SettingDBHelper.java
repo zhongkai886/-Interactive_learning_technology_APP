@@ -28,7 +28,6 @@ public class SettingDBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "123.db";
     private static final int DATABASE_VERSION = 1;
-    public SQLiteDatabase mDatabase;
 
     public SettingDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

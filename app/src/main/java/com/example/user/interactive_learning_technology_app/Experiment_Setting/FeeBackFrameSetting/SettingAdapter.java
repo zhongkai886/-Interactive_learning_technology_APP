@@ -2,6 +2,7 @@ package com.example.user.interactive_learning_technology_app.Experiment_Setting.
 
 import android.content.Context;
 import android.database.Cursor;
+import android.icu.text.Transliterator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,6 +133,11 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
     public int getItemCount() {
         return mFeedbackDataList.size();
 
+    }
+
+    public void removeItem(int position){
+        mFeedbackDataList.remove(position);
+        notifyItemRemoved(position);
     }
 
 //    public void swapCursor (Cursor newCursor ){

@@ -1,15 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Detect.DetectTestFragment">
+    tools:context=".Detect.DetectTestFragment"
+    android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:textSize="100dp"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="測試回饋" />
+        android:layout_height="wrap_content">
+        <TextView
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="受試者編號:" />
+        <TextView
+            android:id="@+id/test"
+            android:layout_marginStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="000"
+            android:textSize="20dp"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/testButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="click"
+        android:textSize="20dp"/>
+    <Button
+        android:id="@+id/againTestButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="againText"
+        android:textSize="20dp"/>
+    <Button
+        android:id="@+id/detectButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:text="Detect"
+        android:textSize="20dp"/>
 
-</FrameLayout>
+</LinearLayout>

@@ -55,12 +55,12 @@ public class ChoiceFeedBackFragment extends Fragment {
         LoadData();
         final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         final DetectLoginFragment detectLoginFragment = new DetectLoginFragment();
-
+        final String[] timeSpinner= {"5","10","15","20","25","30","35","40","45","50","55","60"};
         button = view.findViewById(R.id.enterButton);
         spinnerFeedBack = view.findViewById(R.id.FeedBackSpinner);
         spinnerTime = view.findViewById(R.id.TimeSpinner);
-        ArrayAdapter<CharSequence> adapterTime = new ArrayAdapter.createFromResource(getActivity(),R.array.timeArray,R.layout.item_spinner_time_choice);
-        spinnerTime.setAdapter(adapterTime);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(view.getContext(),android.R.layout.simple_spinner_item,timeSpinner);
+        spinnerTime.setAdapter(arrayAdapter);
         spinnerFeedBack.setAdapter(new SpinnerAdapter(view.getContext(),ListId,ListName,ListItem));
         button.setOnClickListener(new View.OnClickListener() {
             @Override

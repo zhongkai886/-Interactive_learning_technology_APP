@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/wjk_mindset_dialog_btnScan"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/wjk_mindset_dialog_string_startsearch" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/wjk_mindset_dialog_string_paireddevices"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:background="#d0d0d0"
+        android:textColor="#323232" />
+
+    <ListView
+        android:id="@+id/wjk_mindset_dialog_pairedDevices"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/wjk_mindset_dialog_scanDevicesTextbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/wjk_mindset_dialog_string_scandevices"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:background="#d0d0d0"
+        android:textColor="#323232"
+        android:visibility="gone" />
+
+    <ListView
+        android:id="@+id/wjk_mindset_dialog_scanDevices"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

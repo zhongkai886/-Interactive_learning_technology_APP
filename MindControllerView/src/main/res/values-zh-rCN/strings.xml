@@ -1,0 +1,32 @@
+<resources>
+
+    <!--<string name="wjk_mindset_activity_string_app_name">脑波连接器</string>-->
+
+    <!--<string name="wjk_mindset_activity_string_btnDialog">蓝牙配对</string>-->
+
+    <!--<string name="wjk_mindset_activity_string_chart">脑波频段</string>-->
+
+    <!--<string name="wjk_mindset_activity_string_attention">专注</string>-->
+
+    <!--<string name="wjk_mindset_activity_string_meditation">冥想</string>-->
+
+    <!--<string name="wjk_mindset_activity_string_statelink_none">未连接</string>-->
+
+    <!--<string name="wjk_mindset_activity_string_statelink_connected">已连接</string>-->
+
+    <!--<string name="wjk_mindset_activity_string_statelink_connecting">连接中…</string>-->
+
+    <!--<string name="wjk_mindset_dialog_string_startsearch">搜寻设备</string>-->
+
+    <!--<string name="wjk_mindset_dialog_string_paireddevices">配对的设备</string>-->
+
+    <!--<string name="wjk_mindset_dialog_string_scandevices">可用的设备</string>-->
+
+    <!--<string name="wjk_mindset_dialog_string_notfound">未找到设备</string>-->
+
+    <!--<string name="wjk_mindset_dialog_string_scaning">搜寻中…</string>-->
+
+    <!--<string name="wjk_mindset_dialog_string_unbluetooth">没有蓝牙设备</string>-->
+
+
+</resources>

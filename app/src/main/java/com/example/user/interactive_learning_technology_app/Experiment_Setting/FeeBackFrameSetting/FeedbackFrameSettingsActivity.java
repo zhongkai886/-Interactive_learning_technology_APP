@@ -43,7 +43,7 @@ public class FeedbackFrameSettingsActivity extends Fragment {
     public SettingAdapter mAdapter;
     public ArrayList<String> mCheckBoxDataList = new ArrayList<String>();
     public ArrayList<FeedbackData> feedbackDataList = new ArrayList<FeedbackData>();
-
+    public RecyclerView recyclerView;
 
 
     public FeedbackFrameSettingsActivity() {
@@ -70,7 +70,7 @@ public class FeedbackFrameSettingsActivity extends Fragment {
 
         LoadData();
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mAdapter = new SettingAdapter(feedbackDataList, this);
@@ -143,7 +143,8 @@ public class FeedbackFrameSettingsActivity extends Fragment {
 //
 //    }
     public void LoadData() {
-
+//        recyclerView.setAdapter(mAdapter);
+//        mAdapter.notifyDataSetChanged();
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM settingDataList", null);
         while (cursor.moveToNext()) {
             String id = cursor.getString(cursor.getColumnIndex(COLUMN_ID));
@@ -166,9 +167,11 @@ public class FeedbackFrameSettingsActivity extends Fragment {
     }
 
     private void DeleteData() {
+
         mCheckBoxDataList=mAdapter.getId();
         Log.d("list", "mcheckbox" + mCheckBoxDataList);
         for (int i=0 ;i<mCheckBoxDataList.size();i++){
+//            mDatabase.execSQL(TABLE_NAME);
             mDatabase.delete(TABLE_NAME, COLUMN_ID + "=" +mCheckBoxDataList.get(i)  , null);
             Log.d("fed","mcheckbox"+mCheckBoxDataList.get(i));
         }

@@ -1,2 +1,3 @@
 rootProject.name='Interactive_learning_technology_APP'
-include ':app'
+include ':app',':mindcontroller', ':mindlibrary'
+include ':MindControllerView'

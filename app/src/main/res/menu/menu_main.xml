@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_mindsignal"
+        android:orderInCategory="200"
+        app:showAsAction="always"
+        android:icon="@null"
+        android:title="@null"
+        android:enabled="false" />
+
+
+    <item
+        android:id="@+id/action_bluetooth"
+        android:orderInCategory="300"
+        app:showAsAction="always"
+        android:icon="@drawable/icon01"
+        android:title="@null" />
+</menu>
