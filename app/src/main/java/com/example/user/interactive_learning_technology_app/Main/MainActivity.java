@@ -21,6 +21,7 @@ import com.alchemy.mindcontroller.MindControllerFactory;
 import com.alchemy.mindcontroller.MindsetValue;
 import com.alchemy.wjk.mind.view.MindsetActivity;
 import com.example.user.interactive_learning_technology_app.BuildConfig;
+import com.example.user.interactive_learning_technology_app.Detect.DetectFragment;
 import com.example.user.interactive_learning_technology_app.Experiment_Setting.FeeBackFrameSetting.FeedbackData;
 import com.example.user.interactive_learning_technology_app.Experiment_Setting.FeeBackFrameSetting.SettingAdapter;
 import com.example.user.interactive_learning_technology_app.Experiment_Setting.Login.LoginActivity;
@@ -64,8 +65,9 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
             @Override
             public void onClick(View view) {
                 LoginActivity loginActivity =new LoginActivity();
+                DetectFragment detectFragment =new DetectFragment();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.center, loginActivity);
+                fragmentTransaction.replace(R.id.center, detectFragment);
                 fragmentTransaction.commit();
                 mExperimentSettingButton.setVisibility(View.INVISIBLE); //隱藏
                 mExperimentSearchButton.setVisibility(View.INVISIBLE);

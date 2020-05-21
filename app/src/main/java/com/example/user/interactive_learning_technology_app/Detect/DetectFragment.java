@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.alchemy.mindcontroller.MindController;
 import com.alchemy.mindlibrary.tool.MindDetectToolMulti;
@@ -27,6 +29,8 @@ public class DetectFragment extends Fragment {
     public Button mStartButton;
     public Button mPauseButton;
     public Button mStopButton;
+    public EditText mTimerEdit;
+    public Spinner mTimerSpinner;
 
     //member
     public NumberAdapter mChartAdapterAtt;
@@ -57,9 +61,13 @@ public class DetectFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detect, container, false);
+
         mStartButton = (Button) view.findViewById(R.id.detectButton);
         mPauseButton = (Button) view.findViewById(R.id.removeButton);
         mStopButton = (Button) view.findViewById(R.id.stopButton);
+        mTimerSpinner = (Spinner) view.findViewById(R.id.timetime);
+//        mTimerEdit = (EditText) view.findViewById(R.id.fragment_detect_timerEdit);
+//        _initView();
         return view;
     }
 
@@ -67,9 +75,10 @@ public class DetectFragment extends Fragment {
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    int t = 2;
+                if (mTimerEdit.getVisibility() != View.GONE) {
+                    int t = Integer.valueOf(mTimerEdit.getText().toString());
                     mTimeDetect.setTimer(t);
-
+                }
 
                 mTimeDetect.setRound(Integer.valueOf((String) mTimerSpinner.getSelectedItem()));
                 mTimeDetect_data = "";
