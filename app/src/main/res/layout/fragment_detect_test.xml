@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Detect.DetectTestFragment"
+    tools:context=".mindanalysis.mbti.tyes.Detect.DetectTestFragment"
     android:orientation="vertical">
 
     <!-- TODO: Update blank fragment layout -->

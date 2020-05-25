@@ -55,4 +55,8 @@ dependencies {
     implementation project(path: ':mindcontroller')
     implementation project(':mindlibrary')
     implementation project(':MindControllerView')
+
+
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
 }

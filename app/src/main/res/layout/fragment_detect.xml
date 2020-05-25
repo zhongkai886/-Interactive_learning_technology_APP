@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Detect.DetectFragment">
+    tools:context=".mindanalysis.mbti.tyes.Detect.DetectFragment">
 
     <Button
         android:text="star"
@@ -32,20 +32,49 @@
         android:id="@+id/timetime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:entries="@array/timeArray"
+        android:entries="@array/fragment_detect_timer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/removeButton" />
 
-<!--    <EditText-->
-<!--        android:id="@+id/fragment_detect_timerEdit"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:ems="3"-->
-<!--        android:inputType="number"-->
-<!--        android:visibility="@integer/fragment_detect_timerEdit"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/TimeSpinner" />-->
+    <EditText
+        android:id="@+id/fragment_detect_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:hint="名字"
+        android:maxLines="1"
+        android:minEms="6"
+        android:singleLine="true"
+        android:textColor="#465866"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timetime"
+        app:layout_constraintVertical_bias="0.05" />
+
+    <EditText
+        android:id="@+id/fragment_detect_timerEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="3"
+        android:inputType="number"
+        android:visibility="@integer/fragment_detect_timerEdit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TimeSpinner" />
+
+    <TextView
+        android:id="@+id/fragment_detect_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="腦波檢測"
+        android:textColor="#3F3F3F"
+        android:textSize="14pt"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_detect_username" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

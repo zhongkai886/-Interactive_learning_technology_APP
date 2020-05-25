@@ -1,32 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp"
     android:orientation="horizontal">
+
     <CheckBox
         android:id="@+id/settingCheckbox"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/settingId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="30sp"
         android:text="01"
-        android:layout_marginStart="10dp"/>
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/AddDelButtonGuideLine2"
+        app:layout_constraintStart_toStartOf="@id/settingCheckbox"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/settingItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="attent"
         android:textSize="30sp"
-        android:layout_marginStart="10dp"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/AddDelButtonGuideLine1"
+        app:layout_constraintStart_toStartOf="@+id/AddDelButtonGuideLine2"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/settingButton"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:text="點此進入"
-        android:textSize="10sp"
-        android:layout_marginStart="10dp"/>
-</LinearLayout>
+        android:textSize="8sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/AddDelButtonGuideLine"
+        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/AddDelButtonGuideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/AddDelButtonGuideLine1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.55" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/AddDelButtonGuideLine2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25" />
+</androidx.constraintlayout.widget.ConstraintLayout>
