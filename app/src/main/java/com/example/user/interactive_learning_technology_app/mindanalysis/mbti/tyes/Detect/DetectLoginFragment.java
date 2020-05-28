@@ -33,6 +33,7 @@ public class DetectLoginFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_detect_loginfragment, container, false);
         final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         final DetectTestFragment detectTestFragment = new DetectTestFragment();
+        final DetectFragment detectFragment = new DetectFragment();
         loginId = (EditText) view.findViewById(R.id.LoginId);
         loginName = (EditText) view.findViewById(R.id.LoginName);
         button = (Button) view.findViewById(R.id.enterButton);
@@ -42,8 +43,9 @@ public class DetectLoginFragment extends Fragment {
                 if((loginId.getText().toString().isEmpty())||(loginName.getText().toString().isEmpty())) {
                     Toast.makeText(getActivity(),"請完整輸入編號及姓名!",Toast.LENGTH_SHORT).show();
                 } else{
+
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.center, detectTestFragment);
+                    fragmentTransaction.replace(R.id.center, detectFragment);
                     fragmentTransaction.commit();
 
                 }

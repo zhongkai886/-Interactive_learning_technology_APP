@@ -240,6 +240,8 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         values.data = mTimeDetect_data;
         values.date = System.currentTimeMillis();
         values.name = mUserNameEdit.getText().toString();
+        Log.d("yoyoyyo",""+values.data);
+        Log.d("yoyoyyo",""+values.name);
         if (values.name.length() <= 0)
             values.name = "匿名";
         values.rawData = "";

@@ -46,7 +46,7 @@ public class AddFeedbackFrameSetting extends Fragment {
     public Spinner SpinnerItem;
     private String attWay;
     private String relWay;
-
+    private Integer radioButtonId;
     public AddFeedbackFrameSetting() {
     }
     public static AddFeedbackFrameSetting newInstance(String param1, String param2) {
@@ -101,26 +101,36 @@ public class AddFeedbackFrameSetting extends Fragment {
                 String RelWay;
                 final String edtFbwSecText = EdtFbwSec.getText().toString();
                 final String edtFbwSecTipsText = EdtFbwSecTips.getText().toString();
-                switch (radioGroupAtt.getCheckedRadioButtonId()){
-                    case R.id.attSight:
-                        attWay="0";
-                    case R.id.attShock:
-                        attWay="1";
-                    case R.id.attVoice:
-                        attWay="2";
-                }
-//                Log.d("yoman",""+attWay);
-                switch (radioGroupRel.getCheckedRadioButtonId()){
-                    case R.id.relSight:
-                        relWay="0";
-                        Log.d("yoman","0");
-                    case R.id.relShock:
-                        relWay="1";
-                        Log.d("yoman","1");
-                    case R.id.relVoice:
-                        relWay="2";
-                        Log.d("yoman","2");
-                }
+
+                radioGroupAtt.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                        radioButtonId = radioGroup.getCheckedRadioButtonId();
+                        View radioButton = radioGroup.findViewById(radioButtonId);
+                        int position = radioGroup.indexOfChild(radioButton);
+                        Log.d("pospos",""+position +radioButtonId);
+                    }
+                });
+//                switch (radioGroupAtt.getCheckedRadioButtonId()){
+//                    case R.id.attSight:
+//                        attWay="0";
+//                    case R.id.attShock:
+//                        attWay="1";
+//                    case R.id.attVoice:
+//                        attWay="2";
+//                }
+////                Log.d("yoman",""+attWay);
+//                switch (radioGroupRel.getCheckedRadioButtonId()){
+//                    case R.id.relSight:
+//                        relWay="0";
+//                        Log.d("yoman","0");
+//                    case R.id.relShock:
+//                        relWay="1";
+//                        Log.d("yoman","1");
+//                    case R.id.relVoice:
+//                        relWay="2";
+//                        Log.d("yoman","2");
+//                }
 //                Log.d("yoman",""+relWay);
 
                 cv.put(COLUMN_Name,edtNameText);
