@@ -51,6 +51,7 @@
             android:text="當Attention水平:高於"/>
         <EditText
             android:id="@+id/attentionHigh"
+            android:numeric="integer"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:hint="0-100"/>
@@ -61,6 +62,7 @@
             android:text="低於"/>
         <EditText
             android:id="@+id/attentionLow"
+            android:numeric="integer"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:hint="0-100"/>
@@ -117,6 +119,7 @@
 
         <EditText
             android:id="@+id/relaxationHigh"
+            android:numeric="integer"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:hint="0-100" />
@@ -128,6 +131,7 @@
             android:text="低於"/>
         <EditText
             android:id="@+id/relaxationLow"
+            android:numeric="integer"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:hint="0-100"/>
@@ -181,6 +185,7 @@
             android:text="開始測量"/>
         <EditText
             android:id="@+id/fbwSec"
+            android:numeric="integer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="輸入數字"/>
@@ -200,6 +205,7 @@
             android:text="回饋之後，"/>
         <EditText
             android:id="@+id/fbwSecTips"
+            android:numeric="integer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="輸入數字"/>

@@ -49,4 +49,8 @@ public class SpinnerAdapter extends BaseAdapter {
         textView3.setText(itemList.get(i));
         return view;
     }
+
+    public ArrayList<String> getIdList() {
+        return idList;
+    }
 }

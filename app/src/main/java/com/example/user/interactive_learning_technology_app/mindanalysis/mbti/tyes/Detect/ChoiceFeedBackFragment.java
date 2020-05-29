@@ -1,5 +1,6 @@
 package com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Detect;
 
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -21,6 +23,7 @@ import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.ty
 
 import java.util.ArrayList;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_ID;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_Item;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_Name;
@@ -29,7 +32,7 @@ public class ChoiceFeedBackFragment extends Fragment {
     private Button button;
     private Spinner spinnerFeedBack;
     private Spinner spinnerTime;
-    private SettingDBHelper settingDBHelper;
+
     private SQLiteDatabase  mDatabase;
     private ArrayList<String> ListId = new ArrayList<String>();
     private ArrayList<String> ListName = new ArrayList<String>();
@@ -60,6 +63,40 @@ public class ChoiceFeedBackFragment extends Fragment {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(view.getContext(),android.R.layout.simple_spinner_item,timeSpinner);
         spinnerTime.setAdapter(arrayAdapter);
         spinnerFeedBack.setAdapter(new SpinnerAdapter(view.getContext(),ListId,ListName,ListItem));
+        spinnerFeedBack.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Integer  settingId = adapterView.getPositionForView(view);
+                String user = settingId.toString();
+                              SharedPreferences pref = getActivity().getSharedPreferences("select", MODE_PRIVATE);
+                pref.edit()
+                        .putString("USER", user)
+                        .commit();
+
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        spinnerTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Integer time = parent.getPositionForView(view);
+                String timerSelect = timeSpinner[time];
+                SharedPreferences pref = getActivity().getSharedPreferences("timeSelect", MODE_PRIVATE);
+                pref.edit()
+                        .putString("USER", timerSelect)
+                        .commit();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
