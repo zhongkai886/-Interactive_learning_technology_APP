@@ -44,9 +44,8 @@ public class AddFeedbackFrameSetting extends Fragment {
     public SQLiteDatabase mDatabase;
     public List<String> list;
     public Spinner SpinnerItem;
-    private String attWay;
-    private String relWay;
-    private Integer radioButtonId;
+    private Integer attRadioId;
+    private Integer relRadioId;
     public AddFeedbackFrameSetting() {
     }
     public static AddFeedbackFrameSetting newInstance(String param1, String param2) {
@@ -80,7 +79,40 @@ public class AddFeedbackFrameSetting extends Fragment {
         final EditText EdtFbwSecTips =(EditText) view.findViewById(R.id.fbwSecTips);
         RadioGroup radioGroupAtt = (RadioGroup) view.findViewById(R.id.radioGroupAtt);
         RadioGroup radioGroupRel = (RadioGroup) view.findViewById(R.id.radioGroupRel);
-
+        radioGroupAtt.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.attSight:
+                        attRadioId = 0;
+                        break;
+                    case R.id.attShock:
+                        attRadioId = 1;
+                        break;
+                    case R.id.attVoice:
+                        attRadioId = 2;
+                        break;
+                }
+                Log.d("pospos",""+attRadioId);
+            }
+        });
+        radioGroupRel.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.relSight:
+                        relRadioId = 0;
+                        break;
+                    case R.id.relShock:
+                        relRadioId = 1;
+                        break;
+                    case R.id.relVoice:
+                        relRadioId = 2;
+                        break;
+                }
+                Log.d("pospos",""+relRadioId);
+            }
+        });
 
 
         SubmitButton.setOnClickListener(new View.OnClickListener() {
@@ -98,49 +130,17 @@ public class AddFeedbackFrameSetting extends Fragment {
 //                final String AttWay;
                 final String edtRelaxationHighText = EdtRelaxationHigh.getText().toString();
                 final String edtRelaxationLowText = EdtRelaxationLow.getText().toString();
-                String RelWay;
                 final String edtFbwSecText = EdtFbwSec.getText().toString();
                 final String edtFbwSecTipsText = EdtFbwSecTips.getText().toString();
-
-                radioGroupAtt.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                        radioButtonId = radioGroup.getCheckedRadioButtonId();
-                        View radioButton = radioGroup.findViewById(radioButtonId);
-                        int position = radioGroup.indexOfChild(radioButton);
-                        Log.d("pospos",""+position +radioButtonId);
-                    }
-                });
-//                switch (radioGroupAtt.getCheckedRadioButtonId()){
-//                    case R.id.attSight:
-//                        attWay="0";
-//                    case R.id.attShock:
-//                        attWay="1";
-//                    case R.id.attVoice:
-//                        attWay="2";
-//                }
-////                Log.d("yoman",""+attWay);
-//                switch (radioGroupRel.getCheckedRadioButtonId()){
-//                    case R.id.relSight:
-//                        relWay="0";
-//                        Log.d("yoman","0");
-//                    case R.id.relShock:
-//                        relWay="1";
-//                        Log.d("yoman","1");
-//                    case R.id.relVoice:
-//                        relWay="2";
-//                        Log.d("yoman","2");
-//                }
-//                Log.d("yoman",""+relWay);
 
                 cv.put(COLUMN_Name,edtNameText);
                 cv.put(COLUMN_Item,spinnerItemText);
                 cv.put(COLUMN_AttentionHigh,edtAttentionHighText);
                 cv.put(COLUMN_AttentionLow,edtAttentionLowText);
-                cv.put(COLUMN_AttentionFeedBackWay,attWay);
+                cv.put(COLUMN_AttentionFeedBackWay,attRadioId);
                 cv.put(COLUMN_RelaxationHigh,edtRelaxationHighText);
                 cv.put(COLUMN_RelaxationLow,edtRelaxationLowText);
-                cv.put(COLUMN_RelaxationFeedBackWay,relWay);
+                cv.put(COLUMN_RelaxationFeedBackWay,relRadioId);
                 cv.put(COLUMN_FeedBackWaySecond,edtFbwSecText);
                 cv.put(COLUMN_FeedBackWayStopTipSecond,edtFbwSecTipsText);
                 mDatabase.insert(TABLE_NAME,null,cv);
@@ -170,9 +170,9 @@ public class AddFeedbackFrameSetting extends Fragment {
                 {
                     String id = c.getString(c.getColumnIndex(COLUMN_ID));    // 取出名字欄位資料
                     String name = c.getString(c.getColumnIndex(COLUMN_Name));
-                    String attenhigh = c.getString(c.getColumnIndex(COLUMN_AttentionHigh));
+                    String relWay = c.getString(c.getColumnIndex(COLUMN_RelaxationFeedBackWay));
                     String attWay = c.getString(c.getColumnIndex(COLUMN_AttentionFeedBackWay));
-                    Log.v("7788",id+"//////"+name+"////"+attWay);
+                    Log.v("7788",id+"//////"+relWay+"////"+attWay);
 
                 }
                 final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

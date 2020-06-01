@@ -6,11 +6,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 
 import com.example.user.interactive_learning_technology_app.R;
@@ -63,8 +66,44 @@ public class Edit_FeedbackWay extends Fragment {
         final EditText EdtRelaxationLow =(EditText) view.findViewById(R.id.relaxationLow);
         final EditText EdtFbwSec =(EditText) view.findViewById(R.id.fbwSec);
         final EditText EdtFbwSecTips =(EditText) view.findViewById(R.id.fbwSecTips);
+        RadioButton attSight = (RadioButton) view.findViewById(R.id.attSight);
+        RadioButton attShock = (RadioButton) view.findViewById(R.id.attShock);
+        RadioButton attVoice = (RadioButton) view.findViewById(R.id.attVoice);
+        RadioButton relSight = (RadioButton) view.findViewById(R.id.relSight);
+        RadioButton relShock = (RadioButton) view.findViewById(R.id.relShock);
+        RadioButton relVoice = (RadioButton) view.findViewById(R.id.relVoice);
         EdtName.setText(mName);
         EdtItem.setText(mItem);
+
+        if (mAttentionWay==null){
+        } else{
+            if (Integer.valueOf(mAttentionWay)==0){
+                attSight.setChecked(true);
+            }
+            if (Integer.valueOf(mAttentionWay)==1){
+                attShock.setChecked(true);
+            }
+            if (Integer.valueOf(mAttentionWay)==2){
+                attVoice.setChecked(true);
+            }
+
+        }
+        if (mRelaxationWay==null){
+        } else{
+            if (Integer.valueOf(mRelaxationWay)==0){
+                relSight.setChecked(true);
+            }
+            if (Integer.valueOf(mRelaxationWay)==1){
+                relShock.setChecked(true);
+            }
+            if (Integer.valueOf(mRelaxationWay)==2){
+                relVoice.setChecked(true);
+            }
+
+        }
+
+
+
         EdtAttentionHigh.setText(mAttentionHigh);
         EdtAttentionLow.setText(mAttentionLow);
         EdtRelaxationHigh.setText(mRelaxationHigh);

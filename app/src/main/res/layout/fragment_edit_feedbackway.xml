@@ -81,6 +81,7 @@
             android:textSize="14dp"
             android:text="回饋方式"/>
         <RadioGroup
+            android:id="@+id/radioGroupAtt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -144,6 +145,7 @@
             android:layout_height="wrap_content"
             android:text="回饋方式"/>
         <RadioGroup
+            android:id="@+id/radioGroupRel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
