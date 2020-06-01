@@ -4,8 +4,12 @@ import android.app.Service;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Handler;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +22,17 @@ import com.example.user.interactive_learning_technology_app.R;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class DetectTestFragment extends Fragment {
     private Button testButton;
     private Button againButton;
-    private TextView textView;
+    private Button detectButton;
+    private TextView detectIdTextView;
     private Delayed delayed;
     private TimeUnit timeUnit ;
+    Handler handler = new Handler();
+    boolean onClickBoolean = false;
     public DetectTestFragment() {
     }
     @Override
@@ -37,20 +46,41 @@ public class DetectTestFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_detect_test, container, false);
         testButton = (Button) view.findViewById(R.id.testButton);
         againButton = (Button) view.findViewById(R.id.againTestButton);
-        textView = (TextView) view.findViewById(R.id.test);
+        detectIdTextView = (TextView) view.findViewById(R.id.detectId);
+        detectButton = (Button) view.findViewById(R.id.detectButton);
+
+        final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        final DetectFragment detectFragment = new DetectFragment();
+
+        String loginId = getActivity().getSharedPreferences("detectId", MODE_PRIVATE)
+                .getString("USER", "");
+        detectIdTextView.setText(loginId);
         againButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "可以吧", Toast.LENGTH_SHORT).show();
-            }
+                if (onClickBoolean==false){
+            onClickBoolean=true;
+                    handler.postDelayed(updateDevice,500);
+        }else{
+            handler.removeCallbacks(updateDevice);
+            onClickBoolean=false;
+            againButton.setBackgroundColor(againButton.getContext().getResources().getColor(R.color.white));
+        }
+    }
         });
+
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setVibrate(1000);
-//                delayed.wait();
-//                demo demo =new demo();
-//                demo.start();
+            }
+        });
+        detectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.center, detectFragment);
+                fragmentTransaction.commit();
             }
         });
         return view;
@@ -59,23 +89,20 @@ public class DetectTestFragment extends Fragment {
         Vibrator vibrator =(Vibrator) getActivity().getSystemService(Service.VIBRATOR_SERVICE);
         vibrator.vibrate(time);
     }
-    public void setColor(){
-        testButton.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-    }
 
-    public  class  demo extends Thread{
-        public void run(){
-//            try {
-//
-//                textView.setBackgroundResource(R.drawable.color_72dpi);
-//                Thread.sleep(2000);
-//
-//                textView.setBackgroundResource(R.drawable.logo_icon);
+    Boolean na = true;
+    private Runnable updateDevice = new Runnable() {
+        public void run() {
 
-//            }catch (InterruptedException e) {
-//                System.out.println("Thread ERROR");
-//            }
+            if (na==true){
+                againButton.setBackgroundColor(againButton.getContext().getResources().getColor(R.color.colorPrimaryDark));
+                na=false;
+            }else{
+                againButton.setBackgroundColor(againButton.getContext().getResources().getColor(R.color.white));
+                na=true;
+            }
+            handler.postDelayed(this, 1000);
         }
-    }
+    };
 
 }

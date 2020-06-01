@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:text="受試者編號:" />
         <TextView
-            android:id="@+id/test"
+            android:id="@+id/detectId"
             android:layout_marginStart="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
