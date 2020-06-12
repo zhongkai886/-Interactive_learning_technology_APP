@@ -6,14 +6,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 
 
 import com.example.user.interactive_learning_technology_app.R;
@@ -114,7 +112,7 @@ public class Edit_FeedbackWay extends Fragment {
             @Override
             public void onClick(View view) {
                 final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FeedbackFrameSettingsActivity SettingFragment =new FeedbackFrameSettingsActivity();
+                FeedbackFrameSettingsFragment SettingFragment =new FeedbackFrameSettingsFragment();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.center, SettingFragment);
                 fragmentTransaction.commit();

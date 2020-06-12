@@ -1,4 +1,4 @@
-package com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.Login;
+package com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.DataSearch.Login;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,19 +13,20 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.user.interactive_learning_technology_app.R;
+import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.DataSearch.SearchFragment.DataSearchFragment;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.FeedbackFrameSettingsFragment;
 
-public class LoginActivity extends Fragment {
+public class ResearchLoginFragment extends Fragment {
     private Button  mSubmitButton;
     private EditText mAccountEdit;
     private EditText mPasswordEdit;
 
-    public LoginActivity() {
+    public ResearchLoginFragment() {
         // Required empty public constructor
     }
 
-    public static LoginActivity newInstance() {
-        LoginActivity fragment = new LoginActivity();
+    public static ResearchLoginFragment newInstance() {
+        ResearchLoginFragment fragment = new ResearchLoginFragment();
         return fragment;
     }
 
@@ -43,14 +44,13 @@ public class LoginActivity extends Fragment {
         mPasswordEdit=(EditText) view.findViewById(R.id.PasswordEdit);
         final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        final FeedbackFrameSettingsFragment fragment = new FeedbackFrameSettingsFragment();
-
+        final DataSearchFragment dataSearchFragment = new DataSearchFragment();
         mSubmitButton.setOnClickListener(new Button.OnClickListener(){
 
             @Override
             public void onClick(View view) {
                 if((mAccountEdit.getText().toString().equals("000"))&&(mPasswordEdit.getText().toString().equals("000"))){
-                    fragmentTransaction.replace(R.id.center,fragment);
+                    fragmentTransaction.replace(R.id.center,dataSearchFragment);
                     fragmentTransaction.commit();
                 } else{
                     Toast.makeText(getActivity(),"帳號密碼有誤，請再試一次!",Toast.LENGTH_SHORT).show();

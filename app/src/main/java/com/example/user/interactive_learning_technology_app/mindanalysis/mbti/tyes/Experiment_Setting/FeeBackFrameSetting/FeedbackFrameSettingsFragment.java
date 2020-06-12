@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionFeedBackWay;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionHigh;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionLow;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionMp3Uri;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_FeedBackWaySecond;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_FeedBackWayStopTipSecond;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_ID;
@@ -32,9 +33,10 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationFeedBackWay;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationHigh;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationLow;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationMp3Uri;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.TABLE_NAME;
 
-public class FeedbackFrameSettingsActivity extends Fragment {
+public class FeedbackFrameSettingsFragment extends Fragment {
     public SQLiteDatabase mDatabase;
     public SettingAdapter mAdapter;
     public ArrayList<String> mCheckBoxDataList = new ArrayList<String>();
@@ -42,7 +44,7 @@ public class FeedbackFrameSettingsActivity extends Fragment {
     public RecyclerView recyclerView;
 
 
-    public FeedbackFrameSettingsActivity() {
+    public FeedbackFrameSettingsFragment() {
 
     }
 
@@ -57,7 +59,7 @@ public class FeedbackFrameSettingsActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_feedback_frame_settings_activity, container, false);
+        View view = inflater.inflate(R.layout.fragment_feedback_frame_settings, container, false);
 //        SettingDBHelper dbHelper = new SettingDBHelper(this.getContext());
 //        mDatabase = dbHelper.getWritableDatabase();
 //        addItem();
@@ -74,7 +76,7 @@ public class FeedbackFrameSettingsActivity extends Fragment {
 
         final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         final AddFeedbackFrameSetting addFragment = new AddFeedbackFrameSetting();
-        final FeedbackFrameSettingsActivity Fragment = new FeedbackFrameSettingsActivity();
+        final FeedbackFrameSettingsFragment Fragment = new FeedbackFrameSettingsFragment();
 
         Button mFeedBackAdd = (Button) view.findViewById(R.id.FeedBackAdd);
         Button mFeedBackDel = (Button) view.findViewById(R.id.FeedBackDel);
@@ -84,8 +86,6 @@ public class FeedbackFrameSettingsActivity extends Fragment {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.center, addFragment);
                 fragmentTransaction.commit();
-
-
             }
         });
         mFeedBackDel.setOnClickListener(new View.OnClickListener() {
@@ -95,8 +95,6 @@ public class FeedbackFrameSettingsActivity extends Fragment {
                 Log.d("click", "" + mAdapter.getId());
             }
         });
-
-
         return view;
     }
 
@@ -149,9 +147,11 @@ public class FeedbackFrameSettingsActivity extends Fragment {
             String attentionHigh = cursor.getString(cursor.getColumnIndex(COLUMN_AttentionHigh));
             String attentionLow = cursor.getString(cursor.getColumnIndex(COLUMN_AttentionLow));
             String attentionFeedBackWay = cursor.getString(cursor.getColumnIndex(COLUMN_AttentionFeedBackWay));
+            String attentionMp3Uri = cursor.getString(cursor.getColumnIndex(COLUMN_AttentionMp3Uri));
             String relaxationHigh = cursor.getString(cursor.getColumnIndex(COLUMN_RelaxationHigh));
             String relaxationLow = cursor.getString(cursor.getColumnIndex(COLUMN_RelaxationLow));
             String relaxationFeedBackWay = cursor.getString(cursor.getColumnIndex(COLUMN_RelaxationFeedBackWay));
+            String relaxationMp3Uri = cursor.getString(cursor.getColumnIndex(COLUMN_RelaxationMp3Uri));
             String feedBackWaySecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWaySecond));
             String feedBackWayStopTipSecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWayStopTipSecond));
             FeedbackData feedbackData = new FeedbackData(id, name, item, attentionHigh, attentionLow, attentionFeedBackWay,
@@ -172,7 +172,5 @@ public class FeedbackFrameSettingsActivity extends Fragment {
             Log.d("fed","mcheckbox"+mCheckBoxDataList.get(i));
         }
         LoadData();
-
-
     }
 }

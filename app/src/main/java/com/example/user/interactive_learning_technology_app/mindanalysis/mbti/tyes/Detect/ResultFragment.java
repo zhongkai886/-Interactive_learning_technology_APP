@@ -108,10 +108,19 @@ public class ResultFragment extends Fragment {
         detectName.setText(loginId);
         selectId = Integer.valueOf(userId);
         LoadData();
+
+        if (Integer.valueOf(mAttentionFeedBackWay)==0){
+            feedBackWay.setText("視覺");
+        }
+        if (Integer.valueOf(mAttentionFeedBackWay)==1){
+            feedBackWay.setText("震動");
+        }
+        if (Integer.valueOf(mAttentionFeedBackWay)==2){
+            feedBackWay.setText("聲音");
+        }
         SelectItem.setText(mItem);
         attentionHigh.setText(mAttentionHigh);
         attentionLow.setText(mAttentionLow);
-        feedBackWay.setText(mAttentionFeedBackWay);
         fbwSec.setText(mFeedBackWaySecond);
         fbwSecTips.setText(mFeedBackWayStopTipSecond);
         detectSec.setText(timeId);
@@ -129,7 +138,7 @@ public class ResultFragment extends Fragment {
         mAttentionFeedBackWay = cursor.getString(cursor.getColumnIndex(COLUMN_AttentionFeedBackWay));
         mFeedBackWaySecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWaySecond));
         mFeedBackWayStopTipSecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWayStopTipSecond));
-
+        Log.d("??",mAttentionFeedBackWay);
 
         cursor.close();
     }

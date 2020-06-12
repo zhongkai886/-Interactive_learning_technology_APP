@@ -1,4 +1,4 @@
-package com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database;
+package com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,12 +19,12 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationMp3Uri;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.TABLE_NAME;
 
-public class SettingDBHelper extends SQLiteOpenHelper {
+public class SearchDBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "123.db";
     private static final int DATABASE_VERSION = 1;
 
-    public SettingDBHelper(Context context) {
+    public SearchDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
     @Override

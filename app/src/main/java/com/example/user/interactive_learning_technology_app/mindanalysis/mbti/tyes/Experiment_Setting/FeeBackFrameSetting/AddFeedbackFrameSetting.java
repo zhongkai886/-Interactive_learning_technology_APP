@@ -1,19 +1,24 @@
 package com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting;
 
 import android.content.ContentValues;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -26,9 +31,11 @@ import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.ty
 
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionFeedBackWay;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionHigh;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionLow;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionMp3Uri;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_FeedBackWaySecond;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_FeedBackWayStopTipSecond;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_ID;
@@ -37,6 +44,7 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationFeedBackWay;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationHigh;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationLow;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationMp3Uri;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.TABLE_NAME;
 
 
@@ -46,6 +54,7 @@ public class AddFeedbackFrameSetting extends Fragment {
     public Spinner SpinnerItem;
     private Integer attRadioId;
     private Integer relRadioId;
+    private Uri attUri;
     public AddFeedbackFrameSetting() {
     }
     public static AddFeedbackFrameSetting newInstance(String param1, String param2) {
@@ -77,6 +86,11 @@ public class AddFeedbackFrameSetting extends Fragment {
         final EditText EdtRelaxationLow =(EditText) view.findViewById(R.id.relaxationLow);
         final EditText EdtFbwSec =(EditText) view.findViewById(R.id.fbwSec);
         final EditText EdtFbwSecTips =(EditText) view.findViewById(R.id.fbwSecTips);
+        //選取mp3
+        final String mimeType = "audio/*";
+        final PackageManager packageManager = getActivity().getPackageManager();
+        final Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        //radioGroup
         RadioGroup radioGroupAtt = (RadioGroup) view.findViewById(R.id.radioGroupAtt);
         RadioGroup radioGroupRel = (RadioGroup) view.findViewById(R.id.radioGroupRel);
         radioGroupAtt.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -91,6 +105,20 @@ public class AddFeedbackFrameSetting extends Fragment {
                         break;
                     case R.id.attVoice:
                         attRadioId = 2;
+
+                        intent.setType(mimeType);
+                        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                        if (list.size() > 0) {
+                            // 如果有可用的Activity
+                            Intent picker = new Intent(Intent.ACTION_GET_CONTENT);
+                            picker.putExtra(Intent.EXTRA_LOCAL_ONLY, false);
+                            picker.setType(mimeType);
+                            // 使用Intent Chooser
+                            Intent destIntent = Intent.createChooser(picker, "選取MP3音樂");
+                            startActivityForResult(destIntent,100);
+                        } else {
+                            // 沒有可用的Activity
+                        }
                         break;
                 }
                 Log.d("pospos",""+attRadioId);
@@ -133,19 +161,35 @@ public class AddFeedbackFrameSetting extends Fragment {
                 final String edtFbwSecText = EdtFbwSec.getText().toString();
                 final String edtFbwSecTipsText = EdtFbwSecTips.getText().toString();
 
-                cv.put(COLUMN_Name,edtNameText);
-                cv.put(COLUMN_Item,spinnerItemText);
-                cv.put(COLUMN_AttentionHigh,edtAttentionHighText);
-                cv.put(COLUMN_AttentionLow,edtAttentionLowText);
-                cv.put(COLUMN_AttentionFeedBackWay,attRadioId);
-                cv.put(COLUMN_RelaxationHigh,edtRelaxationHighText);
-                cv.put(COLUMN_RelaxationLow,edtRelaxationLowText);
-                cv.put(COLUMN_RelaxationFeedBackWay,relRadioId);
-                cv.put(COLUMN_FeedBackWaySecond,edtFbwSecText);
-                cv.put(COLUMN_FeedBackWayStopTipSecond,edtFbwSecTipsText);
-                mDatabase.insert(TABLE_NAME,null,cv);
-//                mAdapter.swapCursor(getAllItems());
-
+//                cv.put(COLUMN_Name,edtNameText);
+//                cv.put(COLUMN_Item,spinnerItemText);
+//                cv.put(COLUMN_AttentionHigh,edtAttentionHighText);
+//                cv.put(COLUMN_AttentionLow,edtAttentionLowText);
+//                cv.put(COLUMN_AttentionFeedBackWay,attRadioId);
+//                cv.put(COLUMN_AttentionMp3Uri,attUri.toString());
+//                cv.put(COLUMN_RelaxationHigh,edtRelaxationHighText);
+//                cv.put(COLUMN_RelaxationLow,edtRelaxationLowText);
+//                cv.put(COLUMN_RelaxationFeedBackWay,relRadioId);
+//                cv.put(COLUMN_RelaxationMp3Uri,"");
+//                cv.put(COLUMN_FeedBackWaySecond,edtFbwSecText);
+//                cv.put(COLUMN_FeedBackWayStopTipSecond,edtFbwSecTipsText);
+//                mDatabase.insert(TABLE_NAME,null,cv);
+                String sql = "INSERT into '" + TABLE_NAME + "' ( '" + COLUMN_Name
+                        + "','" + COLUMN_Item
+                        + "','" + COLUMN_AttentionHigh
+                        + "','" + COLUMN_AttentionLow
+                        + "','" + COLUMN_AttentionFeedBackWay
+                        + "','" + COLUMN_AttentionMp3Uri
+                        + "','" + COLUMN_RelaxationHigh
+                        + "','" + COLUMN_RelaxationLow
+                        + "','" + COLUMN_RelaxationFeedBackWay
+                        + "','" + COLUMN_RelaxationMp3Uri
+                        + "','" + COLUMN_FeedBackWaySecond
+                        + "','" + COLUMN_FeedBackWayStopTipSecond + "' ) " +
+                        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+                Object[] mValue = new Object[]{edtNameText,spinnerItemText,edtAttentionHighText,edtAttentionLowText,attRadioId,attUri,
+                                               edtRelaxationHighText,edtRelaxationLowText,relRadioId,"",edtFbwSecText,edtFbwSecTipsText};
+                mDatabase.execSQL(sql,mValue);
 
                 Cursor c = mDatabase.query(TABLE_NAME,                                         // 資料表名字
                         new String[]{COLUMN_ID,
@@ -154,9 +198,11 @@ public class AddFeedbackFrameSetting extends Fragment {
                                 COLUMN_AttentionHigh ,
                                 COLUMN_AttentionLow,
                                 COLUMN_AttentionFeedBackWay,
+                                COLUMN_AttentionMp3Uri,
                                 COLUMN_RelaxationHigh,
                                 COLUMN_RelaxationLow,
                                 COLUMN_RelaxationFeedBackWay,
+                                COLUMN_RelaxationMp3Uri,
                                 COLUMN_FeedBackWaySecond,
                                 COLUMN_FeedBackWayStopTipSecond},  // 要取出的欄位資料
                         null,                                              // 查詢條件式
@@ -169,15 +215,15 @@ public class AddFeedbackFrameSetting extends Fragment {
                 while(c.moveToNext())
                 {
                     String id = c.getString(c.getColumnIndex(COLUMN_ID));    // 取出名字欄位資料
-                    String name = c.getString(c.getColumnIndex(COLUMN_Name));
+                    String mp3 = c.getString(c.getColumnIndex(COLUMN_AttentionMp3Uri));
                     String relWay = c.getString(c.getColumnIndex(COLUMN_RelaxationFeedBackWay));
                     String attWay = c.getString(c.getColumnIndex(COLUMN_AttentionFeedBackWay));
-                    Log.v("7788",id+"//////"+relWay+"////"+attWay);
+                    Log.v("7788",mp3+"//////"+mp3+"////"+mp3);
 
                 }
                 final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                final FeedbackFrameSettingsActivity fsaFragment = new  FeedbackFrameSettingsActivity();
+                final FeedbackFrameSettingsFragment fsaFragment = new FeedbackFrameSettingsFragment();
 
                 fragmentTransaction.replace(R.id.center, fsaFragment);
                 fragmentTransaction.commit();
@@ -194,5 +240,39 @@ public class AddFeedbackFrameSetting extends Fragment {
                 null,
                 COLUMN_ID + " DESC"
         );
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Log.d("??","測試");
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // 有選擇檔案
+        if ( resultCode == RESULT_OK ){
+            // 取得檔案的 Uri
+            attUri = data.getData();
+            if( attUri != null ){
+
+                Log.d("??","///"+attUri);
+
+                try {
+                    MediaPlayer mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    mediaPlayer.setDataSource(getActivity(), attUri);
+                    mediaPlayer.prepare();
+                    mediaPlayer.start();
+                }
+                catch (Exception e){
+                    Log.d("///",e+"");
+                }
+            }
+            else{
+                Toast.makeText(getActivity(), "無效的檔案路徑 !!", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else{
+            Toast.makeText(getActivity(), "取消選擇檔案 !!", Toast.LENGTH_SHORT).show();
+        }
     }
 }

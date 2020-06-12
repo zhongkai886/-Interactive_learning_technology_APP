@@ -6,6 +6,8 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,6 +44,8 @@ import retrofit2.Call;
 import retrofit2.Response;
 import wjk.android.chart.adapter.NumberAdapter;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class DetectFragment extends Fragment implements MindDetectToolMulti.Listen{
     private boolean mInitialCreate;
@@ -54,9 +58,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     public Button mStartButton;
     public Button mPauseButton;
     public Button mStopButton;
-    public EditText mTimerEdit;
     public EditText mUserNameEdit;
-    public Spinner mTimerSpinner;
     public TextView mTimerText;
     boolean toast = true;
 
@@ -175,27 +177,29 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detect, container, false);
+
         mTimerText = (TextView) view.findViewById(R.id.fragment_detect_title);
         mStartButton = (Button) view.findViewById(R.id.detectButton);
         mPauseButton = (Button) view.findViewById(R.id.removeButton);
         mStopButton = (Button) view.findViewById(R.id.stopButton);
-        mTimerSpinner = (Spinner) view.findViewById(R.id.timetime);
         mUserNameEdit = (EditText) view.findViewById(R.id.fragment_detect_username);
-        mTimerEdit = (EditText) view.findViewById(R.id.fragment_detect_timerEdit);
         _initView();
         return view;
     }
 
     private void _initView() {
+
+        String timeId = getActivity().getSharedPreferences("timeSelect", MODE_PRIVATE)
+                .getString("USER", "");
+
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mTimerEdit.getVisibility() != View.GONE) {
-                    int t = Integer.valueOf(mTimerEdit.getText().toString());
-                    mTimeDetect.setTimer(t);
-                }
+                int t = Integer.valueOf(timeId);
+                mTimeDetect.setTimer(t);
 
-                mTimeDetect.setRound(Integer.valueOf((String) mTimerSpinner.getSelectedItem()));
+
+                mTimeDetect.setRound(1);
                 mTimeDetect_data = "";
                 mTimeDetect.start();
 
@@ -222,14 +226,19 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     private void _state(String state) {
         if (state.equals("start")) {
             mStartButton.setVisibility(View.GONE);
-            mStopButton.setVisibility(View.VISIBLE);
+            mStopButton.setVisibility(View.GONE);
             mPauseButton.setVisibility(View.VISIBLE);
         } else if (state.equals("pause")) {
-
+            Log.d("??","結束按鈕");
         } else if (state.equals("stop")) {
             mStartButton.setVisibility(View.VISIBLE);
             mStopButton.setVisibility(View.GONE);
             mPauseButton.setVisibility(View.GONE);
+            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            final ResultFragment resultFragment = new ResultFragment();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.center, resultFragment);
+            fragmentTransaction.commit();
         }
     }
 

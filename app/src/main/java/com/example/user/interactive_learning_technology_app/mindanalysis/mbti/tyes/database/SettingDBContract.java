@@ -12,11 +12,12 @@ public class SettingDBContract {
         public static final String  COLUMN_AttentionHigh ="attention_High";
         public static final String  COLUMN_AttentionLow ="attention_Low";
         public static final String  COLUMN_AttentionFeedBackWay ="attention_FeedBackWay";
+        public static final String  COLUMN_AttentionMp3Uri ="attention_Mp3Uri";
         public static final String  COLUMN_RelaxationHigh ="relaxation_High";
         public static final String  COLUMN_RelaxationLow ="relaxation_Low";
         public static final String  COLUMN_RelaxationFeedBackWay ="relaxation_FeedBackWay";
+        public static final String  COLUMN_RelaxationMp3Uri ="relaxation_Mp3Uri";
         public static final String  COLUMN_FeedBackWaySecond ="feedBackWay_Second";
         public static final String  COLUMN_FeedBackWayStopTipSecond ="feedBackWay_StopTip_Second";
-
     }
 }

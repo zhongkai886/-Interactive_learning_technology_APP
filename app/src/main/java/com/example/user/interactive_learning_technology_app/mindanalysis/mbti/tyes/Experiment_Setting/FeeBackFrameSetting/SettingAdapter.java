@@ -23,13 +23,13 @@ import java.util.ArrayList;
 
 public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingViewHolder> {
     private ArrayList<FeedbackData> mFeedbackDataList;
-    FeedbackFrameSettingsActivity feedbackFrameSettingsActivity;
+    FeedbackFrameSettingsFragment feedbackFrameSettingsActivity;
     public ArrayList<String> mCheckBoxDataList = new ArrayList<String>();
     private Context mContext;
     private Cursor mCursor;
 
     public SettingAdapter(ArrayList<FeedbackData> feedbackData,
-                          FeedbackFrameSettingsActivity feedbackFrameSettingsActivity){
+                          FeedbackFrameSettingsFragment feedbackFrameSettingsActivity){
         this.mFeedbackDataList =  feedbackData;
         this.feedbackFrameSettingsActivity = feedbackFrameSettingsActivity;
     }

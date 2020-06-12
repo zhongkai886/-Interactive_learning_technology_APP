@@ -21,11 +21,10 @@ import com.alchemy.mindcontroller.MindControllerFactory;
 import com.alchemy.mindcontroller.MindsetValue;
 import com.alchemy.wjk.mind.view.MindsetActivity;
 import com.example.user.interactive_learning_technology_app.BuildConfig;
-import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Detect.DetectFragment;
-import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.FeedbackData;
-import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.FeedbackFrameSettingsActivity;
-import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.SettingAdapter;
+import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.DataSearch.Login.ResearchLoginFragment;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.Login.LoginActivity;
+import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.FeedbackData;
+import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.SettingAdapter;
 import com.example.user.interactive_learning_technology_app.R;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBHelper;
 
@@ -90,6 +89,19 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
 
             }
         });
+        mExperimentSearchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ResearchLoginFragment researchLoginFragment =new ResearchLoginFragment();
+
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.center, researchLoginFragment);
+                fragmentTransaction.commit();
+                mExperimentSettingButton.setVisibility(View.INVISIBLE); //隱藏
+                mExperimentSearchButton.setVisibility(View.INVISIBLE);
+                mBackHomeButton.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override
@@ -113,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
 
     private void addItem(){
         SettingDBHelper dbHelper = new SettingDBHelper(this);
+
         mDatabase = dbHelper.getWritableDatabase();
 //        data = mDatabase.rawQuery("SELECT * FROM settingDataList",null);
 //        data.moveToFirst();
