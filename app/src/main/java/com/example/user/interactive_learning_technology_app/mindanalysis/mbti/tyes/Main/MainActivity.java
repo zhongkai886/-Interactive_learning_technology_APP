@@ -28,7 +28,16 @@ import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.ty
 import com.example.user.interactive_learning_technology_app.R;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBHelper;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity implements Handler.Callback {
     public SQLiteDatabase mDatabase;
@@ -53,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         MainFragment fragment = new MainFragment();
         fragmentTransaction.add(R.id.center,fragment);
         fragmentTransaction.commit();
-
 
         if (savedInstanceState == null) {
             mMindCenter = MindControllerFactory.obtain(getApplicationContext(), new Handler(this));
