@@ -9,7 +9,7 @@
     android:orientation="horizontal">
 
     <CheckBox
-        android:id="@+id/settingCheckbox"
+        android:id="@+id/searchCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -17,22 +17,22 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/settingId"
+        android:id="@+id/searchId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="01"
-        android:textSize="30sp"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/AddDelButtonGuideLine2"
-        app:layout_constraintStart_toStartOf="@id/settingCheckbox"
+        app:layout_constraintStart_toStartOf="@id/searchCheckbox"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/settingItem"
+        android:id="@+id/searchItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="attent"
-        android:textSize="30sp"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/AddDelButtonGuideLine5"
         app:layout_constraintStart_toStartOf="@+id/AddDelButtonGuideLine2"
@@ -42,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Count"
-        android:textSize="30sp"
+        android:textSize="15sp"
         app:layout_constraintStart_toEndOf="@id/AddDelButtonGuideLine5"
         app:layout_constraintEnd_toStartOf="@id/AddDelButtonGuideLine1"
         app:layout_constraintTop_toTopOf="parent"
@@ -54,14 +54,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2011"
-        android:textSize="30sp"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/settingButton"
         app:layout_constraintStart_toEndOf="@+id/count"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/settingButton"
+        android:id="@+id/searchButton"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:text="點此進入"

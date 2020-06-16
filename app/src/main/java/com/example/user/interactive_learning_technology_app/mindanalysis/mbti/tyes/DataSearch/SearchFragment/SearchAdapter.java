@@ -28,15 +28,15 @@ import java.util.ArrayList;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder> {
     private ArrayList<DetectData> mDetectDataList;
-    FeedbackFrameSettingsFragment feedbackFrameSettingsActivity;
+    DataSearchFragment dataSearchFragment;
     public ArrayList<String> mCheckBoxDataList = new ArrayList<String>();
     private Context mContext;
     private Cursor mCursor;
 
     public SearchAdapter(ArrayList<DetectData> detectData,
-                          FeedbackFrameSettingsFragment feedbackFrameSettingsActivity){
+                         DataSearchFragment dataSearchFragment){
         this.mDetectDataList =  detectData;
-        this.feedbackFrameSettingsActivity = feedbackFrameSettingsActivity;
+        this.dataSearchFragment = dataSearchFragment;
     }
 
     public class SearchViewHolder extends RecyclerView.ViewHolder{
@@ -50,12 +50,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
         public SearchViewHolder(@NonNull View itemView) {
             super(itemView);
-            mCheckbox = itemView.findViewById(R.id.settingCheckbox);
-            mId = itemView.findViewById(R.id.settingId);
-            mItem = itemView.findViewById(R.id.settingItem);
+            mCheckbox = itemView.findViewById(R.id.searchCheckbox);
+            mId = itemView.findViewById(R.id.searchId);
+            mItem = itemView.findViewById(R.id.searchItem);
             mCount = itemView.findViewById(R.id.count);
             mTimeDate = itemView.findViewById(R.id.TimeDate);
-            mButton = itemView.findViewById(R.id.settingButton);
+            mButton = itemView.findViewById(R.id.searchButton);
         }
     }
 
@@ -63,7 +63,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     @Override
     public SearchViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.item_feedback_setting,parent,false);
+        View view = inflater.inflate(R.layout.item_feedback_search,parent,false);
         final SearchViewHolder holder = new SearchViewHolder(view);
 
         return holder;
