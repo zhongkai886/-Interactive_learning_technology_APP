@@ -12,10 +12,11 @@ import android.widget.TextView;
 
 import com.example.user.interactive_learning_technology_app.R;
 
-import java.sql.Time;
 
 public class Edit_DetectDataFragment extends Fragment {
     private String mId;
+    private String mNumber;
+    private String mName;
     private String mTimeDate;
     private String mFeedBackWay;
     private String mFeedBackCount;
@@ -33,12 +34,14 @@ public class Edit_DetectDataFragment extends Fragment {
     private String mAverageRelaxation;
     private String mData;
 
-    public Edit_DetectDataFragment(String Id , String TimeDate , String FeedBackWay, String FeedBackCount,String AttentionHigh,
+    public Edit_DetectDataFragment(String Id ,String Number ,String Name, String TimeDate , String FeedBackWay, String FeedBackCount,String AttentionHigh,
                                    String AttentionLow, String RelaxationHigh, String RelaxationLow,
                                    String AttentionMax, String AttentionMin, String RelaxationMax,
                                    String RelaxationMin, String FeedBackSecondsGap, String FeedBackPassSeconds,
                                    String AverageAttention, String AverageRelaxation, String Data) {
         this.mId=Id;
+        this.mNumber=Number;
+        this.mName=Name;
         this.mTimeDate=TimeDate;
         this.mFeedBackWay=FeedBackWay;
         this.mFeedBackCount=FeedBackCount;
@@ -70,7 +73,8 @@ public class Edit_DetectDataFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit__detect_data, container, false);
-        final TextView TvId = (TextView) view.findViewById(R.id.id);
+//        final TextView TvId = (TextView) view.findViewById(R.id.id);
+        final TextView TvNumber = (TextView) view.findViewById(R.id.number);
         final TextView TvTimeDate =(TextView) view.findViewById(R.id.timeDate);
         final TextView TvFeedBackWay = (TextView) view.findViewById(R.id.feedBackWay);
         final TextView TvFeedBackCount =(TextView) view.findViewById(R.id.feedBackCount);
@@ -87,6 +91,25 @@ public class Edit_DetectDataFragment extends Fragment {
         final TextView TvAverageAttention =(TextView) view.findViewById(R.id.averageAttention);
         final TextView TvAverageRelaxation =(TextView) view.findViewById(R.id.averageRelaxation);
         final TextView TvData =(TextView) view.findViewById(R.id.data);
+
+        TvNumber.setText(mNumber);
+        TvTimeDate.setText(mTimeDate);
+        TvFeedBackWay.setText(mFeedBackWay);
+        TvFeedBackCount.setText(mFeedBackCount);
+        TvAttentionHigh.setText(mAttentionHigh);
+        TvAttentionLow.setText(mAttentionLow);
+        TvRelaxationHigh.setText(mRelaxationHigh);
+        TvRelaxationLow.setText(mRelaxationLow);
+        TvAttentionMax.setText(mAttentionMax);
+        TvAttentionMin.setText(mAttentionMin);
+        TvRelaxationMax.setText(mRelaxationMax);
+        TvRelaxationMin.setText(mRelaxationMin);
+        TvFeedBackSecondsGap.setText(mFeedBackSecondsGap);
+        TvFeedBackPassSeconds.setText(mFeedBackPassSeconds);
+        TvAverageAttention.setText(mAverageAttention);
+        TvAverageRelaxation.setText(mAverageRelaxation);
+        TvData.setText(mData);
+
 
 
 

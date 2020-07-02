@@ -3,33 +3,28 @@ package com.example.user.interactive_learning_technology_app.mindanalysis.mbti.t
 public class DetectData {
 
     private String Id;
+    private String Number;
     private String Name;
     private String DetectTime;
     private String Item;
     private String FeedBackCount;
-
     private String AttentionHigh;
     private String AttentionLow;
-
     private String RelaxationHigh;
     private String RelaxationLow;
-
     private String AttentionMax;
     private String AttentionMin;
-
     private String RelaxationMax;
     private String RelaxationMin;
     private String FeedbackSecondsGap;
     private String FeedbackPassSecond;
-
     private String AverageAttention;
     private String AverageRelaxation;
-
     private String PointInTime;
 
 
 
-    public DetectData(String Id , String Name , String DetectTime,String Item,String FeedBackCount,
+    public DetectData(String Id , String Number,String Name , String DetectTime,String Item,String FeedBackCount,
                         String AttentionHigh, String AttentionLow,
                         String RelaxationHigh, String RelaxationLow,
                         String AttentionMax, String AttentionMin,
@@ -38,6 +33,7 @@ public class DetectData {
                         String AverageAttention , String AverageRelaxation,
                         String PointInTime){
         this.Id=Id;
+        this.Number=Number;
         this.Name=Name;
         this.DetectTime=DetectTime;
         this.Item=Item;
@@ -60,6 +56,8 @@ public class DetectData {
     public String getId() {
         return Id;
     }
+
+    public String getNumber(){return Number;}
 
     public String getName() {
         return Name;

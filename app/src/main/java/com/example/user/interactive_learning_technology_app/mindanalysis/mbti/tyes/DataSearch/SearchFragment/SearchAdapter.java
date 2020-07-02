@@ -104,6 +104,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 FragmentManager fragmentManager = dataSearchFragment.getActivity().getSupportFragmentManager();
                 Edit_DetectDataFragment edit_detectDataFragment = new Edit_DetectDataFragment(
                         mDetectData.getId(),
+                        mDetectData.getNumber(),
+                        mDetectData.getName(),
                         mDetectData.getDetectTime(),
                         mDetectData.getItem(),
                         mDetectData.getFeedBackCount(),

@@ -33,6 +33,7 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_ID;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_Item;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_Name;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_Number;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_PointInTime;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationHigh;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationLow;
@@ -80,6 +81,7 @@ public class DataSearchFragment extends Fragment {
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM searchDataList", null);
         while (cursor.moveToNext()) {
             String id = cursor.getString(cursor.getColumnIndex(COLUMN_ID));
+            String number = cursor.getString(cursor.getColumnIndex(COLUMN_Number));
             String name = cursor.getString(cursor.getColumnIndex(COLUMN_Name));
             String detectTime = cursor.getString(cursor.getColumnIndex(COLUMN_DetectTime));
             String item = cursor.getString(cursor.getColumnIndex(COLUMN_Item));
@@ -98,7 +100,7 @@ public class DataSearchFragment extends Fragment {
             String averageRelaxation = cursor.getString(cursor.getColumnIndex(COLUMN_AverageRelaxation));
             String pointInTime = cursor.getString(cursor.getColumnIndex(COLUMN_PointInTime));
 
-            DetectData detectData = new DetectData(id,name,detectTime,item,
+            DetectData detectData = new DetectData(id,number,name,detectTime,item,
                     feedBackCount,attentionHigh,attentionLow,
                     relaxationHigh,relaxationLow,attentionMax,attentionMin,
                     relaxationMax,relaxationMin,feedBackSecondsGap,feedBackPassSeconds,
@@ -108,9 +110,10 @@ public class DataSearchFragment extends Fragment {
         }
         cursor.close();
     }
-    public void InsertTable(){
+    public void InsertTable(){ //19欄位  Id資料辨識用不須顯示
         final String SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_Number + " VARCHAR(50), " +
                 COLUMN_Name + " VARCHAR(50), " +
                 COLUMN_DetectTime + " VARCHAR(50)," +
                 COLUMN_Item + " VARCHAR(50)," +
@@ -130,8 +133,9 @@ public class DataSearchFragment extends Fragment {
                 COLUMN_PointInTime + " VARCHAR(50)" +
                 ");";
         mDatabase.execSQL(SQL);
-
-        String sql = "INSERT into '" + TABLE_NAME + "' ( '" + COLUMN_Name
+        //18欄位 扣掉自動生成ID
+        String sql = "INSERT into '" + TABLE_NAME + "' ( '" + COLUMN_Number
+                + "','" + COLUMN_Name
                 + "','" + COLUMN_DetectTime
                 + "','" + COLUMN_Item
                 + "','" + COLUMN_FeedBackCount
@@ -148,7 +152,7 @@ public class DataSearchFragment extends Fragment {
                 + "','" + COLUMN_AverageAttention
                 + "','" + COLUMN_AverageRelaxation
                 + "','" + COLUMN_PointInTime + "' ) " +
-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 //        for (int i = 0 ; i<5 ; i++){
 //            Object[] mValue = new Object[]{"安安","2001","Attention",
 //                    "5",

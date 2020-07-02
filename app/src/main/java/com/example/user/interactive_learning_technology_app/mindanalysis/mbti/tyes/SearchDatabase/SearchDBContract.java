@@ -7,6 +7,7 @@ public class SearchDBContract {
     public static final class SearchDataEntry implements BaseColumns{
         public static final String  TABLE_NAME ="searchDataList";
         public static final String  COLUMN_ID ="id";
+        public static final String  COLUMN_Number ="number";
         public static final String  COLUMN_Name ="name";
         public static final String  COLUMN_DetectTime ="detect_Time";
         public static final String  COLUMN_Item ="item";
