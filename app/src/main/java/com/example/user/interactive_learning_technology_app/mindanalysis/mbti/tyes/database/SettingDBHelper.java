@@ -29,22 +29,7 @@ public class SettingDBHelper extends SQLiteOpenHelper {
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
-        final String SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_Name + " VARCHAR(50), " +
-                COLUMN_Item + " VARCHAR(50)," +
-                COLUMN_AttentionHigh + " VARCHAR(50)," +
-                COLUMN_AttentionLow + " VARCHAR(50)," +
-                COLUMN_AttentionFeedBackWay + " VARCHAR(50)," +
-                COLUMN_AttentionMp3Uri + " VARCHAR(250)," +
-                COLUMN_RelaxationHigh + " VARCHAR(50)," +
-                COLUMN_RelaxationLow + " VARCHAR(50)," +
-                COLUMN_RelaxationFeedBackWay + " VARCHAR(50)," +
-                COLUMN_RelaxationMp3Uri + " VARCHAR(250)," +
-                COLUMN_FeedBackWaySecond + " VARCHAR(50)," +
-                COLUMN_FeedBackWayStopTipSecond + " VARCHAR(50)" +
-                ");";
-        db.execSQL(SQL);
+
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

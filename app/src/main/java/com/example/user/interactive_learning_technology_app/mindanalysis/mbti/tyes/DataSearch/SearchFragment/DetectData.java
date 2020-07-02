@@ -4,7 +4,7 @@ public class DetectData {
 
     private String Id;
     private String Name;
-    private String Detect_Time;
+    private String DetectTime;
     private String Item;
     private String FeedBackCount;
 
@@ -39,7 +39,7 @@ public class DetectData {
                         String PointInTime){
         this.Id=Id;
         this.Name=Name;
-        this.Detect_Time=DetectTime;
+        this.DetectTime=DetectTime;
         this.Item=Item;
         this.FeedBackCount=FeedBackCount;
         this.AttentionHigh=AttentionHigh;
@@ -65,8 +65,8 @@ public class DetectData {
         return Name;
     }
 
-    public String getDetect_Time() {
-        return Detect_Time;
+    public String getDetectTime() {
+        return DetectTime;
     }
 
     public String getItem() {

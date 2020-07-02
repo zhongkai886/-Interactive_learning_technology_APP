@@ -79,9 +79,9 @@ public class RemoteDeviceDialog extends DialogFragment implements
         if (mBtAdapter != null) {
             Set<BluetoothDevice> devices = mBtAdapter.getBondedDevices();
             for (BluetoothDevice device : devices) {
-                if (device.getName() != null && device.getName().equals("alchemy")||device.getName().equals("Alchemy")) {
+//                if (device.getName() != null && device.getName().equals("alchemy")||device.getName().equals("Alchemy")) {
                     mPairAdapter.add(listItemtext(device.getName(), device.getAddress()));
-                }
+//                }
 //                mPairAdapter.add(listItemtext(device.getName(), device.getAddress()));
             }
             if (!mBtAdapter.isEnabled()) {

@@ -1,6 +1,7 @@
 package com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Detect;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.ty
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.API.PostData.Esense;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.API.PostData.OutputPost;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.API.RetrofitClient;
+import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBHelper;
 import com.example.user.interactive_learning_technology_app.widget.PreferencesCenter;
 import com.example.user.interactive_learning_technology_app.widget.StringMultiple;
 import com.example.user.interactive_learning_technology_app.wjk.database.SQLiteCenter;
@@ -45,10 +47,30 @@ import retrofit2.Response;
 import wjk.android.chart.adapter.NumberAdapter;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AttentionHigh;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AttentionLow;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AttentionMax;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AttentionMin;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AverageAttention;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AverageRelaxation;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_DetectTime;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_FeedBackCount;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_FeedBackPassSeconds;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_FeedBackSecondsGap;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_ID;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_Item;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_Name;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_PointInTime;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationHigh;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationLow;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationMax;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationMin;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.TABLE_NAME;
 
 
 public class DetectFragment extends Fragment implements MindDetectToolMulti.Listen{
     private boolean mInitialCreate;
+    public SQLiteDatabase sqLiteDatabase;
     private onCompleteListener mListener;
     //mind
     private MindController mMindCenter;
@@ -178,6 +200,8 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detect, container, false);
 
+        SearchDBHelper dbHelper = new SearchDBHelper(getActivity());
+        sqLiteDatabase = dbHelper.getWritableDatabase();
         mTimerText = (TextView) view.findViewById(R.id.fragment_detect_title);
         mStartButton = (Button) view.findViewById(R.id.detectButton);
         mPauseButton = (Button) view.findViewById(R.id.removeButton);
@@ -243,22 +267,75 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     }
 
     private void _result(){
+        final String SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_Name + " VARCHAR(50), " +
+                COLUMN_DetectTime + " VARCHAR(50)," +
+                COLUMN_Item + " VARCHAR(50)," +
+                COLUMN_FeedBackCount + " VARCHAR(50)," +
+                COLUMN_AttentionHigh + " VARCHAR(50)," +
+                COLUMN_AttentionLow + " VARCHAR(50)," +
+                COLUMN_RelaxationHigh + " VARCHAR(50)," +
+                COLUMN_RelaxationLow + " VARCHAR(50)," +
+                COLUMN_AttentionMax + " VARCHAR(50)," +
+                COLUMN_AttentionMin + " VARCHAR(50)," +
+                COLUMN_RelaxationMax + " VARCHAR(50)," +
+                COLUMN_RelaxationMin + " VARCHAR(50)," +
+                COLUMN_FeedBackSecondsGap + " VARCHAR(50)," +
+                COLUMN_FeedBackPassSeconds + " VARCHAR(50)," +
+                COLUMN_AverageAttention + " VARCHAR(50)," +
+                COLUMN_AverageRelaxation + " VARCHAR(50)," +
+                COLUMN_PointInTime + " VARCHAR(50)" +
+                ");";
+        sqLiteDatabase.execSQL(SQL);
 
-        SQLiteCenter center = new SQLiteCenter(getActivity());
-        UserTable values = new UserTable();
-        values.data = mTimeDetect_data;
-        values.date = System.currentTimeMillis();
-        values.name = mUserNameEdit.getText().toString();
-        Log.d("yoyoyyo",""+values.data);
-        Log.d("yoyoyyo",""+values.name);
-        if (values.name.length() <= 0)
-            values.name = "匿名";
-        values.rawData = "";
-        if (values.name.equals("")) values.name = mUserNameEdit.getHint().toString();
-        center.insert(values);
+        String sql = "INSERT into '" + TABLE_NAME + "' ( '" + COLUMN_Name
+                + "','" + COLUMN_DetectTime
+                + "','" + COLUMN_Item
+                + "','" + COLUMN_FeedBackCount
+                + "','" + COLUMN_AttentionHigh
+                + "','" + COLUMN_AttentionLow
+                + "','" + COLUMN_RelaxationHigh
+                + "','" + COLUMN_RelaxationLow
+                + "','" + COLUMN_AttentionMax
+                + "','" + COLUMN_AttentionMin
+                + "','" + COLUMN_RelaxationMax
+                + "','" + COLUMN_RelaxationMin
+                + "','" + COLUMN_FeedBackSecondsGap
+                + "','" + COLUMN_FeedBackPassSeconds
+                + "','" + COLUMN_AverageAttention
+                + "','" + COLUMN_AverageRelaxation
+                + "','" + COLUMN_PointInTime + "' ) " +
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        Object[] mValue = new Object[]{"安安","2001","Attention",
+                "5",
+                "70","20",
+                "80","30",
+                "100","5",
+                "98","3",
+                "2","5",
+                "45","30",
+                ""};
+
+
+
+//        SQLiteCenter center = new SQLiteCenter(getActivity());
+//        UserTable values = new UserTable();
+//        values.data = mTimeDetect_data;
+        sqLiteDatabase.execSQL(sql,mValue);
+//        values.date = System.currentTimeMillis();
+//        values.name = mUserNameEdit.getText().toString();
+//        Log.d("yoyoyyo",""+values.data);
+//        Log.d("yoyoyyo",""+values.name);
+//        if (values.name.length() <= 0)
+//            values.name = "匿名";
+//        values.rawData = "";
+//        if (values.name.equals("")) values.name = mUserNameEdit.getHint().toString();
+//        center.insert(values);
 
         mindData = mTimeDetect_data;
-        nameData = values.name;
+//        nameData = values.name;
         rawData = "";
 //        if (mListener != null) mListener.onComplete();
 

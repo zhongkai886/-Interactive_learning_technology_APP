@@ -7,59 +7,90 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.user.interactive_learning_technology_app.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Edit_DetectDataFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.sql.Time;
+
 public class Edit_DetectDataFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private String mId;
+    private String mTimeDate;
+    private String mFeedBackWay;
+    private String mFeedBackCount;
+    private String mAttentionHigh;
+    private String mAttentionLow;
+    private String mRelaxationHigh;
+    private String mRelaxationLow;
+    private String mAttentionMax;
+    private String mAttentionMin;
+    private String mRelaxationMax;
+    private String mRelaxationMin;
+    private String mFeedBackSecondsGap;
+    private String mFeedBackPassSeconds;
+    private String mAverageAttention;
+    private String mAverageRelaxation;
+    private String mData;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    public Edit_DetectDataFragment(String Id , String TimeDate , String FeedBackWay, String FeedBackCount,String AttentionHigh,
+                                   String AttentionLow, String RelaxationHigh, String RelaxationLow,
+                                   String AttentionMax, String AttentionMin, String RelaxationMax,
+                                   String RelaxationMin, String FeedBackSecondsGap, String FeedBackPassSeconds,
+                                   String AverageAttention, String AverageRelaxation, String Data) {
+        this.mId=Id;
+        this.mTimeDate=TimeDate;
+        this.mFeedBackWay=FeedBackWay;
+        this.mFeedBackCount=FeedBackCount;
+        this.mAttentionHigh=AttentionHigh;
+        this.mAttentionLow=AttentionLow;
+        this.mRelaxationHigh=RelaxationHigh;
+        this.mRelaxationLow=RelaxationLow;
+        this.mAttentionMax=AttentionMax;
+        this.mAttentionMin =AttentionMin;
+        this.mRelaxationMax=RelaxationMax;
+        this.mRelaxationMin=RelaxationMin;
+        this.mFeedBackSecondsGap=FeedBackSecondsGap;
+        this.mFeedBackPassSeconds=FeedBackPassSeconds;
+        this.mAverageAttention=AverageAttention;
+        this.mAverageRelaxation=AverageRelaxation;
+        this.mData=Data;
 
-    public Edit_DetectDataFragment() {
-        // Required empty public constructor
-    }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Edit_DetectDataFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Edit_DetectDataFragment newInstance(String param1, String param2) {
-        Edit_DetectDataFragment fragment = new Edit_DetectDataFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit__detect_data, container, false);
+        View view = inflater.inflate(R.layout.fragment_edit__detect_data, container, false);
+        final TextView TvId = (TextView) view.findViewById(R.id.id);
+        final TextView TvTimeDate =(TextView) view.findViewById(R.id.timeDate);
+        final TextView TvFeedBackWay = (TextView) view.findViewById(R.id.feedBackWay);
+        final TextView TvFeedBackCount =(TextView) view.findViewById(R.id.feedBackCount);
+        final TextView TvAttentionHigh =(TextView) view.findViewById(R.id.attentionHigh);
+        final TextView TvAttentionLow =(TextView) view.findViewById(R.id.attentionLow);
+        final TextView TvRelaxationHigh =(TextView) view.findViewById(R.id.relaxationHigh);
+        final TextView TvRelaxationLow =(TextView) view.findViewById(R.id.relaxationLow);
+        final TextView TvAttentionMax =(TextView) view.findViewById(R.id.attentionMax);
+        final TextView TvAttentionMin =(TextView) view.findViewById(R.id.attentionMin);
+        final TextView TvRelaxationMax =(TextView) view.findViewById(R.id.relaxationMax);
+        final TextView TvRelaxationMin =(TextView) view.findViewById(R.id.relaxationMin);
+        final TextView TvFeedBackSecondsGap =(TextView) view.findViewById(R.id.feedBackSecondsGap);
+        final TextView TvFeedBackPassSeconds =(TextView) view.findViewById(R.id.relaxationMax);
+        final TextView TvAverageAttention =(TextView) view.findViewById(R.id.averageAttention);
+        final TextView TvAverageRelaxation =(TextView) view.findViewById(R.id.averageRelaxation);
+        final TextView TvData =(TextView) view.findViewById(R.id.data);
+
+
+
+
+        return  view;
     }
 }

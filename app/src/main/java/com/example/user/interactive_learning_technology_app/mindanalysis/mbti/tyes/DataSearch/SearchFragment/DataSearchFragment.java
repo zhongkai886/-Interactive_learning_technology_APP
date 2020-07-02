@@ -77,30 +77,6 @@ public class DataSearchFragment extends Fragment {
         return view;
     }
     public void LoadData(){
-//        Cursor c = mDatabase.query(TABLE_NAME,                                         // 資料表名字
-//                new String[]{COLUMN_ID,COLUMN_Name,COLUMN_DetectTime,COLUMN_Item,
-//                        COLUMN_FeedBackCount,
-//                        COLUMN_AttentionHigh,COLUMN_AttentionLow,
-//                        COLUMN_RelaxationHigh,COLUMN_RelaxationLow,
-//                        COLUMN_AttentionMax,COLUMN_AttentionMin,
-//                        COLUMN_RelaxationMax,COLUMN_RelaxationMin,
-//                        COLUMN_FeedBackSecondsGap,COLUMN_FeedBackPassSeconds,
-//                        COLUMN_AverageAttention,COLUMN_AverageRelaxation,
-//                        COLUMN_PointInTime},  // 要取出的欄位資料
-//                null,                                              // 查詢條件式
-//                null,                                              // 查詢條件值字串陣列
-//                null,                                              // Group By字串語法
-//                null,                                              // Having字串法
-//                COLUMN_ID,                                            // Order By字串語法(排序)
-//                null);                                             // Limit字串語法
-//
-//        while(c.moveToNext())
-//        {
-//            String id = c.getString(c.getColumnIndex(COLUMN_ID));    // 取出名字欄位資料
-//            String count = c.getString(c.getColumnIndex(COLUMN_FeedBackCount));
-//            Log.v("7788",id+"////////"+count);
-//
-//        }
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM searchDataList", null);
         while (cursor.moveToNext()) {
             String id = cursor.getString(cursor.getColumnIndex(COLUMN_ID));
@@ -128,7 +104,7 @@ public class DataSearchFragment extends Fragment {
                     relaxationMax,relaxationMin,feedBackSecondsGap,feedBackPassSeconds,
                     averageAttention,averageRelaxation,pointInTime);
             detectDataList.add(detectData);
-            Log.d("刷新",""+detectData);
+            Log.d("刷新",""+detectData.getDetectTime());
         }
         cursor.close();
     }

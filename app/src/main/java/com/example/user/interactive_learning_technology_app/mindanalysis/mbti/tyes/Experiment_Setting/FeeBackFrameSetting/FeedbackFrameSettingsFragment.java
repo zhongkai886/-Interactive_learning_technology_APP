@@ -65,7 +65,7 @@ public class FeedbackFrameSettingsFragment extends Fragment {
 //        addItem();
         SettingDBHelper dbHelper = new SettingDBHelper(getActivity());
         mDatabase = dbHelper.getWritableDatabase();
-
+        CreateSetting();
         LoadData();
 
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -119,23 +119,6 @@ public class FeedbackFrameSettingsFragment extends Fragment {
                 null);
     }
 
-    //    private void addItem(){
-//        SettingDBHelper dbHelper = new SettingDBHelper(this.getContext());
-//        mDatabase = dbHelper.getWritableDatabase();
-//
-//
-//        ContentValues cv = new ContentValues();
-//        cv.put("_MusicName","12313123");
-////        cv.put(SettingDBContract.SettingDataEntry.COLUMN_ID,"1");
-////        cv.put("_name","a");
-////        cv.put(SettingDBContract.SettingDataEntry.COLUMN_Item,"relaxation");
-////        cv.put(SettingDBContract.SettingDataEntry.COLUMN_FeedBackWaySecond,"3");
-////        cv.put(SettingDBContract.SettingDataEntry.COLUMN_FeedBackWayStopTipSecond,"2");
-//        mDatabase.insert("TableName",null,cv);
-//        Log.d("yo",""+cv);
-//
-//
-//    }
     public void LoadData() {
 //        recyclerView.setAdapter(mAdapter);
 //        mAdapter.notifyDataSetChanged();
@@ -172,5 +155,23 @@ public class FeedbackFrameSettingsFragment extends Fragment {
             Log.d("fed","mcheckbox"+mCheckBoxDataList.get(i));
         }
         LoadData();
+    }
+    public void  CreateSetting(){
+        final String SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_Name + " VARCHAR(50), " +
+                COLUMN_Item + " VARCHAR(50)," +
+                COLUMN_AttentionHigh + " VARCHAR(50)," +
+                COLUMN_AttentionLow + " VARCHAR(50)," +
+                COLUMN_AttentionFeedBackWay + " VARCHAR(50)," +
+                COLUMN_AttentionMp3Uri + " VARCHAR(250)," +
+                COLUMN_RelaxationHigh + " VARCHAR(50)," +
+                COLUMN_RelaxationLow + " VARCHAR(50)," +
+                COLUMN_RelaxationFeedBackWay + " VARCHAR(50)," +
+                COLUMN_RelaxationMp3Uri + " VARCHAR(250)," +
+                COLUMN_FeedBackWaySecond + " VARCHAR(50)," +
+                COLUMN_FeedBackWayStopTipSecond + " VARCHAR(50)" +
+                ");";
+        mDatabase.execSQL(SQL);
     }
 }

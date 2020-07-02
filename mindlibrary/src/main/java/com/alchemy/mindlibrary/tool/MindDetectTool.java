@@ -2,6 +2,7 @@ package com.alchemy.mindlibrary.tool;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 
 import com.alchemy.mindlibrary.MindKey;
 
@@ -129,6 +130,7 @@ public class MindDetectTool {
 
     protected boolean onMindPower(){
         if(storeAll || (signal == 0 && (attention != 0 || meditation != 0))){
+            Log.d("會出現嗎",""+attention);
             if(onFilter())onMindStore();
 
             if(timer>0) {

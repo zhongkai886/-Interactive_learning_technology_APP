@@ -138,7 +138,7 @@ public class ResultFragment extends Fragment {
         mAttentionFeedBackWay = cursor.getString(cursor.getColumnIndex(COLUMN_AttentionFeedBackWay));
         mFeedBackWaySecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWaySecond));
         mFeedBackWayStopTipSecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWayStopTipSecond));
-        Log.d("??",mAttentionFeedBackWay);
+//        Log.d("??",mAttentionFeedBackWay);
 
         cursor.close();
     }

@@ -54,7 +54,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             mId = itemView.findViewById(R.id.searchId);
             mItem = itemView.findViewById(R.id.searchItem);
             mCount = itemView.findViewById(R.id.count);
-            mTimeDate = itemView.findViewById(R.id.TimeDate);
+            mTimeDate = itemView.findViewById(R.id.timeDate);
             mButton = itemView.findViewById(R.id.searchButton);
         }
     }
@@ -76,6 +76,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
 
         holder.mId.setText(mDetectDataList.get(position).getId());
         holder.mItem.setText(mDetectDataList.get(position).getItem());
+        holder.mCount.setText(mDetectDataList.get(position).getFeedBackCount());
+        holder.mTimeDate.setText(mDetectDataList.get(position).getDetectTime());
         holder.mCheckbox.setTag(position);
         holder.mCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -96,28 +98,35 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         });
 
 
-//        holder.mButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FragmentManager fragmentManager = feedbackFrameSettingsActivity.getActivity().getSupportFragmentManager();
-//                Edit_FeedbackWay edit_FeedbackWay = new Edit_FeedbackWay(
-//                        mFeedbackData.getId(),
-//                        mFeedbackData.getName(),
-//                        mFeedbackData.getItem(),
-//                        mFeedbackData.getAttentionHigh(),
-//                        mFeedbackData.getAttentionLow(),
-//                        mFeedbackData.getAttentionWay(),
-//                        mFeedbackData.getRelaxationHigh(),
-//                        mFeedbackData.getRelaxationLow(),
-//                        mFeedbackData.getRelaxationWay(),
-//                        mFeedbackData.getWaySecond(),
-//                        mFeedbackData.getWayStopTipSecond());
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.center, edit_FeedbackWay);
-//                fragmentTransaction.commit();
-//            }
-//        }
-//        );
+        holder.mButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = dataSearchFragment.getActivity().getSupportFragmentManager();
+                Edit_DetectDataFragment edit_detectDataFragment = new Edit_DetectDataFragment(
+                        mDetectData.getId(),
+                        mDetectData.getDetectTime(),
+                        mDetectData.getItem(),
+                        mDetectData.getFeedBackCount(),
+                        mDetectData.getAttentionHigh(),
+                        mDetectData.getAttentionLow(),
+                        mDetectData.getRelaxationHigh(),
+                        mDetectData.getRelaxationLow(),
+                        mDetectData.getAttentionMax(),
+                        mDetectData.getAttentionMin(),
+                        mDetectData.getRelaxationMax(),
+                        mDetectData.getRelaxationMin(),
+                        mDetectData.getFeedbackSecondsGap(),
+                        mDetectData.getFeedbackPassSecond(),
+                        mDetectData.getAverageAttention(),
+                        mDetectData.getAverageRelaxation(),
+                        mDetectData.getPointInTime()
+                );
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.center, edit_detectDataFragment);
+                fragmentTransaction.commit();
+            }
+        }
+        );
     }
     public ArrayList<String> getId(){
         return  mCheckBoxDataList;
