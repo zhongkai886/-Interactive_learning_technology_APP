@@ -1,24 +1,37 @@
 package com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.DataSearch.SearchFragment;
 
+import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.user.interactive_learning_technology_app.R;
-import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.FeedbackData;
+import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Main.MainActivity;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBHelper;
-import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBHelper;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AttentionHigh;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AttentionLow;
@@ -41,12 +54,13 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationMin;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.TABLE_NAME;
 
-public class DataSearchFragment extends Fragment {
+public class DataSearchFragment extends Fragment implements View.OnClickListener {
     public SQLiteDatabase mDatabase;
     public ArrayList<String> mCheckBoxDataList = new ArrayList<String>();
     public ArrayList<DetectData> detectDataList = new ArrayList<DetectData>();
     public RecyclerView recyclerView;
     public SearchAdapter mAdapter;
+    public Button BtnUpload;
     public DataSearchFragment() {
     }
 
@@ -60,20 +74,22 @@ public class DataSearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_data_search2, container, false);
+        View view = inflater.inflate(R.layout.fragment_data_search, container, false);
 
         SearchDBHelper dbHelper = new SearchDBHelper(getActivity());
-        mDatabase = dbHelper.getWritableDatabase();
-
+        mDatabase = dbHelper.getWritableDatabase(); //寫入
+        mDatabase = dbHelper.getReadableDatabase(); //讀取
         InsertTable();
         LoadData();
 
+        getAuthority();
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new SearchAdapter(detectDataList,this);
         recyclerView.setAdapter(mAdapter);
 
-
+        BtnUpload = (Button) view.findViewById(R.id.dataUpload);
+        BtnUpload.setOnClickListener(this);
 
         return view;
     }
@@ -153,18 +169,86 @@ public class DataSearchFragment extends Fragment {
                 + "','" + COLUMN_AverageRelaxation
                 + "','" + COLUMN_PointInTime + "' ) " +
                 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-//        for (int i = 0 ; i<5 ; i++){
-//            Object[] mValue = new Object[]{"安安","2001","Attention",
-//                    "5",
-//                    "70","20",
-//                    "80","30",
-//                    "100","5",
-//                    "98","3",
-//                    "2","5",
-//                    "45","30",
-//                    "wnfwefnwefnewfnwe"};
-//            mDatabase.execSQL(sql,mValue);
-//        }
+        for (int i = 0 ; i<5 ; i++){
+            Object[] mValue = new Object[]{"安安","2001","Attention",
+                    "5",
+                    "70","20",
+                    "80","30",
+                    "100","5",
+                    "98","3",
+                    "2","5",
+                    "45","30",
+                    "wnfwefnwefnewfnwe"};
+            mDatabase.execSQL(sql,mValue);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.dataUpload:
+                exportCSV();
+//                new ExportDatabaseExcelTask(getActivity()).execute();
+//                Toast.makeText(getActivity(), "花哈哈哈哈ㄏ", Toast.LENGTH_SHORT).show();
+
+        }
+    }
+    public void getAuthority(){
+        if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(
+                    getActivity(),
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    0
+            );
+
+        }
+    }
+
+
+    public void exportCSV(){
+        File carpeta = new File(Environment.getExternalStorageDirectory() + "/ExportarSQLiteCSV");
+        String archivoAgenda = carpeta.toString() + "/" + "Usuarios.csv";
+
+        boolean isCreate = false;
+        if(!carpeta.exists()) {
+            isCreate = carpeta.mkdir();
+        }
+
+        try {
+            FileWriter fileWriter = new FileWriter(archivoAgenda);
+//
+//            AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(getActivity(), "dbSistema", null, 1);
+//
+//            SQLiteDatabase db = admin.getWritableDatabase();
+
+            Cursor fila = mDatabase.rawQuery("select * from usuarios", null);
+
+            if(fila != null && fila.getCount() != 0) {
+                fila.moveToFirst();
+                do {
+
+                    fileWriter.append(fila.getString(0));
+                    fileWriter.append(",");
+                    fileWriter.append(fila.getString(1));
+                    fileWriter.append(",");
+                    fileWriter.append(fila.getString(2));
+                    fileWriter.append("\n");
+
+                } while(fila.moveToNext());
+            } else {
+                Toast.makeText(getActivity(), "No hay registros.", Toast.LENGTH_LONG).show();
+            }
+
+            mDatabase.close();
+            fileWriter.close();
+            Toast.makeText(getActivity(), "SE CREO EL ARCHIVO CSV EXITOSAMENTE", Toast.LENGTH_LONG).show();
+
+        }
+        catch (Exception e) {
+            Log.d("dadada",""+e);
+        }
     }
 }
 

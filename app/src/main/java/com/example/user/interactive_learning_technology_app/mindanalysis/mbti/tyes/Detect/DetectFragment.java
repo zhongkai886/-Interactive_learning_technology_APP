@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import com.alchemy.mindcontroller.MindController;
 import com.alchemy.mindcontroller.MindControllerFactory;
 import com.alchemy.mindlibrary.MindKey;
+import com.alchemy.mindlibrary.tool.MindDetectTool;
 import com.alchemy.mindlibrary.tool.MindDetectToolMulti;
 import com.example.user.interactive_learning_technology_app.R;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.API.BindMetaData.OutPutData;
@@ -36,11 +38,14 @@ import com.example.user.interactive_learning_technology_app.wjk.database.SQLiteC
 import com.example.user.interactive_learning_technology_app.wjk.database.UserTable;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SharedPreferencesHelper.SharedPreferencesHelper;
 
+import org.w3c.dom.Text;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -60,6 +65,7 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_ID;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_Item;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_Name;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_Number;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_PointInTime;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationHigh;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationLow;
@@ -82,6 +88,10 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     public Button mStopButton;
     public EditText mUserNameEdit;
     public TextView mTimerText;
+    public TextView mPointValue;
+    public MindDetectTool mindDetectTool ;
+
+    Handler handler = new Handler();
     boolean toast = true;
 
     //member
@@ -91,6 +101,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     public String mindData;
     public String nameData;
     public String rawData;
+    private ArrayList<String> attention_ArrayList;
 
     @Override
     public void onTimerUp() {
@@ -175,9 +186,10 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 
         mChartAdapterAtt = new NumberAdapter();
         mChartAdapterMed = new NumberAdapter();
+        attention_ArrayList = new ArrayList<String>();
         mChartAdapterAtt.color = getResources().getColor(R.color.chart_attention);
         mChartAdapterMed.color = getResources().getColor(R.color.chart_meditation);
-
+        mindDetectTool = new MindDetectTool();
         mTimeDetect = new MindDetectToolMulti(30);
         mTimeDetect.setListen(this);
         mMindCenter = MindControllerFactory.obtain(getActivity().getApplicationContext(), mTimeDetect.getHandler());
@@ -207,27 +219,31 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         mPauseButton = (Button) view.findViewById(R.id.removeButton);
         mStopButton = (Button) view.findViewById(R.id.stopButton);
         mUserNameEdit = (EditText) view.findViewById(R.id.fragment_detect_username);
+        mPointValue = (TextView)view.findViewById(R.id.recordPointTx);
         _initView();
         return view;
     }
 
-    private void _initView() {
-
+    public void _initView() {
+        //share選擇的時間
         String timeId = getActivity().getSharedPreferences("timeSelect", MODE_PRIVATE)
                 .getString("USER", "");
 
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int t = Integer.valueOf(timeId);
+                int t = 5;
+//                        Integer.valueOf(timeId);
                 mTimeDetect.setTimer(t);
-
 
                 mTimeDetect.setRound(1);
                 mTimeDetect_data = "";
                 mTimeDetect.start();
-
                 _state("start");
+
+                handler.postDelayed(updateDevice,500);
+
+
             }
         });
         mPauseButton.setOnClickListener(new View.OnClickListener() {
@@ -258,18 +274,19 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
             mStartButton.setVisibility(View.VISIBLE);
             mStopButton.setVisibility(View.GONE);
             mPauseButton.setVisibility(View.GONE);
-            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            final ResultFragment resultFragment = new ResultFragment();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.center, resultFragment);
-            fragmentTransaction.commit();
+//            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//            final ResultFragment resultFragment = new ResultFragment();
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            fragmentTransaction.replace(R.id.center, resultFragment);
+//            fragmentTransaction.commit();
         }
     }
 
-    private void _result(){
+    private void _result(){ //測驗資料的19筆欄位
         final String SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_Name + " VARCHAR(50), " +
+                COLUMN_Number + " VARCHAR(50), " +
                 COLUMN_DetectTime + " VARCHAR(50)," +
                 COLUMN_Item + " VARCHAR(50)," +
                 COLUMN_FeedBackCount + " VARCHAR(50)," +
@@ -289,7 +306,8 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 ");";
         sqLiteDatabase.execSQL(SQL);
 
-        String sql = "INSERT into '" + TABLE_NAME + "' ( '" + COLUMN_Name
+        String sql = "INSERT into '" + TABLE_NAME + "' ( '" +COLUMN_Number
+                + "','" + COLUMN_Name
                 + "','" + COLUMN_DetectTime
                 + "','" + COLUMN_Item
                 + "','" + COLUMN_FeedBackCount
@@ -306,17 +324,13 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 + "','" + COLUMN_AverageAttention
                 + "','" + COLUMN_AverageRelaxation
                 + "','" + COLUMN_PointInTime + "' ) " +
-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-        Object[] mValue = new Object[]{"安安","2001","Attention",
-                "5",
-                "70","20",
-                "80","30",
-                "100","5",
-                "98","3",
-                "2","5",
-                "45","30",
-                ""};
+        Object[] mValue = new Object[]{"編號","名稱","日期","Attention",
+                "總回饋次數","a高","a低","r高",
+                "r低","a最大","a最小","r最大",
+                "r最小","間隔秒數", "忽略","平均a",
+                "平均r","data"};
 
 
 
@@ -340,7 +354,32 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 //        if (mListener != null) mListener.onComplete();
 
     }
+    public void changeTextView(Integer attentionValue){
+        mPointValue.setText(attentionValue.toString());
+    }
 
+    private Runnable updateDevice = new Runnable() {
+        public void run() {
+            if (mTimeDetect.getState() == 2){
+                changeTextView(10000);
+            }
+            else if (mTimeDetect.getState() == 1){
+                Log.d("%%%",""+mTimeDetect.getAttention());
+//                Random random = new Random();
+//                int answer = random.nextInt((100 - 0 + 1) + 0);
+                changeTextView(mTimeDetect.getAttention());
+                if (mTimeDetect.getData().length()==0){
+                    Log.d("%%%","end");
+                }else{
+                    attention_ArrayList.add(mTimeDetect.getData());
+                }
+//                attention_ArrayList.add(mTimeDetect.getAttention().toString());
+                handler.postDelayed(this, 1000);
+            }
+            Log.d("%%%need",""+attention_ArrayList); //專門取attention
+            Log.d("%%%data",""+mTimeDetect.getData());//取全部數值
+        }
+    };
     public void CallApi() {
         final SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(getContext());
         String UserId = sharedPreferencesHelper.getUserId();

@@ -117,6 +117,11 @@ public class MindDetectTool {
     public String getData(){
         return mArrayMap.toString();
     }
+    public Integer getAttention(){
+        return attention;
+    }
+
+
 
     public void setStoreAll(boolean e){
         storeAll = e;
@@ -131,6 +136,7 @@ public class MindDetectTool {
     protected boolean onMindPower(){
         if(storeAll || (signal == 0 && (attention != 0 || meditation != 0))){
             Log.d("會出現嗎",""+attention);
+
             if(onFilter())onMindStore();
 
             if(timer>0) {

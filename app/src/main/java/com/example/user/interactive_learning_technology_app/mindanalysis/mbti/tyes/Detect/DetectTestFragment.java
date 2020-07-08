@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.user.interactive_learning_technology_app.R;
 
+import java.util.Random;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
@@ -54,25 +55,49 @@ public class DetectTestFragment extends Fragment {
 
         String loginId = getActivity().getSharedPreferences("detectId", MODE_PRIVATE)
                 .getString("USER", "");
+        String fb_way = getActivity().getSharedPreferences("selectItem", MODE_PRIVATE)
+                .getString("USER", "");
         detectIdTextView.setText(loginId);
         againButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (onClickBoolean==false){
-            onClickBoolean=true;
-                    handler.postDelayed(updateDevice,500);
-        }else{
-            handler.removeCallbacks(updateDevice);
-            onClickBoolean=false;
-            againButton.setBackgroundColor(againButton.getContext().getResources().getColor(R.color.white));
-        }
-    }
+                if (fb_way.equals("0")){
+                    setVibrate(1000);
+                }
+                else if (fb_way.equals("1")){
+                    if (onClickBoolean==false){
+                        onClickBoolean=true;
+                        handler.postDelayed(updateDevice,500);
+                    }else{
+                        handler.removeCallbacks(updateDevice);
+                        onClickBoolean=false;
+                        testButton.setBackgroundColor(testButton.getContext().getResources().getColor(R.color.white));
+                    }
+                }else{
+
+                }
+            }
         });
 
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setVibrate(1000);
+                if (fb_way.equals("0")){
+                    setVibrate(1000);
+                }
+                else if (fb_way.equals("1")){
+                    if (onClickBoolean==false){
+                        onClickBoolean=true;
+                        handler.postDelayed(updateDevice,500);
+                    }else{
+                        handler.removeCallbacks(updateDevice);
+                        onClickBoolean=false;
+                        testButton.setBackgroundColor(testButton.getContext().getResources().getColor(R.color.white));
+                    }
+                }else{
+
+                }
+
             }
         });
         detectButton.setOnClickListener(new View.OnClickListener() {
@@ -93,12 +118,11 @@ public class DetectTestFragment extends Fragment {
     Boolean na = true;
     private Runnable updateDevice = new Runnable() {
         public void run() {
-
             if (na==true){
-                againButton.setBackgroundColor(againButton.getContext().getResources().getColor(R.color.colorPrimaryDark));
+                testButton.setBackgroundColor(testButton.getContext().getResources().getColor(R.color.colorPrimaryDark));
                 na=false;
             }else{
-                againButton.setBackgroundColor(againButton.getContext().getResources().getColor(R.color.white));
+                testButton.setBackgroundColor(testButton.getContext().getResources().getColor(R.color.white));
                 na=true;
             }
             handler.postDelayed(this, 1000);
