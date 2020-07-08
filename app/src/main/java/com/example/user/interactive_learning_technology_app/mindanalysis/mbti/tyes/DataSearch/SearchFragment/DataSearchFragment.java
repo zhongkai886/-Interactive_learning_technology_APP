@@ -169,18 +169,18 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                 + "','" + COLUMN_AverageRelaxation
                 + "','" + COLUMN_PointInTime + "' ) " +
                 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        for (int i = 0 ; i<5 ; i++){
-            Object[] mValue = new Object[]{"安安","2001","Attention",
-                    "5",
-                    "70","20",
-                    "80","30",
-                    "100","5",
-                    "98","3",
-                    "2","5",
-                    "45","30",
-                    "wnfwefnwefnewfnwe"};
-            mDatabase.execSQL(sql,mValue);
-        }
+//        for (int i = 0 ; i<5 ; i++){
+//            Object[] mValue = new Object[]{"安安","2001","Attention",
+//                    "5",
+//                    "70","20",
+//                    "80","30",
+//                    "100","5",
+//                    "98","3",
+//                    "2","5",
+//                    "45","30",
+//                    "wnfwefnwefnewfnwe"};
+//            mDatabase.execSQL(sql,mValue);
+//        }
     }
 
     @Override

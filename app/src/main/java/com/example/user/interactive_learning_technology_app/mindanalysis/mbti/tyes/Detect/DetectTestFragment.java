@@ -58,13 +58,11 @@ public class DetectTestFragment extends Fragment {
         String fb_way = getActivity().getSharedPreferences("selectItem", MODE_PRIVATE)
                 .getString("USER", "");
         detectIdTextView.setText(loginId);
+        Log.d("wayway", "onCreateView: "+fb_way);
         againButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (fb_way.equals("0")){
-                    setVibrate(1000);
-                }
-                else if (fb_way.equals("1")){
                     if (onClickBoolean==false){
                         onClickBoolean=true;
                         handler.postDelayed(updateDevice,500);
@@ -73,6 +71,9 @@ public class DetectTestFragment extends Fragment {
                         onClickBoolean=false;
                         testButton.setBackgroundColor(testButton.getContext().getResources().getColor(R.color.white));
                     }
+                }
+                else if (fb_way.equals("1")){
+                    setVibrate(1000);
                 }else{
 
                 }
@@ -83,9 +84,6 @@ public class DetectTestFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (fb_way.equals("0")){
-                    setVibrate(1000);
-                }
-                else if (fb_way.equals("1")){
                     if (onClickBoolean==false){
                         onClickBoolean=true;
                         handler.postDelayed(updateDevice,500);
@@ -94,6 +92,10 @@ public class DetectTestFragment extends Fragment {
                         onClickBoolean=false;
                         testButton.setBackgroundColor(testButton.getContext().getResources().getColor(R.color.white));
                     }
+                }
+                else if (fb_way.equals("1")){
+                    setVibrate(1000);
+
                 }else{
 
                 }

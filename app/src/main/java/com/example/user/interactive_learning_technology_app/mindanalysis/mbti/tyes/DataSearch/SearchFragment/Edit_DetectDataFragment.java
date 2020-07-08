@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,6 +100,7 @@ public class Edit_DetectDataFragment extends Fragment {
         TvAttentionHigh.setText(mAttentionHigh);
         TvAttentionLow.setText(mAttentionLow);
         TvRelaxationHigh.setText(mRelaxationHigh);
+        Log.d("taggggg", "onCreateView: "+mRelaxationMax);
         TvRelaxationLow.setText(mRelaxationLow);
         TvAttentionMax.setText(mAttentionMax);
         TvAttentionMin.setText(mAttentionMin);

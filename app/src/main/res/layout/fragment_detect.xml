@@ -74,11 +74,14 @@
 <!--        app:layout_constraintTop_toBottomOf="@+id/fragment_detect_title" />-->
     <TextView
         android:id="@+id/recordPointTx"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:text="顯示水平值"
-        android:textSize="50dp"
+        android:layout_width="265dp"
+        android:layout_height="281dp"
+        android:background="@drawable/shape_oval"
         android:gravity="center"
+        android:text="顯示水平值"
+        android:textSize="40dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/fragment_detect_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

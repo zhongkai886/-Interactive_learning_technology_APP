@@ -9,19 +9,19 @@ public class FeedbackData {
     private String AttentionHigh;
     private String AttentionLow;
     private String AttentionWay;
-    //    private String AttentionMp3Uri;
+    private String AttentionMp3Uri;
     private String RelaxationHigh;
     private String RelaxationLow;
     private String RelaxationWay;
-    //    private String RelaxationMp3Uri;
+    private String RelaxationMp3Uri;
     private String WaySecond;
     private String WayStopTipSecond;
 
     public FeedbackData(String Id , String Name , String Item,
                       String AttentionHigh, String AttentionLow, String AttentionWay,
-//                        String AttentionMp3Uri,
+                        String AttentionMp3Uri,
                       String RelaxationHigh, String RelaxationLow, String RelaxationWay,
-//                        String RelaxationMp3Uri,
+                        String RelaxationMp3Uri,
                       String WaySecond, String WayStopTipSecond){
         this.Id=Id;
         this.Name=Name;
@@ -29,11 +29,11 @@ public class FeedbackData {
         this.AttentionHigh=AttentionHigh;
         this.AttentionLow=AttentionLow;
         this.AttentionWay=AttentionWay;
-//        this.AttentionMp3Uri=AttentionMp3Uri;
+        this.AttentionMp3Uri=AttentionMp3Uri;
         this.RelaxationHigh=RelaxationHigh;
         this.RelaxationLow=RelaxationLow;
         this.RelaxationWay=RelaxationWay;
-//        this.RelaxationMp3Uri=RelaxationMp3Uri;
+        this.RelaxationMp3Uri=RelaxationMp3Uri;
         this.WaySecond=WaySecond;
         this.WayStopTipSecond=WayStopTipSecond;
     }

@@ -1,20 +1,29 @@
 package com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Detect;
 
+import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Handler;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -31,7 +40,10 @@ import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.ty
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.API.PostData.Esense;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.API.PostData.OutputPost;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.API.RetrofitClient;
+import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.FeedbackData;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBHelper;
+import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract;
+import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBHelper;
 import com.example.user.interactive_learning_technology_app.widget.PreferencesCenter;
 import com.example.user.interactive_learning_technology_app.widget.StringMultiple;
 import com.example.user.interactive_learning_technology_app.wjk.database.SQLiteCenter;
@@ -45,6 +57,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 
 import retrofit2.Call;
@@ -63,6 +78,7 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_FeedBackPassSeconds;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_FeedBackSecondsGap;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_ID;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_ID2;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_Item;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_Name;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_Number;
@@ -72,6 +88,13 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationMax;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationMin;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.TABLE_NAME;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.TABLE_NAME2;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionFeedBackWay;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionMp3Uri;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_FeedBackWaySecond;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_FeedBackWayStopTipSecond;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationFeedBackWay;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationMp3Uri;
 
 
 public class DetectFragment extends Fragment implements MindDetectToolMulti.Listen{
@@ -86,11 +109,17 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     public Button mStartButton;
     public Button mPauseButton;
     public Button mStopButton;
+    public Button mRecordPointButton;
     public EditText mUserNameEdit;
     public TextView mTimerText;
     public TextView mPointValue;
     public MindDetectTool mindDetectTool ;
+    public AlertDialog.Builder builder;
+    public AlertDialog dialog;
 
+    public String[] mNumPoint= {"1","2","3","4","5","6","7","8","9","10"};
+    public String[] mIdPoint= {"A","B","C","D","E"};
+    public ArrayList<String> pointData = new ArrayList<String>();
     Handler handler = new Handler();
     boolean toast = true;
 
@@ -102,6 +131,28 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     public String nameData;
     public String rawData;
     private ArrayList<String> attention_ArrayList;
+    public String sqlId;
+
+    public String mNum;
+    public String mId;
+    //checkpoint資料
+    public String pointDataSql = "";
+    //load檔案
+    public ArrayList<FeedbackData> feedbackDataList = new ArrayList<FeedbackData>();
+    public String settingId = "";
+    //上傳測驗資料的變數
+    public String detectId="";
+    public CharSequence dateTime="";
+    public String detectItem="";
+    public String detectSecond="";
+    public String detectSecondGap="";
+    public String mAttentionHigh="";
+
+//    public String[] myResArray = getResources().getStringArray(R.array.aE);
+//    public List<String> idArray = Arrays.asList(myResArray);
+//    List<String> myArrayList = Arrays.asList(getResources().getStringArray(R.array.aE));
+
+//    public ArrayList<String> idArray = new ArrayList<String>(R.array.aE);
 
     @Override
     public void onTimerUp() {
@@ -218,8 +269,12 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         mStartButton = (Button) view.findViewById(R.id.detectButton);
         mPauseButton = (Button) view.findViewById(R.id.removeButton);
         mStopButton = (Button) view.findViewById(R.id.stopButton);
+        mRecordPointButton = (Button)view.findViewById(R.id.recordPoint);
         mUserNameEdit = (EditText) view.findViewById(R.id.fragment_detect_username);
         mPointValue = (TextView)view.findViewById(R.id.recordPointTx);
+        builder = new AlertDialog.Builder(getActivity());
+
+
         _initView();
         return view;
     }
@@ -232,7 +287,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int t = 5;
+                int t = 30;
 //                        Integer.valueOf(timeId);
                 mTimeDetect.setTimer(t);
 
@@ -261,6 +316,12 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 _state("stop");
             }
         });
+        mRecordPointButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog();
+            }
+        });
     }
 
     private void _state(String state) {
@@ -283,6 +344,8 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     }
 
     private void _result(){ //測驗資料的19筆欄位
+        LoadData();
+        dataHand();
         final String SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_Name + " VARCHAR(50), " +
@@ -306,6 +369,8 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 ");";
         sqLiteDatabase.execSQL(SQL);
 
+
+
         String sql = "INSERT into '" + TABLE_NAME + "' ( '" +COLUMN_Number
                 + "','" + COLUMN_Name
                 + "','" + COLUMN_DetectTime
@@ -326,11 +391,11 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 + "','" + COLUMN_PointInTime + "' ) " +
                 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-        Object[] mValue = new Object[]{"編號","名稱","日期","Attention",
+        Object[] mValue = new Object[]{detectId,"名稱",dateTime,detectItem,
                 "總回饋次數","a高","a低","r高",
                 "r低","a最大","a最小","r最大",
                 "r最小","間隔秒數", "忽略","平均a",
-                "平均r","data"};
+                "平均r",pointDataSql};
 
 
 
@@ -354,8 +419,49 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 //        if (mListener != null) mListener.onComplete();
 
     }
+    public void dataHand(){
+        //偵測編號
+        detectId = getActivity().getSharedPreferences("detectId", MODE_PRIVATE)
+                .getString("USER", "");
+        //抽資料要用SqlId
+        settingId = getActivity().getSharedPreferences("selectId", MODE_PRIVATE)
+                .getString("USER", "");
+
+        //測驗日期
+        Calendar mCal = Calendar.getInstance();
+        dateTime = DateFormat.format("yyyy-MM-dd kk:mm:ss", mCal.getTime());    // kk:24小時制, hh:12小時制
+
+        //item
+        Log.d("aaaaa",""+feedbackDataList.get(Integer.valueOf(settingId)).getItem());
+        detectItem = feedbackDataList.get(Integer.valueOf(settingId)).getItem();
+        //回饋間隔秒數
+        detectSecond = feedbackDataList.get(Integer.valueOf(settingId)).getWaySecond();
+        //忽略的秒數
+        detectSecondGap = feedbackDataList.get(Integer.valueOf(settingId)).getWayStopTipSecond();
+    }
     public void changeTextView(Integer attentionValue){
-        mPointValue.setText(attentionValue.toString());
+    if (attentionValue>0 && attentionValue<20){
+//        mPointValue.setBackgroundColor(mPointValue.getContext().getResources().getColor(R.color.white));
+        mPointValue.setBackground(mPointValue.getContext().getDrawable(R.drawable.shape_oval));
+    }
+    if(attentionValue>20 && attentionValue<40){
+//        mPointValue.setBackgroundColor(mPointValue.getContext().getResources().getColor(R.color.chart_meditation));
+        mPointValue.setBackground(mPointValue.getContext().getDrawable(R.drawable.shape_oval1));
+    }
+    if(attentionValue>40 && attentionValue<60){
+//        mPointValue.setBackgroundColor(mPointValue.getContext().getResources().getColor(R.color.chart_attention));
+        mPointValue.setBackground(mPointValue.getContext().getDrawable(R.drawable.shape_oval2));
+    }
+    if(attentionValue>60 && attentionValue<80){
+//        mPointValue.setBackgroundColor(mPointValue.getContext().getResources().getColor(R.color.colorAccent));
+        mPointValue.setBackground(mPointValue.getContext().getDrawable(R.drawable.shape_oval3));
+    }
+    if(attentionValue>80 && attentionValue<100){
+//        mPointValue.setBackgroundColor(mPointValue.getContext().getResources().getColor(R.color.colorPrimaryDark));
+        mPointValue.setBackground(mPointValue.getContext().getDrawable(R.drawable.shape_oval4));
+    }
+    mPointValue.setText(attentionValue.toString());
+
     }
 
     private Runnable updateDevice = new Runnable() {
@@ -374,6 +480,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                     attention_ArrayList.add(mTimeDetect.getData());
                 }
 //                attention_ArrayList.add(mTimeDetect.getAttention().toString());
+//                if (mTimeDetect.getAttention()>)
                 handler.postDelayed(this, 1000);
             }
             Log.d("%%%need",""+attention_ArrayList); //專門取attention
@@ -527,4 +634,116 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 
 
     }
+
+    protected void showDialog(){
+
+        Dialog dialog = new Dialog(getActivity());
+        dialog.setCancelable(true);
+
+        View view  = getActivity().getLayoutInflater().inflate(R.layout.dialog_checkpoint, null);
+        dialog.setContentView(view);
+        Spinner spinnerId = view.findViewById(R.id.pointId);
+        Spinner spinnerNum = view.findViewById(R.id.pointNum);
+        Button buttonY = view.findViewById(R.id.buttonY);
+        Button buttonN = view.findViewById(R.id.buttonN);
+
+        //Spinner 註冊adapter
+        ArrayAdapter<CharSequence> idAdapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.aE, android.R.layout.simple_spinner_item);
+        idAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerId.setAdapter(idAdapter);
+
+        ArrayAdapter<String> numAdapter = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_spinner_item,mNumPoint);
+        numAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerNum.setAdapter(numAdapter);
+
+        spinnerId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Integer  settingId = parent.getPositionForView(view);
+                mId = settingId.toString();
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spinnerNum.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Integer  settingNum = parent.getPositionForView(view);
+                mNum = settingNum.toString();
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        buttonY.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Integer timer = mTimeDetect.getTimer();
+                sqlId=mIdPoint[Integer.valueOf(mId)]+mNumPoint[Integer.valueOf(mNum)];
+                pointData.add(mTimeDetect.getAttention().toString());
+                Integer mAttention = mTimeDetect.getAttention();
+                Integer mRel = mTimeDetect.getMeditation();
+
+                Random random = new Random();
+                int answer = random.nextInt((6 - 0 + 1) + 0);
+                pointDataSql=pointDataSql+timer+","+mAttention+","+mRel+","+answer+","+""+",";
+
+                Log.d("aaaaa",""+pointDataSql);
+            }
+        });
+        buttonN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+        dialog.show();
+    }
+    public void LoadData() {
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM settingDataList", null);
+        while (cursor.moveToNext()) {
+            String id = cursor.getString(cursor.getColumnIndex(SettingDBContract.SettingDataEntry.COLUMN_ID));
+            String name = cursor.getString(cursor.getColumnIndex(SettingDBContract.SettingDataEntry.COLUMN_Name));
+            String item = cursor.getString(cursor.getColumnIndex(SettingDBContract.SettingDataEntry.COLUMN_Item));
+            String attentionHigh = cursor.getString(cursor.getColumnIndex(SettingDBContract.SettingDataEntry.COLUMN_AttentionHigh));
+            String attentionLow = cursor.getString(cursor.getColumnIndex(SettingDBContract.SettingDataEntry.COLUMN_AttentionLow));
+            String attentionFeedBackWay = cursor.getString(cursor.getColumnIndex(COLUMN_AttentionFeedBackWay));
+            String attentionMp3Uri = cursor.getString(cursor.getColumnIndex(COLUMN_AttentionMp3Uri));
+            String relaxationHigh = cursor.getString(cursor.getColumnIndex(SettingDBContract.SettingDataEntry.COLUMN_RelaxationHigh));
+            String relaxationLow = cursor.getString(cursor.getColumnIndex(SettingDBContract.SettingDataEntry.COLUMN_RelaxationLow));
+            String relaxationFeedBackWay = cursor.getString(cursor.getColumnIndex(COLUMN_RelaxationFeedBackWay));
+            String relaxationMp3Uri = cursor.getString(cursor.getColumnIndex(COLUMN_RelaxationMp3Uri));
+            String feedBackWaySecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWaySecond));
+            String feedBackWayStopTipSecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWayStopTipSecond));
+            FeedbackData feedbackData = new FeedbackData(id, name, item, attentionHigh, attentionLow, attentionFeedBackWay,attentionMp3Uri,
+                    relaxationHigh, relaxationLow, relaxationFeedBackWay,relaxationMp3Uri,feedBackWaySecond, feedBackWayStopTipSecond);
+            feedbackDataList.add(feedbackData);
+            Log.d("刷新",""+feedbackData);
+        }
+        cursor.close();
+    }
+//    public Cursor searchData(String text){
+//        SettingDBHelper dbHelper = new SettingDBHelper(getActivity());
+//        sqLiteDatabase = dbHelper.getReadableDatabase(); //讀取
+//        String query ="Select * from " + SettingDBContract.SettingDataEntry.TABLE_NAME+" WHERE "
+//                + SettingDBContract.SettingDataEntry.COLUMN_ID+" LIKE '%"+text+"%'";
+//
+//        Cursor cursor = sqLiteDatabase.rawQuery(query,null);
+//
+//        String id = cursor.getString(cursor.getColumnIndex(SettingDBContract.SettingDataEntry.COLUMN_ID));
+//        String item = cursor.getString(cursor.getColumnIndex(SettingDBContract.SettingDataEntry.COLUMN_Item));
+////        Log.d("testttt",""+id+"////"+item);
+//        return cursor;
+//    }
 }

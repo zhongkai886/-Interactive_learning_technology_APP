@@ -138,7 +138,7 @@ public class FeedbackFrameSettingsFragment extends Fragment {
             String feedBackWaySecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWaySecond));
             String feedBackWayStopTipSecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWayStopTipSecond));
             FeedbackData feedbackData = new FeedbackData(id, name, item, attentionHigh, attentionLow, attentionFeedBackWay,
-                    relaxationHigh, relaxationLow, relaxationFeedBackWay, feedBackWaySecond, feedBackWayStopTipSecond);
+                    attentionMp3Uri,relaxationHigh, relaxationLow, relaxationFeedBackWay,relaxationMp3Uri,feedBackWaySecond, feedBackWayStopTipSecond);
             feedbackDataList.add(feedbackData);
             Log.d("刷新",""+feedbackData);
         }

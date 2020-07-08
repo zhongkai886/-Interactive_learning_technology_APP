@@ -126,6 +126,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.center, edit_detectDataFragment);
                 fragmentTransaction.commit();
+                Log.d("question",""+mDetectData.getAttentionMax()+"////..."+mDetectData.getFeedbackPassSecond());
             }
         }
         );

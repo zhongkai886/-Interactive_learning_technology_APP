@@ -25,5 +25,13 @@ public class SearchDBContract {
         public static final String  COLUMN_AverageAttention ="average_Attention";
         public static final String  COLUMN_AverageRelaxation ="average_Relaxation";
         public static final String  COLUMN_PointInTime = "point_In_Time";
+
+        public static final String  TABLE_NAME2 ="data";
+        public static final String  COLUMN_ID2 ="id";
+        public static final String  COLUMN_Time ="pointTime";
+        public static final String  COLUMN_Attention ="attention";
+        public static final String  COLUMN_Relaxation ="relaxation";
+        public static final String  COLUMN_Seconds ="seconds";
+        public static final String  COLUMN_Other ="other";
     }
 }
