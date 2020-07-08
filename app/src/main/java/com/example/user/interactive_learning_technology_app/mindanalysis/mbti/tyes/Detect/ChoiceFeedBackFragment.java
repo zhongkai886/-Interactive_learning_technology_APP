@@ -24,6 +24,7 @@ import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.ty
 import java.util.ArrayList;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionFeedBackWay;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_ID;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_Item;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_Name;
@@ -37,6 +38,7 @@ public class ChoiceFeedBackFragment extends Fragment {
     private ArrayList<String> ListId = new ArrayList<String>();
     private ArrayList<String> ListName = new ArrayList<String>();
     private ArrayList<String> ListItem = new ArrayList<String>();
+    private ArrayList<String> ListWay = new ArrayList<String>();
     public ChoiceFeedBackFragment() {
     }
 
@@ -67,8 +69,8 @@ public class ChoiceFeedBackFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Integer  settingId = adapterView.getPositionForView(view);
-                String user = settingId.toString();
-                              SharedPreferences pref = getActivity().getSharedPreferences("select", MODE_PRIVATE);
+                String user = ListWay.get(settingId);
+                              SharedPreferences pref = getActivity().getSharedPreferences("selectItem", MODE_PRIVATE);
                 pref.edit()
                         .putString("USER", user)
                         .commit();
@@ -116,10 +118,12 @@ public class ChoiceFeedBackFragment extends Fragment {
             String id = cursor.getString(cursor.getColumnIndex(COLUMN_ID));
             String name = cursor.getString(cursor.getColumnIndex(COLUMN_Name));
             String item = cursor.getString(cursor.getColumnIndex(COLUMN_Item));
+            String fb_way = cursor.getString(cursor.getColumnIndex(COLUMN_AttentionFeedBackWay));
             ListId.add(id);
             ListName.add(name);
             ListItem.add(item);
-            Log.d("comeIn", "LoadData: "+ListId.size()+"///"+ListName.size()+"////"+ListItem);
+            ListWay.add(fb_way);
+            Log.d("comeIn", "LoadData: "+ListId.size()+"///"+ListName.size()+"////"+ListItem+"////"+ListWay);
 
         }
         cursor.close();

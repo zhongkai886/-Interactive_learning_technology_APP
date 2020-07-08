@@ -78,24 +78,24 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         holder.mItem.setText(mDetectDataList.get(position).getItem());
         holder.mCount.setText(mDetectDataList.get(position).getFeedBackCount());
         holder.mTimeDate.setText(mDetectDataList.get(position).getDetectTime());
-        holder.mCheckbox.setTag(position);
-        holder.mCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Object position1 = compoundButton.getTag();
-
-                if (holder.mCheckbox.isChecked()){
-                    mCheckBoxDataList.add(mDetectData.getId());
-                    Log.d("yoyo",""+position1);
-                    Log.d("yoyoCheck",""+mCheckBoxDataList);
-                } else{
-                    mCheckBoxDataList.remove(position1.toString());
-                    Log.d("yoyo",""+position1);
-                    Log.d("yoyoCheck",""+mCheckBoxDataList);
-
-                }
-            }
-        });
+//        holder.mCheckbox.setTag(position);
+//        holder.mCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                Object position1 = compoundButton.getTag();
+//
+//                if (holder.mCheckbox.isChecked()){
+//                    mCheckBoxDataList.add(mDetectData.getId());
+//                    Log.d("yoyo",""+position1);
+//                    Log.d("yoyoCheck",""+mCheckBoxDataList);
+//                } else{
+//                    mCheckBoxDataList.remove(position1.toString());
+//                    Log.d("yoyo",""+position1);
+//                    Log.d("yoyoCheck",""+mCheckBoxDataList);
+//
+//                }
+//            }
+//        });
 
 
         holder.mButton.setOnClickListener(new View.OnClickListener() {
@@ -130,6 +130,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         }
         );
     }
+
     public ArrayList<String> getId(){
         return  mCheckBoxDataList;
     }
