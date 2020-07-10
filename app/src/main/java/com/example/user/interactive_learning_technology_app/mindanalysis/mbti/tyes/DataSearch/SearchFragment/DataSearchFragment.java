@@ -324,8 +324,8 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
 
 
 //        driveServiceHelper.fileName(fileName.get(i));
-        Log.d("88888",""+sdCardDir+"/////"+filename);
-                driveServiceHelper.createFile(sdCardDir+filename,filename)
+        Log.d("88888",""+sdCardDir+"/"+filename+"/////"+filename);
+                driveServiceHelper.createFile(sdCardDir+"/"+filename,filename)
                         .addOnSuccessListener(new OnSuccessListener<String>() {
                             @Override
                             public void onSuccess(String s) {

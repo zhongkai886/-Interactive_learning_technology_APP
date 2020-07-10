@@ -40,7 +40,7 @@ public class DriveServiceHelper {
                 e.printStackTrace();
                 Log.d("error",""+e);
             }
-            Log.d("88888",""+fileMetaData+"/////"+myFile);
+//            Log.d("88888",""+fileMetaData+"/////"+myFile);
             if (myFile == null){
                 throw new IOException("Null result when request file creation");
             }

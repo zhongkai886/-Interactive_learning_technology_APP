@@ -121,10 +121,10 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     public String nameData;
     public String rawData;
     private ArrayList<String> attention_ArrayList;
-    public String sqlId;
+    public String sqlId="";
 
-    public String mNum;
-    public String mId;
+    public String mNum="";
+    public String mId="";
     //checkpoint資料
     public String pointDataSql = "";
     //load檔案
@@ -137,15 +137,15 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     public String detectItem="";
     public String detectSecond="";
     public String detectSecondGap="";
-    public Integer mAttention;
-    public String mAttentionHigh; //儲存setting欄位並儲存
-    public String mAttentionLow; //儲存setting欄位並儲存
-    public String mRelaxationHigh; //儲存setting欄位並儲存
-    public String mRelaxationLow; //儲存setting欄位並儲存
-    public Integer mAttentionMax; //儲存setting欄位並儲存
-    public Integer mAttentionMin; //儲存setting欄位並儲存
-    public Integer mRelaxationMax; //儲存setting欄位並儲存
-    public Integer mRelaxationMin; //儲存setting欄位並儲存
+    public Integer mAttention=0;
+    public String mAttentionHigh=""; //儲存setting欄位並儲存
+    public String mAttentionLow=""; //儲存setting欄位並儲存
+    public String mRelaxationHigh=""; //儲存setting欄位並儲存
+    public String mRelaxationLow=""; //儲存setting欄位並儲存
+    public Integer mAttentionMax=0; //儲存setting欄位並儲存
+    public Integer mAttentionMin=0; //儲存setting欄位並儲存
+    public Integer mRelaxationMax=0; //儲存setting欄位並儲存
+    public Integer mRelaxationMin=0; //儲存setting欄位並儲存
     public double mAverageAttention; //儲存setting欄位並儲存
     public double mAverageRelaxation; //儲存setting欄位並儲存
 
@@ -295,12 +295,12 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 .getString("USER", "");
         //抽資料要用SqlId 選擇的設定檔id
         settingId = getActivity().getSharedPreferences("selectId", MODE_PRIVATE)
+
                 .getString("USER", "");
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int t = 30;
-//                        Integer.valueOf(timeId);
+                int t = Integer.valueOf(timeId);
                 mTimeDetect.setTimer(t);
 
                 mTimeDetect.setRound(1);
@@ -475,7 +475,8 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 
         mAverageRelaxation = calculateAverage(mRelaxationList);
 
-        Log.d("maxmax",""+mAttentionMax);
+        Log.d("maxmaxatt",""+mAttentionList);
+        Log.d("maxmaxrel",""+mRelaxationList);
     }
     private double calculateAverage(List<Integer> marks) {
         Integer sum = 0;
