@@ -69,12 +69,26 @@ public class ChoiceFeedBackFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Integer  settingId = adapterView.getPositionForView(view);
-                String selectId = ListId.get(settingId);
-                              SharedPreferences pref = getActivity().getSharedPreferences("selectId", MODE_PRIVATE);
+                String selectId = ListWay.get(settingId);
+                String selectPosition = ListId.get(settingId);
+                Log.d("111113333",""+selectPosition);
+                String selectAttentionWay = ListWay.get(settingId);
+
+                SharedPreferences pref = getActivity().getSharedPreferences("selectId", MODE_PRIVATE);
                 pref.edit()
                         .putString("USER", String.valueOf(settingId))
                         .commit();
-                Log.d("這是啥",""+settingId);
+
+                SharedPreferences pref3 = getActivity().getSharedPreferences("selectIdd", MODE_PRIVATE);
+                pref3.edit()
+                        .putString("USER", String.valueOf(settingId))
+                        .commit();
+
+                SharedPreferences pref2 = getActivity().getSharedPreferences("selectAttentionWay", MODE_PRIVATE);
+                pref2.edit()
+                        .putString("USER", selectAttentionWay)
+                        .commit();
+                Log.d("這是啥",""+selectAttentionWay);
 
             }
             @Override

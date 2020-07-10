@@ -120,6 +120,9 @@ public class MindDetectTool {
     public Integer getAttention(){
         return attention;
     }
+    public Integer getMeditation(){
+        return meditation;
+    }
 
 
 

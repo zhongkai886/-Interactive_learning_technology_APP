@@ -88,7 +88,7 @@ public class Edit_DetectDataFragment extends Fragment {
         final TextView TvRelaxationMax =(TextView) view.findViewById(R.id.relaxationMax);
         final TextView TvRelaxationMin =(TextView) view.findViewById(R.id.relaxationMin);
         final TextView TvFeedBackSecondsGap =(TextView) view.findViewById(R.id.feedBackSecondsGap);
-        final TextView TvFeedBackPassSeconds =(TextView) view.findViewById(R.id.relaxationMax);
+        final TextView TvFeedBackPassSeconds =(TextView) view.findViewById(R.id.feedBackPassSeconds);
         final TextView TvAverageAttention =(TextView) view.findViewById(R.id.averageAttention);
         final TextView TvAverageRelaxation =(TextView) view.findViewById(R.id.averageRelaxation);
         final TextView TvData =(TextView) view.findViewById(R.id.data);
@@ -105,9 +105,12 @@ public class Edit_DetectDataFragment extends Fragment {
         TvAttentionMax.setText(mAttentionMax);
         TvAttentionMin.setText(mAttentionMin);
         TvRelaxationMax.setText(mRelaxationMax);
+
         TvRelaxationMin.setText(mRelaxationMin);
         TvFeedBackSecondsGap.setText(mFeedBackSecondsGap);
+
         TvFeedBackPassSeconds.setText(mFeedBackPassSeconds);
+        Log.d("lololololooooo",""+mFeedBackPassSeconds);
         TvAverageAttention.setText(mAverageAttention);
         TvAverageRelaxation.setText(mAverageRelaxation);
         TvData.setText(mData);

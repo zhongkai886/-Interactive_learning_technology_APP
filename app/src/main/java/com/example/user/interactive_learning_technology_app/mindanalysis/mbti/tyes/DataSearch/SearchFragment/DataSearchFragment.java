@@ -1,14 +1,21 @@
 package com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.DataSearch.SearchFragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -16,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,11 +34,25 @@ import android.widget.Toast;
 import com.example.user.interactive_learning_technology_app.R;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Main.MainActivity;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBHelper;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.drive.Drive;
+import com.google.api.services.drive.DriveScopes;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Locale;
 
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AttentionHigh;
@@ -61,6 +83,12 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
     public RecyclerView recyclerView;
     public SearchAdapter mAdapter;
     public Button BtnUpload;
+    public ArrayList<String> row = new ArrayList<>();
+    public CharSequence dateTime="";
+    public DriveServiceHelper driveServiceHelper;
+    public String sdCardDir;
+    private static final int PICK_CSV_FROM_GALLERY_REQUEST_CODE = 100;
+    public String filename ="";
     public DataSearchFragment() {
     }
 
@@ -123,6 +151,8 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                     averageAttention,averageRelaxation,pointInTime);
             detectDataList.add(detectData);
             Log.d("刷新",""+detectData.getDetectTime());
+            Log.d("LOLOLOLO",""+relaxationMax);
+
         }
         cursor.close();
     }
@@ -187,10 +217,73 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.dataUpload:
-                exportCSV();
-//                new ExportDatabaseExcelTask(getActivity()).execute();
-//                Toast.makeText(getActivity(), "花哈哈哈哈ㄏ", Toast.LENGTH_SHORT).show();
 
+                row = mAdapter.getCheckId();
+                Calendar mCal = Calendar.getInstance();
+                dateTime = DateFormat.format("yyyy-MM-dd kk:mm:ss", mCal.getTime());    // kk:24小時制, hh:12小時制
+                Log.d("cvcvcvcvcv",row.size()+"size/////row"+mAdapter.getCheckId());
+                SearchDBHelper dbHelper = new SearchDBHelper(getActivity());
+                mDatabase = dbHelper.getWritableDatabase(); //寫入
+                mDatabase = dbHelper.getReadableDatabase(); //讀取
+                Cursor c = null;
+                        try {
+                            c = mDatabase.rawQuery("select * from searchDataList", null);
+                            int rowcount = 0;//資料量
+                            int colcount = 0;//欄位數量
+                            sdCardDir = Environment.getExternalStorageDirectory().toString();
+
+                            filename = dateTime+".csv";
+                            // the name of the file to export with
+                            File saveFile = new File(sdCardDir, filename);
+                            FileWriter fw = new FileWriter(saveFile);
+
+                            BufferedWriter bw = new BufferedWriter(fw);
+                            rowcount = c.getCount();
+                            colcount = c.getColumnCount();
+                            Log.d("excel",""+rowcount+"////"+colcount);
+                            if (rowcount > 0) {
+                                c.moveToFirst();
+
+                                for (int i = 0; i < colcount; i++) {
+                                    if (i != colcount - 1) {
+
+                                        bw.write(c.getColumnName(i) + ",");
+
+                                    } else {
+
+                                        bw.write(c.getColumnName(i));
+
+                                    }
+                                }
+                                bw.newLine();
+
+                                for (int i = 0; i <= row.size()-1; i++) {
+                                    Log.d("cvcvcvcvcv",""+Integer.valueOf(row.get(i)));
+
+                                    c.moveToPosition(Integer.valueOf(row.get(i)));
+
+                                    for (int j = 0; j < colcount; j++) {
+                                        if (j != colcount - 1)
+                                            bw.write(c.getString(j) + ",");
+                                        else
+                                            bw.write(c.getString(j));
+                                    }
+                                    bw.newLine();
+                                }
+                                bw.flush();
+                                Toast.makeText(getActivity(), "Exported Successfully.", Toast.LENGTH_SHORT).show();
+                                requestSignIn();
+                                uploadFile();
+                            }
+                        } catch (Exception ex) {
+                            if (mDatabase.isOpen()) {
+                                mDatabase.close();
+                                Log.d("有吧?", "onClick: "+ex);
+                            }
+
+                        } finally {
+
+                        }
         }
     }
     public void getAuthority(){
@@ -204,6 +297,98 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
             );
 
         }
+    }
+
+    public void requestSignIn(){
+        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestScopes(new Scope(DriveScopes.DRIVE_FILE),
+                        new Scope(DriveScopes.DRIVE_APPDATA))
+                .build();
+
+        GoogleSignInClient client = GoogleSignIn.getClient(getActivity(),signInOptions);
+
+        startActivityForResult(client.getSignInIntent(),400);
+    }
+
+    public void uploadFile(){
+//        String filePath = "/storage/emulated/0/acx1.csv";
+//        driveServiceHelper.createFile(filePath)
+//        int j = filepa.size();
+
+        //Loading
+            ProgressDialog progressDialog = new ProgressDialog(getActivity());
+            progressDialog.setTitle("Uploading to Google Drive");
+            progressDialog.setMessage("Please wait...");
+            progressDialog.show();
+
+
+//        driveServiceHelper.fileName(fileName.get(i));
+        Log.d("88888",""+sdCardDir+"/////"+filename);
+                driveServiceHelper.createFile(sdCardDir+filename,filename)
+                        .addOnSuccessListener(new OnSuccessListener<String>() {
+                            @Override
+                            public void onSuccess(String s) {
+                                progressDialog.dismiss();
+                                Toast.makeText(getActivity(),"Uploaded successfully",Toast.LENGTH_LONG).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Toast.makeText(getActivity(),"Check your google api key",Toast.LENGTH_LONG).show();
+                        Log.d("aaa",""+e);
+                    }
+                });
+    }
+    private void handleSignInIntent(Intent data) {
+        GoogleSignIn.getSignedInAccountFromIntent(data)
+                .addOnSuccessListener(googleSignInAccount -> {
+                    GoogleAccountCredential credential = GoogleAccountCredential
+                            .usingOAuth2(getActivity(), Collections.singleton(DriveScopes.DRIVE_FILE));
+
+                    credential.setSelectedAccount(googleSignInAccount.getAccount());
+
+                    Drive googleDriveService =
+                            new Drive.Builder(
+                                    AndroidHttp.newCompatibleTransport(),
+                                    new GsonFactory(),
+                                    credential)
+                                    .setApplicationName("AppName")
+                                    .build();
+
+                    driveServiceHelper = new DriveServiceHelper(googleDriveService);
+
+                })
+                .addOnFailureListener(e -> e.printStackTrace());
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        switch (requestCode)
+        {
+            case 400:
+                if(resultCode == getActivity().RESULT_OK ) {
+                    handleSignInIntent(data);
+                }
+                break;
+//            case PICK_CSV_FROM_GALLERY_REQUEST_CODE:
+//                Uri selectedCsv =null;
+//                ClipData clipData = null;
+//                if (resultCode == Activity.RESULT_OK && data != null){
+//                    selectedCsv = data.getData();
+//                    if (clipData != null){
+//                        catchFileInApp(selectedCsv,clipData);
+//                    }
+//                    else if (Build.VERSION.SDK_INT>=16 && clipData== null){
+//                        clipData = data.getClipData();
+//                        catchFileInApp(selectedCsv,clipData);
+//                    }
+//                }
+//                break;
+            default:
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
 

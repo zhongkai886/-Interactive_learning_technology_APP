@@ -103,6 +103,7 @@
                 android:text="聲音" />
         </RadioGroup>
         <EditText
+            android:id="@+id/attentionMp3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="mp3"/>
@@ -171,6 +172,7 @@
                 android:text="聲音" />
         </RadioGroup>
         <EditText
+            android:id="@+id/relaxationMp3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="mp3"/>

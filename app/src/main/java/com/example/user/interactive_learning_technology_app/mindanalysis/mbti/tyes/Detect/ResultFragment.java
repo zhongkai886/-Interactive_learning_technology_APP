@@ -33,7 +33,7 @@ public class ResultFragment extends Fragment {
     private String _name;
     private String _data;
     private String _rawFile;
-    private Integer selectId;
+    private Integer selectId=0;
     private SQLiteDatabase mDatabase;
 
     //sql string
@@ -100,13 +100,14 @@ public class ResultFragment extends Fragment {
                 .getString("USER", "");
 
 
-        String userId = getActivity().getSharedPreferences("select", MODE_PRIVATE)
+        String userId = getActivity().getSharedPreferences("selectId", MODE_PRIVATE)
                 .getString("USER", "");
 
         String loginId = getActivity().getSharedPreferences("detectId", MODE_PRIVATE)
                 .getString("USER", "");
         detectName.setText(loginId);
         selectId = Integer.valueOf(userId);
+
         LoadData();
 
         if (Integer.valueOf(mAttentionFeedBackWay)==0){
@@ -130,7 +131,7 @@ public class ResultFragment extends Fragment {
     public void LoadData() {
 
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM settingDataList", null);
-
+        Log.d("787878",""+selectId);
         cursor.moveToPosition(selectId);
         mItem = cursor.getString(cursor.getColumnIndex(COLUMN_Item));
         mAttentionHigh = cursor.getString(cursor.getColumnIndex(COLUMN_AttentionHigh));

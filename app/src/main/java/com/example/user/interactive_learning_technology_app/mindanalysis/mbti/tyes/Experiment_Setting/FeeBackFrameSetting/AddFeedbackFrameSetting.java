@@ -52,8 +52,8 @@ public class AddFeedbackFrameSetting extends Fragment {
     public SQLiteDatabase mDatabase;
     public List<String> list;
     public Spinner SpinnerItem;
-    private Integer attRadioId;
-    private Integer relRadioId;
+    private Integer attRadioId=0;
+    private Integer relRadioId=0;
     private Uri attUri;
     public AddFeedbackFrameSetting() {
     }
@@ -90,6 +90,9 @@ public class AddFeedbackFrameSetting extends Fragment {
         final String mimeType = "audio/*";
         final PackageManager packageManager = getActivity().getPackageManager();
         final Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        final EditText EdtAttentionMp3 = view.findViewById(R.id.attentionMp3);
+        final EditText EdtRelaxationMp3 = view.findViewById(R.id.relaxationMp3);
+
         //radioGroup
         RadioGroup radioGroupAtt = (RadioGroup) view.findViewById(R.id.radioGroupAtt);
         RadioGroup radioGroupRel = (RadioGroup) view.findViewById(R.id.radioGroupRel);
@@ -136,6 +139,20 @@ public class AddFeedbackFrameSetting extends Fragment {
                         break;
                     case R.id.relVoice:
                         relRadioId = 2;
+
+                        intent.setType(mimeType);
+                        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+                        if (list.size() > 0) {
+                            // 如果有可用的Activity
+                            Intent picker = new Intent(Intent.ACTION_GET_CONTENT);
+                            picker.putExtra(Intent.EXTRA_LOCAL_ONLY, false);
+                            picker.setType(mimeType);
+                            // 使用Intent Chooser
+                            Intent destIntent = Intent.createChooser(picker, "選取MP3音樂");
+                            startActivityForResult(destIntent,100);
+                        } else {
+                            // 沒有可用的Activity
+                        }
                         break;
                 }
                 Log.d("pospos",""+relRadioId);
@@ -161,19 +178,7 @@ public class AddFeedbackFrameSetting extends Fragment {
                 final String edtFbwSecText = EdtFbwSec.getText().toString();
                 final String edtFbwSecTipsText = EdtFbwSecTips.getText().toString();
 
-//                cv.put(COLUMN_Name,edtNameText);
-//                cv.put(COLUMN_Item,spinnerItemText);
-//                cv.put(COLUMN_AttentionHigh,edtAttentionHighText);
-//                cv.put(COLUMN_AttentionLow,edtAttentionLowText);
-//                cv.put(COLUMN_AttentionFeedBackWay,attRadioId);
-//                cv.put(COLUMN_AttentionMp3Uri,attUri.toString());
-//                cv.put(COLUMN_RelaxationHigh,edtRelaxationHighText);
-//                cv.put(COLUMN_RelaxationLow,edtRelaxationLowText);
-//                cv.put(COLUMN_RelaxationFeedBackWay,relRadioId);
-//                cv.put(COLUMN_RelaxationMp3Uri,"");
-//                cv.put(COLUMN_FeedBackWaySecond,edtFbwSecText);
-//                cv.put(COLUMN_FeedBackWayStopTipSecond,edtFbwSecTipsText);
-//                mDatabase.insert(TABLE_NAME,null,cv);
+
                 String sql = "INSERT into '" + TABLE_NAME + "' ( '" + COLUMN_Name
                         + "','" + COLUMN_Item
                         + "','" + COLUMN_AttentionHigh
@@ -245,34 +250,68 @@ public class AddFeedbackFrameSetting extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        Log.d("??","測試");
         super.onActivityResult(requestCode, resultCode, data);
+        if (attRadioId.equals(2)){
+            // 有選擇檔案
+            Log.d("???","attatt");
+            if ( resultCode == RESULT_OK ){
+                // 取得檔案的 Uri
+                attUri = data.getData();
+                if( attUri != null ){
 
-        // 有選擇檔案
-        if ( resultCode == RESULT_OK ){
-            // 取得檔案的 Uri
-            attUri = data.getData();
-            if( attUri != null ){
+                    Log.d("??","///"+attUri);
 
-                Log.d("??","///"+attUri);
-
-                try {
-                    MediaPlayer mediaPlayer = new MediaPlayer();
-                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                    mediaPlayer.setDataSource(getActivity(), attUri);
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
+                    try {
+                        //撥放音樂
+//                    MediaPlayer mediaPlayer = new MediaPlayer();
+//                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//                    mediaPlayer.setDataSource(getActivity(), attUri);
+//                    mediaPlayer.prepare();
+//                    mediaPlayer.start();
+                    }
+                    catch (Exception e){
+                        Log.d("///",e+"");
+                    }
                 }
-                catch (Exception e){
-                    Log.d("///",e+"");
+                else{
+                    Toast.makeText(getActivity(), "無效的檔案路徑 !!", Toast.LENGTH_SHORT).show();
                 }
             }
             else{
-                Toast.makeText(getActivity(), "無效的檔案路徑 !!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "取消選擇檔案 !!", Toast.LENGTH_SHORT).show();
             }
         }
-        else{
-            Toast.makeText(getActivity(), "取消選擇檔案 !!", Toast.LENGTH_SHORT).show();
+
+        if (relRadioId.equals(2)){
+            // 有選擇檔案
+            Log.d("???","relrel");
+            if ( resultCode == RESULT_OK ){
+                // 取得檔案的 Uri
+                attUri = data.getData();
+                if( attUri != null ){
+
+                    Log.d("??","///"+attUri);
+
+                    try {
+                        //撥放音樂
+//                    MediaPlayer mediaPlayer = new MediaPlayer();
+//                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//                    mediaPlayer.setDataSource(getActivity(), attUri);
+//                    mediaPlayer.prepare();
+//                    mediaPlayer.start();
+                    }
+                    catch (Exception e){
+                        Log.d("///",e+"");
+                    }
+                }
+                else{
+                    Toast.makeText(getActivity(), "無效的檔案路徑 !!", Toast.LENGTH_SHORT).show();
+                }
+            }
+            else{
+                Toast.makeText(getActivity(), "取消選擇檔案 !!", Toast.LENGTH_SHORT).show();
+            }
         }
+
     }
 }

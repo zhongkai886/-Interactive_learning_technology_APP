@@ -1,10 +1,8 @@
 package com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Detect;
 
 import android.app.Dialog;
-import android.content.ContentValues;
+import android.app.Service;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
@@ -17,6 +15,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Handler;
+import android.os.Vibrator;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,27 +42,20 @@ import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.ty
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.FeedbackData;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBHelper;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract;
-import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBHelper;
 import com.example.user.interactive_learning_technology_app.widget.PreferencesCenter;
 import com.example.user.interactive_learning_technology_app.widget.StringMultiple;
-import com.example.user.interactive_learning_technology_app.wjk.database.SQLiteCenter;
-import com.example.user.interactive_learning_technology_app.wjk.database.UserTable;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SharedPreferencesHelper.SharedPreferencesHelper;
-
-import org.w3c.dom.Text;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import retrofit2.Call;
-import retrofit2.Response;
 import wjk.android.chart.adapter.NumberAdapter;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -78,7 +70,6 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_FeedBackPassSeconds;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_FeedBackSecondsGap;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_ID;
-import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_ID2;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_Item;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_Name;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_Number;
@@ -88,7 +79,6 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationMax;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationMin;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.TABLE_NAME;
-import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.TABLE_NAME2;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionFeedBackWay;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionMp3Uri;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_FeedBackWaySecond;
@@ -141,12 +131,31 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     public ArrayList<FeedbackData> feedbackDataList = new ArrayList<FeedbackData>();
     public String settingId = "";
     //上傳測驗資料的變數
+    public Integer detectTotalCount=0;
     public String detectId="";
     public CharSequence dateTime="";
     public String detectItem="";
     public String detectSecond="";
     public String detectSecondGap="";
-    public String mAttentionHigh="";
+    public Integer mAttention;
+    public String mAttentionHigh; //儲存setting欄位並儲存
+    public String mAttentionLow; //儲存setting欄位並儲存
+    public String mRelaxationHigh; //儲存setting欄位並儲存
+    public String mRelaxationLow; //儲存setting欄位並儲存
+    public Integer mAttentionMax; //儲存setting欄位並儲存
+    public Integer mAttentionMin; //儲存setting欄位並儲存
+    public Integer mRelaxationMax; //儲存setting欄位並儲存
+    public Integer mRelaxationMin; //儲存setting欄位並儲存
+    public double mAverageAttention; //儲存setting欄位並儲存
+    public double mAverageRelaxation; //儲存setting欄位並儲存
+
+    public Integer fb_Way =0;
+
+    public ArrayList<Integer> mAttentionList = new ArrayList<>();
+
+    public ArrayList<Integer> mRelaxationList = new ArrayList<>();
+    //設定檔取值
+
 
 //    public String[] myResArray = getResources().getStringArray(R.array.aE);
 //    public List<String> idArray = Arrays.asList(myResArray);
@@ -280,10 +289,13 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     }
 
     public void _initView() {
+        LoadData();
         //share選擇的時間
         String timeId = getActivity().getSharedPreferences("timeSelect", MODE_PRIVATE)
                 .getString("USER", "");
-
+        //抽資料要用SqlId 選擇的設定檔id
+        settingId = getActivity().getSharedPreferences("selectId", MODE_PRIVATE)
+                .getString("USER", "");
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -296,7 +308,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 mTimeDetect.start();
                 _state("start");
 
-                handler.postDelayed(updateDevice,500);
+                handler.postDelayed(getData,500);
 
 
             }
@@ -335,16 +347,16 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
             mStartButton.setVisibility(View.VISIBLE);
             mStopButton.setVisibility(View.GONE);
             mPauseButton.setVisibility(View.GONE);
-//            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//            final ResultFragment resultFragment = new ResultFragment();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.center, resultFragment);
-//            fragmentTransaction.commit();
+            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            final ResultFragment resultFragment = new ResultFragment();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.center, resultFragment);
+            fragmentTransaction.commit();
         }
     }
 
     private void _result(){ //測驗資料的19筆欄位
-        LoadData();
+
         dataHand();
         final String SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -370,7 +382,6 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         sqLiteDatabase.execSQL(SQL);
 
 
-
         String sql = "INSERT into '" + TABLE_NAME + "' ( '" +COLUMN_Number
                 + "','" + COLUMN_Name
                 + "','" + COLUMN_DetectTime
@@ -391,11 +402,20 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 + "','" + COLUMN_PointInTime + "' ) " +
                 "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-        Object[] mValue = new Object[]{detectId,"名稱",dateTime,detectItem,
-                "總回饋次數","a高","a低","r高",
-                "r低","a最大","a最小","r最大",
-                "r最小","間隔秒數", "忽略","平均a",
-                "平均r",pointDataSql};
+        Object[] mValue = new Object[]{detectId,"aaaaaa",dateTime,detectItem,
+                detectTotalCount,mAttentionHigh,mAttentionLow,mRelaxationHigh,
+                mRelaxationLow,mAttentionMax,mAttentionMin,mRelaxationMax,
+                mRelaxationMin,detectSecondGap, detectSecond,mAverageAttention,
+                mAverageRelaxation,pointDataSql};
+
+        //測試用資料
+
+        Object[] mValueTest = new Object[]{"編號","名稱","實驗日期","回饋方式",
+                "總回饋次數","A高","A低","R高",
+                "r低","A最大","A最小","R最大",
+                "R最大","間隔秒數","忽略秒數","平均A",
+                "平均R","資料"};
+//        Log.d("sss",""+mAttentionHighCount);
 
 
 
@@ -423,10 +443,6 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         //偵測編號
         detectId = getActivity().getSharedPreferences("detectId", MODE_PRIVATE)
                 .getString("USER", "");
-        //抽資料要用SqlId
-        settingId = getActivity().getSharedPreferences("selectId", MODE_PRIVATE)
-                .getString("USER", "");
-
         //測驗日期
         Calendar mCal = Calendar.getInstance();
         dateTime = DateFormat.format("yyyy-MM-dd kk:mm:ss", mCal.getTime());    // kk:24小時制, hh:12小時制
@@ -435,9 +451,41 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         Log.d("aaaaa",""+feedbackDataList.get(Integer.valueOf(settingId)).getItem());
         detectItem = feedbackDataList.get(Integer.valueOf(settingId)).getItem();
         //回饋間隔秒數
-        detectSecond = feedbackDataList.get(Integer.valueOf(settingId)).getWaySecond();
+        detectSecondGap = feedbackDataList.get(Integer.valueOf(settingId)).getWaySecond();
         //忽略的秒數
-        detectSecondGap = feedbackDataList.get(Integer.valueOf(settingId)).getWayStopTipSecond();
+        detectSecond = feedbackDataList.get(Integer.valueOf(settingId)).getWayStopTipSecond();
+
+        mAttentionHigh = feedbackDataList.get(Integer.valueOf(settingId)).getAttentionHigh();
+
+        mAttentionLow = feedbackDataList.get(Integer.valueOf(settingId)).getAttentionLow();
+
+        mRelaxationHigh = feedbackDataList.get(Integer.valueOf(settingId)).getRelaxationHigh();
+
+        mRelaxationLow = feedbackDataList.get(Integer.valueOf(settingId)).getRelaxationLow();
+
+        mAttentionMax = Collections.max(mAttentionList);
+
+        mAttentionMin = Collections.min(mAttentionList);
+
+        mRelaxationMax =Collections.max(mRelaxationList);
+
+        mRelaxationMin =Collections.min(mRelaxationList);
+
+        mAverageAttention = calculateAverage(mAttentionList);
+
+        mAverageRelaxation = calculateAverage(mRelaxationList);
+
+        Log.d("maxmax",""+mAttentionMax);
+    }
+    private double calculateAverage(List<Integer> marks) {
+        Integer sum = 0;
+        if(!marks.isEmpty()) {
+            for (Integer mark : marks) {
+                sum += mark;
+            }
+            return sum.doubleValue() / marks.size();
+        }
+        return sum;
     }
     public void changeTextView(Integer attentionValue){
     if (attentionValue>0 && attentionValue<20){
@@ -464,23 +512,41 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 
     }
 
-    private Runnable updateDevice = new Runnable() {
+    private Runnable getData = new Runnable() {
         public void run() {
+            fb_Way = Integer.valueOf(getActivity().getSharedPreferences("selectAttentionWay", MODE_PRIVATE)
+                    .getString("USER", ""));
             if (mTimeDetect.getState() == 2){
                 changeTextView(10000);
             }
+
+            //偵測時做的資料處理
             else if (mTimeDetect.getState() == 1){
-                Log.d("%%%",""+mTimeDetect.getAttention());
-//                Random random = new Random();
-//                int answer = random.nextInt((100 - 0 + 1) + 0);
                 changeTextView(mTimeDetect.getAttention());
+                mAttention =mTimeDetect.getAttention();
+                mAttentionList.add(mTimeDetect.getAttention());
+                mRelaxationList.add(mTimeDetect.getMeditation());
+                if (mAttention >Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionHigh())
+                && mAttention <Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionLow())){
+                    if (fb_Way.equals("0")){
+//                        handler.postDelayed(getData,500);
+                    }
+                    else if (fb_Way.equals("1")){
+                        setVibrate(1000);
+                    }else{
+
+                    }
+                    detectTotalCount++;
+
+                }
+//                if (mAttention <Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionLow())){
+//                    mAttentionLowCount++;
+//                }
                 if (mTimeDetect.getData().length()==0){
                     Log.d("%%%","end");
                 }else{
                     attention_ArrayList.add(mTimeDetect.getData());
                 }
-//                attention_ArrayList.add(mTimeDetect.getAttention().toString());
-//                if (mTimeDetect.getAttention()>)
                 handler.postDelayed(this, 1000);
             }
             Log.d("%%%need",""+attention_ArrayList); //專門取attention
@@ -733,17 +799,11 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         }
         cursor.close();
     }
-//    public Cursor searchData(String text){
-//        SettingDBHelper dbHelper = new SettingDBHelper(getActivity());
-//        sqLiteDatabase = dbHelper.getReadableDatabase(); //讀取
-//        String query ="Select * from " + SettingDBContract.SettingDataEntry.TABLE_NAME+" WHERE "
-//                + SettingDBContract.SettingDataEntry.COLUMN_ID+" LIKE '%"+text+"%'";
-//
-//        Cursor cursor = sqLiteDatabase.rawQuery(query,null);
-//
-//        String id = cursor.getString(cursor.getColumnIndex(SettingDBContract.SettingDataEntry.COLUMN_ID));
-//        String item = cursor.getString(cursor.getColumnIndex(SettingDBContract.SettingDataEntry.COLUMN_Item));
-////        Log.d("testttt",""+id+"////"+item);
-//        return cursor;
-//    }
+
+    //振動方式
+    public void setVibrate(int time){
+        Vibrator vibrator =(Vibrator) getActivity().getSystemService(Service.VIBRATOR_SERVICE);
+        vibrator.vibrate(time);
+    }
+
 }
