@@ -46,7 +46,7 @@ public class DetectTestFragment extends Fragment {
     private Button againButton;
     private Button detectButton;
     private TextView detectIdTextView;
-    private Delayed delayed;
+    static boolean isPlay = false;
     private TimeUnit timeUnit ;
     public SQLiteDatabase sqLiteDatabase;
     public ArrayList<FeedbackData> feedbackDataList = new ArrayList<FeedbackData>();
@@ -100,6 +100,7 @@ public class DetectTestFragment extends Fragment {
                     setVibrate(1000);
                 }else if (fb_Way.equals("2")){
                     playBeep();
+                    Log.d("222222222222", "onClick: 可以吧");
                 }
             }
         });
@@ -107,7 +108,7 @@ public class DetectTestFragment extends Fragment {
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("222222", "onClick: 可以吧"+fb_Way);
+
                 if (fb_Way.equals("0")){
                     if (onClickBoolean==false){
                         onClickBoolean=true;
@@ -123,6 +124,7 @@ public class DetectTestFragment extends Fragment {
 
                 }else if (fb_Way.equals("2")){
                     playBeep();
+                    Log.d("222222222", "onClick: 可以吧"+fb_Way);
                 }
 
             }
@@ -179,23 +181,28 @@ public class DetectTestFragment extends Fragment {
         cursor.close();
     }
     public void playBeep() {
-        try {
-            if (mediaPlayer.isPlaying()) {
-                mediaPlayer.stop();
-                mediaPlayer.release();
-                mediaPlayer = new MediaPlayer();
+            try {
+                mediaPlayer.reset();
+                AssetFileDescriptor descriptor = getActivity().getAssets().openFd("voice.mp3");
+                mediaPlayer.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
+                descriptor.close();
+                if (mediaPlayer.isPlaying()) {
+                    mediaPlayer.reset();
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                }else{
+
+                    mediaPlayer.prepare();
+//                    mediaPlayer.setLooping(true);
+                    mediaPlayer.start();
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d("error",e+"");
             }
+            isPlay=true;
 
-            AssetFileDescriptor descriptor = getActivity().getAssets().openFd("coin07.mp3");
-            mediaPlayer.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
-            descriptor.close();
 
-            mediaPlayer.prepare();
-//            m.setVolume(1f, 1f);
-//            m.setLooping(true);
-            mediaPlayer.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

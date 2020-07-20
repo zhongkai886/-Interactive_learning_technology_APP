@@ -858,7 +858,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 //
 //            }
             mediaPlayer = new MediaPlayer();
-            AssetFileDescriptor descriptor = getActivity().getAssets().openFd("coin07.mp3");
+            AssetFileDescriptor descriptor = getActivity().getAssets().openFd("voice.mp3");
             mediaPlayer.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
             descriptor.close();
 
