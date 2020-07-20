@@ -230,8 +230,9 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                             c = mDatabase.rawQuery("select * from searchDataList", null);
                             int rowcount = 0;//資料量
                             int colcount = 0;//欄位數量
-                            sdCardDir = Environment.getExternalStorageDirectory().toString();
-
+//                            String sdCardDir2 = Environment.getExternalStorageDirectory().toString();
+                            sdCardDir = getActivity().getExternalFilesDir(null).getAbsolutePath();
+//                            Log.d("sdCardDir",sdCardDir2+"////"+sdCardDir);
                             filename = dateTime+".csv";
                             // the name of the file to export with
                             File saveFile = new File(sdCardDir, filename);
@@ -337,7 +338,7 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                     public void onFailure(@NonNull Exception e) {
                         progressDialog.dismiss();
                         Toast.makeText(getActivity(),"Check your google api key",Toast.LENGTH_LONG).show();
-                        Log.d("aaa",""+e);
+                        Log.d("aaa888",""+e);
                     }
                 });
     }

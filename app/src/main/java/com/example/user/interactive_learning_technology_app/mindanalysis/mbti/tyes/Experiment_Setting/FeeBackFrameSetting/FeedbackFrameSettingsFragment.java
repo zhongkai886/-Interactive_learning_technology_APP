@@ -159,18 +159,18 @@ public class FeedbackFrameSettingsFragment extends Fragment {
     public void  CreateSetting(){
         final String SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_Name + " VARCHAR(50), " +
-                COLUMN_Item + " VARCHAR(50)," +
-                COLUMN_AttentionHigh + " VARCHAR(50)," +
-                COLUMN_AttentionLow + " VARCHAR(50)," +
-                COLUMN_AttentionFeedBackWay + " VARCHAR(50)," +
+                COLUMN_Name + " VARCHAR(250), " +
+                COLUMN_Item + " VARCHAR(250)," +
+                COLUMN_AttentionHigh + " VARCHAR(250)," +
+                COLUMN_AttentionLow + " VARCHAR(250)," +
+                COLUMN_AttentionFeedBackWay + " VARCHAR(250)," +
                 COLUMN_AttentionMp3Uri + " VARCHAR(250)," +
-                COLUMN_RelaxationHigh + " VARCHAR(50)," +
-                COLUMN_RelaxationLow + " VARCHAR(50)," +
-                COLUMN_RelaxationFeedBackWay + " VARCHAR(50)," +
+                COLUMN_RelaxationHigh + " VARCHAR(250)," +
+                COLUMN_RelaxationLow + " VARCHAR(250)," +
+                COLUMN_RelaxationFeedBackWay + " VARCHAR(250)," +
                 COLUMN_RelaxationMp3Uri + " VARCHAR(250)," +
-                COLUMN_FeedBackWaySecond + " VARCHAR(50)," +
-                COLUMN_FeedBackWayStopTipSecond + " VARCHAR(50)" +
+                COLUMN_FeedBackWaySecond + " VARCHAR(250)," +
+                COLUMN_FeedBackWayStopTipSecond + " VARCHAR(250)" +
                 ");";
         mDatabase.execSQL(SQL);
     }

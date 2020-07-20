@@ -149,7 +149,7 @@ public class ChoiceFeedBackFragment extends Fragment {
             ListName.add(name);
             ListItem.add(item);
             ListWay.add(fb_way);
-            Log.d("comeIn", "LoadData: "+ListId+"///"+ListName.size()+"////"+ListItem+"////"+ListWay);
+            Log.d("comeIn", "LoadData: "+fb_way);
 
         }
         cursor.close();

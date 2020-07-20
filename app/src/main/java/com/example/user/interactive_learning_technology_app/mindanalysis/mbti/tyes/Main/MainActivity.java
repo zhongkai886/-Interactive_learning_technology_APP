@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         View mBottomView = (View) findViewById(R.id.bottom_view_main);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+//        getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.logo));
         final Button mExperimentSearchButton = (Button) mBottomView.findViewById(R.id.ExperimentSearchButton);
         final Button mExperimentSettingButton = (Button) mBottomView.findViewById(R.id.ExperimentSettingButton);
         final Button mBackHomeButton = (Button) mBottomView.findViewById(R.id.BackHomeButton);

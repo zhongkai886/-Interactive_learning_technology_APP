@@ -17,12 +17,13 @@ public class FeedbackData {
     private String WaySecond;
     private String WayStopTipSecond;
 
+
     public FeedbackData(String Id , String Name , String Item,
-                      String AttentionHigh, String AttentionLow, String AttentionWay,
+                        String AttentionHigh, String AttentionLow, String AttentionWay,
                         String AttentionMp3Uri,
-                      String RelaxationHigh, String RelaxationLow, String RelaxationWay,
+                        String RelaxationHigh, String RelaxationLow, String RelaxationWay,
                         String RelaxationMp3Uri,
-                      String WaySecond, String WayStopTipSecond){
+                        String WaySecond, String WayStopTipSecond){
         this.Id=Id;
         this.Name=Name;
         this.Item=Item;
@@ -81,4 +82,13 @@ public class FeedbackData {
     public String getWayStopTipSecond() {
         return WayStopTipSecond;
     }
+
+    public String getAttentionMp3Uri() {
+        return AttentionMp3Uri;
+    }
+
+    public String getRelaxationMp3Uri() {
+        return RelaxationMp3Uri;
+    }
+
 }

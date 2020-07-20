@@ -3,10 +3,17 @@ package com.example.user.interactive_learning_technology_app.mindanalysis.mbti.t
 import android.app.Dialog;
 import android.app.Service;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -46,10 +53,13 @@ import com.example.user.interactive_learning_technology_app.widget.PreferencesCe
 import com.example.user.interactive_learning_technology_app.widget.StringMultiple;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SharedPreferencesHelper.SharedPreferencesHelper;
 
+import org.apache.log4j.lf5.util.Resource;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -148,6 +158,9 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     public Integer mRelaxationMin=0; //儲存setting欄位並儲存
     public double mAverageAttention; //儲存setting欄位並儲存
     public double mAverageRelaxation; //儲存setting欄位並儲存
+
+    public MediaPlayer mediaPlayer = new MediaPlayer();
+    public String mp3Uri ="";
 
     public Integer fb_Way =0;
 
@@ -285,6 +298,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 
 
         _initView();
+
         return view;
     }
 
@@ -295,8 +309,10 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 .getString("USER", "");
         //抽資料要用SqlId 選擇的設定檔id
         settingId = getActivity().getSharedPreferences("selectId", MODE_PRIVATE)
-
                 .getString("USER", "");
+
+        mp3Uri = feedbackDataList.get(Integer.valueOf(settingId)).getAttentionMp3Uri();
+
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -307,8 +323,11 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 mTimeDetect_data = "";
                 mTimeDetect.start();
                 _state("start");
+                fb_Way = Integer.valueOf(getActivity().getSharedPreferences("selectAttentionWay", MODE_PRIVATE)
+                        .getString("USER", ""));
 
                 handler.postDelayed(getData,500);
+
 
 
             }
@@ -437,6 +456,10 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 //        nameData = values.name;
         rawData = "";
 //        if (mListener != null) mListener.onComplete();
+        SharedPreferences pref = getActivity().getSharedPreferences("feedbackCount", MODE_PRIVATE);
+        pref.edit()
+                .putString("USER", detectTotalCount.toString())
+                .commit();
 
     }
     public void dataHand(){
@@ -488,35 +511,33 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         }
         return sum;
     }
+    public void changeSightColor(Integer attentionValue){
+        //處理視覺回饋時的資料區間的顏色
+        if (fb_Way==0){
+            if (attentionValue>0 && attentionValue<20){
+            mPointValue.setBackground(mPointValue.getContext().getDrawable(R.drawable.shape_oval));
+
+            }
+            if(attentionValue>20 && attentionValue<40){
+                mPointValue.setBackground(mPointValue.getContext().getDrawable(R.drawable.shape_oval1));
+            }
+            if(attentionValue>40 && attentionValue<60){
+                mPointValue.setBackground(mPointValue.getContext().getDrawable(R.drawable.shape_oval2));
+            }
+            if(attentionValue>60 && attentionValue<80){
+                mPointValue.setBackground(mPointValue.getContext().getDrawable(R.drawable.shape_oval3));
+            }
+            if(attentionValue>80 && attentionValue<100){
+                mPointValue.setBackground(mPointValue.getContext().getDrawable(R.drawable.shape_oval4));
+            }
+        }
+    }
+
     public void changeTextView(Integer attentionValue){
-    if (attentionValue>0 && attentionValue<20){
-//        mPointValue.setBackgroundColor(mPointValue.getContext().getResources().getColor(R.color.white));
-        mPointValue.setBackground(mPointValue.getContext().getDrawable(R.drawable.shape_oval));
+        mPointValue.setText(attentionValue.toString());
     }
-    if(attentionValue>20 && attentionValue<40){
-//        mPointValue.setBackgroundColor(mPointValue.getContext().getResources().getColor(R.color.chart_meditation));
-        mPointValue.setBackground(mPointValue.getContext().getDrawable(R.drawable.shape_oval1));
-    }
-    if(attentionValue>40 && attentionValue<60){
-//        mPointValue.setBackgroundColor(mPointValue.getContext().getResources().getColor(R.color.chart_attention));
-        mPointValue.setBackground(mPointValue.getContext().getDrawable(R.drawable.shape_oval2));
-    }
-    if(attentionValue>60 && attentionValue<80){
-//        mPointValue.setBackgroundColor(mPointValue.getContext().getResources().getColor(R.color.colorAccent));
-        mPointValue.setBackground(mPointValue.getContext().getDrawable(R.drawable.shape_oval3));
-    }
-    if(attentionValue>80 && attentionValue<100){
-//        mPointValue.setBackgroundColor(mPointValue.getContext().getResources().getColor(R.color.colorPrimaryDark));
-        mPointValue.setBackground(mPointValue.getContext().getDrawable(R.drawable.shape_oval4));
-    }
-    mPointValue.setText(attentionValue.toString());
-
-    }
-
     private Runnable getData = new Runnable() {
         public void run() {
-            fb_Way = Integer.valueOf(getActivity().getSharedPreferences("selectAttentionWay", MODE_PRIVATE)
-                    .getString("USER", ""));
             if (mTimeDetect.getState() == 2){
                 changeTextView(10000);
             }
@@ -529,20 +550,43 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 mRelaxationList.add(mTimeDetect.getMeditation());
                 if (mAttention >Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionHigh())
                 && mAttention <Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionLow())){
-                    if (fb_Way.equals("0")){
-//                        handler.postDelayed(getData,500);
+                    Log.d("detectTTT", "run: WAY"+fb_Way);
+                    if (fb_Way==0){
+                        changeSightColor(mTimeDetect.getAttention());
+                        Log.d("detectTTT", "run: 000000");
                     }
-                    else if (fb_Way.equals("1")){
+                    else if (fb_Way==1){
                         setVibrate(1000);
-                    }else{
+                        Log.d("detectTTT", "run: 111111");
+                    }else if (fb_Way==2){
+
+                        if( mp3Uri != null ){
+
+                            Log.d("???","///"+Uri.parse(mp3Uri));
+
+                            playBeep();
+//                            try {
+//                                //撥放音樂
+//                                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//                                AssetFileDescriptor descriptor = getActivity().getAssets().openFd("coin07.mp3");
+//                                mediaPlayer.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
+//
+//                                mediaPlayer.prepare();
+//                                mediaPlayer.start();
+//
+//                                descriptor.close();
+//                            }
+//                            catch (Exception e){
+//                                Log.d("///",e+"");
+//                            }
+                        }
+                        Log.d("detectTTT", "run: 222222");
 
                     }
                     detectTotalCount++;
+                    Log.d("detectTTT", "run: Count"+detectTotalCount);
 
                 }
-//                if (mAttention <Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionLow())){
-//                    mAttentionLowCount++;
-//                }
                 if (mTimeDetect.getData().length()==0){
                     Log.d("%%%","end");
                 }else{
@@ -805,6 +849,26 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     public void setVibrate(int time){
         Vibrator vibrator =(Vibrator) getActivity().getSystemService(Service.VIBRATOR_SERVICE);
         vibrator.vibrate(time);
+    }
+    public void playBeep() {
+        try {
+//            if (mediaPlayer.isPlaying()) {
+//                mediaPlayer.stop();
+//                mediaPlayer.release();
+//
+//            }
+            mediaPlayer = new MediaPlayer();
+            AssetFileDescriptor descriptor = getActivity().getAssets().openFd("coin07.mp3");
+            mediaPlayer.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
+            descriptor.close();
+
+            mediaPlayer.prepare();
+//            m.setVolume(1f, 1f);
+//            m.setLooping(true);
+            mediaPlayer.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

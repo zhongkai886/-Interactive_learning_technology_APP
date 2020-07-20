@@ -29,11 +29,11 @@
     </array>
 
     <array name="aE">
-    <item>A</item>
-    <item>B</item>
-    <item>C</item>
-    <item>D</item>
-    <item>E</item>
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+        <item>E</item>
     </array>
 
     <array name="itemSpinner">

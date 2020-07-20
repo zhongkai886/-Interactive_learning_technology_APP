@@ -192,7 +192,7 @@ public class AddFeedbackFrameSetting extends Fragment {
                         + "','" + COLUMN_FeedBackWaySecond
                         + "','" + COLUMN_FeedBackWayStopTipSecond + "' ) " +
                         "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
-                Object[] mValue = new Object[]{edtNameText,spinnerItemText,edtAttentionHighText,edtAttentionLowText,attRadioId,attUri,
+                Object[] mValue = new Object[]{edtNameText,spinnerItemText,edtAttentionHighText,edtAttentionLowText,attRadioId,attUri.toString(),
                                                edtRelaxationHighText,edtRelaxationLowText,relRadioId,"",edtFbwSecText,edtFbwSecTipsText};
                 mDatabase.execSQL(sql,mValue);
 
@@ -262,12 +262,13 @@ public class AddFeedbackFrameSetting extends Fragment {
                     Log.d("??","///"+attUri);
 
                     try {
-                        //撥放音樂
-//                    MediaPlayer mediaPlayer = new MediaPlayer();
-//                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//                    mediaPlayer.setDataSource(getActivity(), attUri);
-//                    mediaPlayer.prepare();
-//                    mediaPlayer.start();
+//                        撥放音樂
+                    MediaPlayer mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    Log.d("??","///"+attUri);
+                    mediaPlayer.setDataSource(getActivity(), attUri);
+                    mediaPlayer.prepare();
+                    mediaPlayer.start();
                     }
                     catch (Exception e){
                         Log.d("///",e+"");
