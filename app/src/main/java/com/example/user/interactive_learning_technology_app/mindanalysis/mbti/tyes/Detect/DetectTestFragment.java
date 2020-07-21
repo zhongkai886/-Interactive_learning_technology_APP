@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +43,7 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_RelaxationMp3Uri;
 
 public class DetectTestFragment extends Fragment {
-    private Button testButton;
+    private ImageButton testButton;
     private Button againButton;
     private Button detectButton;
     private TextView detectIdTextView;
@@ -64,7 +65,7 @@ public class DetectTestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detect_test, container, false);
-        testButton = (Button) view.findViewById(R.id.testButton);
+        testButton = view.findViewById(R.id.testButton);
         againButton = (Button) view.findViewById(R.id.againTestButton);
         detectIdTextView = (TextView) view.findViewById(R.id.detectId);
         detectButton = (Button) view.findViewById(R.id.detectButton);

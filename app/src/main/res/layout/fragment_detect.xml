@@ -6,42 +6,143 @@
     android:layout_height="match_parent"
     tools:context=".mindanalysis.mbti.tyes.Detect.DetectFragment">
 
-    <Button
-        android:text="開始實驗"
-        android:id="@+id/detectButton"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="正式測量"
+        android:textStyle="bold"
+        android:textSize="40dp"
+        android:textColor="#000"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/title_vertical"
+        app:layout_constraintBottom_toBottomOf="@id/title_horizontal"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="受試者編號:"
+        android:textStyle="bold"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@id/title_horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/detectId"
+        app:layout_constraintStart_toStartOf="@id/title_vertical_detect_id"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:text="暫停"
-        android:visibility="gone"
-        android:id="@+id/stopButton"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:layout_constraintTop_toBottomOf="@+id/detectButton"/>
-
-    <Button
-        android:id="@+id/recordPoint"
+    <TextView
+        android:id="@+id/detectId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00007"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/title_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="紀錄時間點"
-        app:layout_constraintBottom_toTopOf="@+id/fragment_detect_title"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/removeButton"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center">
 
-    <Button
-        android:text="結束"
-        android:id="@+id/removeButton"
+        <TextView
+            android:id="@+id/fragment_detect_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="腦波檢測"
+            android:textColor="#3F3F3F"
+            android:textSize="14pt"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.464"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/recordPointTx"
+            android:layout_width="265dp"
+            android:layout_height="281dp"
+            android:background="@drawable/shape_oval"
+            android:gravity="center"
+            android:text="顯示水平值"
+            android:textColor="@color/white"
+            android:textSize="40dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/fragment_detect_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recordPoint" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:layout_constraintTop_toBottomOf="@+id/stopButton"/>
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/timerLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/detectButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="開始實驗"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/shape_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/stopButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/shape_button"
+            android:text="暫停"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/detectButton" />
+
+        <Button
+            android:id="@+id/recordPoint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:text="紀錄時間點"
+            android:background="@drawable/shape_button"
+            app:layout_constraintBottom_toTopOf="@+id/fragment_detect_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/removeButton"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/removeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="結束"
+            android:background="@drawable/shape_button"
+            app:layout_constraintTop_toBottomOf="@+id/stopButton" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/timerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="horizontal">
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/fragment_detect_username"
@@ -58,9 +159,25 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/removeButton"
         app:layout_constraintVertical_bias="0.05" />
-
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/title_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/title_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/title_vertical_detect_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.6" />
 <!--    <EditText-->
 <!--        android:id="@+id/fragment_detect_timerEdit"-->
 <!--        android:layout_width="86dp"-->
@@ -72,31 +189,5 @@
 <!--        app:layout_constraintEnd_toEndOf="parent"-->
 <!--        app:layout_constraintStart_toStartOf="parent"-->
 <!--        app:layout_constraintTop_toBottomOf="@+id/fragment_detect_title" />-->
-    <TextView
-        android:id="@+id/recordPointTx"
-        android:layout_width="265dp"
-        android:layout_height="281dp"
-        android:background="@drawable/shape_oval"
-        android:gravity="center"
-        android:text="顯示水平值"
-        android:textSize="40dp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/fragment_detect_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recordPoint" />
-
-    <TextView
-        android:id="@+id/fragment_detect_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="腦波檢測"
-        android:textColor="#3F3F3F"
-        android:textSize="14pt"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.464"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

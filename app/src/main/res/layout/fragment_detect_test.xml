@@ -1,68 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mindanalysis.mbti.tyes.Detect.DetectTestFragment"
-    android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".mindanalysis.mbti.tyes.Detect.DetectTestFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textSize="40dp"
-            android:text="回饋測試"/>"
-        <TextView
-            android:textSize="20dp"
-            android:layout_weight="0.7"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="受試者編號:" />
-        <TextView
-            android:id="@+id/detectId"
-            android:layout_weight="0.3"
-            android:layout_marginStart="10dp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="000"
-            android:textSize="20dp"/>
-    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="回饋測試"
+        android:textStyle="bold"
+        android:textSize="40dp"
+        android:textColor="#000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/title_vertical"
+        app:layout_constraintBottom_toBottomOf="@id/title_horizontal"/>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="受試者編號:"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/title_horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/detectId"
+        app:layout_constraintStart_toStartOf="@id/title_vertical_detect_id"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/detectId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00007"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/title_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
+<!--        <TextView-->
+<!--            android:layout_weight="1"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textSize="40dp"-->
+<!--            android:text="回饋測試"/>"-->
+<!--        <TextView-->
+<!--            android:textSize="20dp"-->
+<!--            android:layout_weight="0.7"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="受試者編號:" />-->
+<!--        <TextView-->
+<!--            android:id="@+id/detectId"-->
+<!--            android:layout_weight="0.3"-->
+<!--            android:layout_marginStart="10dp"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="000"-->
+<!--            android:textSize="20dp"/>-->
+<!--    </LinearLayout>-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center">
-        <Button
+        android:gravity="center"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/title_horizontal">
+
+        <ImageButton
             android:id="@+id/testButton"
             android:layout_width="250dp"
             android:layout_height="250dp"
+            android:background="@drawable/shape_mainfragment"
             android:text="click"
-            android:textSize="20dp"/>
+            android:textSize="20dp" />
     </LinearLayout>
+
     <LinearLayout
-        android:layout_width="300dp"
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
         android:gravity="center"
-        android:layout_gravity="center">
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
         <Button
             android:id="@+id/againTestButton"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:text="againText"
-            android:textSize="20dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/shape_button"
+            android:text="再試一次"
+            android:textSize="20dp" />
+
         <Button
             android:id="@+id/detectButton"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:text="Detect"
-            android:textSize="20dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_button"
+            android:text="開始實驗"
+            android:textSize="20dp" />
 
     </LinearLayout>
 
-</LinearLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/title_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/title_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/title_vertical_detect_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.6" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

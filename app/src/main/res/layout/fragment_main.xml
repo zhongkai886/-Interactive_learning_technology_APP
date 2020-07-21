@@ -10,9 +10,10 @@
         android:id="@+id/detectButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/shape_rectangle"
+        android:background="@drawable/shape_mainfragment"
         android:text="進入實驗"
-        android:src="@drawable/logo_icon_128dpi"
+
+        android:src="@drawable/logo_icon_128dpi_removebg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.4"
