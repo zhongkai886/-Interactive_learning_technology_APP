@@ -159,24 +159,24 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
     public void InsertTable(){ //19欄位  Id資料辨識用不須顯示
         final String SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COLUMN_Number + " VARCHAR(50), " +
-                COLUMN_Name + " VARCHAR(50), " +
-                COLUMN_DetectTime + " VARCHAR(50)," +
-                COLUMN_Item + " VARCHAR(50)," +
-                COLUMN_FeedBackCount + " VARCHAR(50)," +
-                COLUMN_AttentionHigh + " VARCHAR(50)," +
-                COLUMN_AttentionLow + " VARCHAR(50)," +
-                COLUMN_RelaxationHigh + " VARCHAR(50)," +
-                COLUMN_RelaxationLow + " VARCHAR(50)," +
-                COLUMN_AttentionMax + " VARCHAR(50)," +
-                COLUMN_AttentionMin + " VARCHAR(50)," +
-                COLUMN_RelaxationMax + " VARCHAR(50)," +
-                COLUMN_RelaxationMin + " VARCHAR(50)," +
-                COLUMN_FeedBackSecondsGap + " VARCHAR(50)," +
-                COLUMN_FeedBackPassSeconds + " VARCHAR(50)," +
-                COLUMN_AverageAttention + " VARCHAR(50)," +
-                COLUMN_AverageRelaxation + " VARCHAR(50)," +
-                COLUMN_PointInTime + " VARCHAR(50)" +
+                COLUMN_Number + " VARCHAR(250), " +
+                COLUMN_Name + " VARCHAR(250), " +
+                COLUMN_DetectTime + " VARCHAR(250)," +
+                COLUMN_Item + " VARCHAR(250)," +
+                COLUMN_FeedBackCount + " VARCHAR(250)," +
+                COLUMN_AttentionHigh + " VARCHAR(250)," +
+                COLUMN_AttentionLow + " VARCHAR(250)," +
+                COLUMN_RelaxationHigh + " VARCHAR(250)," +
+                COLUMN_RelaxationLow + " VARCHAR(250)," +
+                COLUMN_AttentionMax + " VARCHAR(250)," +
+                COLUMN_AttentionMin + " VARCHAR(250)," +
+                COLUMN_RelaxationMax + " VARCHAR(250)," +
+                COLUMN_RelaxationMin + " VARCHAR(250)," +
+                COLUMN_FeedBackSecondsGap + " VARCHAR(250)," +
+                COLUMN_FeedBackPassSeconds + " VARCHAR(250)," +
+                COLUMN_AverageAttention + " VARCHAR(250)," +
+                COLUMN_AverageRelaxation + " VARCHAR(250)," +
+                COLUMN_PointInTime + " VARCHAR(250)" +
                 ");";
         mDatabase.execSQL(SQL);
         //18欄位 扣掉自動生成ID
@@ -273,7 +273,7 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                                 }
                                 bw.flush();
                                 Toast.makeText(getActivity(), "Exported Successfully.", Toast.LENGTH_SHORT).show();
-                                requestSignIn();
+
                                 uploadFile();
                             }
                         } catch (Exception ex) {

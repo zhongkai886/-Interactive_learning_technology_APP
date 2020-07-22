@@ -27,6 +27,11 @@ import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.ty
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.SettingAdapter;
 import com.example.user.interactive_learning_technology_app.R;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBHelper;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.Scope;
+import com.google.api.services.drive.DriveScopes;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         View mBottomView = (View) findViewById(R.id.bottom_view_main);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setIcon(R.drawable.logo_72dpi);
+        getSupportActionBar().setIcon(R.drawable.logo_72dpi_removebg_preview);
 //        getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.logo));
         final Button mExperimentSearchButton = (Button) mBottomView.findViewById(R.id.ExperimentSearchButton);
         final Button mExperimentSettingButton = (Button) mBottomView.findViewById(R.id.ExperimentSettingButton);
@@ -64,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         MainFragment fragment = new MainFragment();
         fragmentTransaction.add(R.id.center,fragment);
         fragmentTransaction.commit();
-
+        requestSignIn();
         if (savedInstanceState == null) {
             mMindCenter = MindControllerFactory.obtain(getApplicationContext(), new Handler(this));
             mMindCenter.start();
@@ -210,5 +215,16 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
                 break;
         }
         return true;
+    }
+    public void requestSignIn(){
+        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestScopes(new Scope(DriveScopes.DRIVE_FILE),
+                        new Scope(DriveScopes.DRIVE_APPDATA))
+                .build();
+
+        GoogleSignInClient client = GoogleSignIn.getClient(this,signInOptions);
+
+        startActivityForResult(client.getSignInIntent(),400);
     }
 }

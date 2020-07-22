@@ -1,73 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mindanalysis.mbti.tyes.Detect.SaveResultFragment"
-    android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:text="實驗結果"
-            android:textSize="25dp"
-            android:layout_weight="50"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:text="受試者編號:"
-            android:layout_weight="20"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/detectId"
-            android:text="aaa"
-            android:layout_weight="20"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".mindanalysis.mbti.tyes.Detect.SaveResultFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="實驗結果"
+        android:textStyle="bold"
+        android:textSize="40dp"
+        android:textColor="#000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/title_vertical"
+        app:layout_constraintBottom_toBottomOf="@id/title_horizontal"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="受試者編號:"
+        android:textStyle="bold"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="@id/title_horizontal"
+        app:layout_constraintEnd_toStartOf="@+id/detectId"
+        app:layout_constraintStart_toStartOf="@id/title_vertical_detect_id"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/detectId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00007"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/title_horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp">
-        <TextView
-            android:text="受試者編號:"
-            android:textSize="30dp"
-            android:layout_weight="60"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
-        <TextView
-            android:id="@+id/detectContentId"
-            android:text="aaa"
-            android:textSize="30dp"
-            android:layout_weight="50"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="60"
+                android:text="受試者編號:"
+                android:textSize="30dp" />
+
+            <TextView
+                android:id="@+id/detectContentId"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="aaa"
+                android:textSize="30dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="實驗結果儲存成功!"
+                android:textSize="30dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="50"
+                android:text="本次實驗已結束，謝謝幫助!"
+                android:textSize="30dp" />
+
+        </LinearLayout>
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/title_horizontal"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp">
-        <TextView
-            android:text="實驗結果儲存成功!"
-            android:textSize="30dp"
-            android:layout_weight="50"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/title_vertical"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp">
-        <TextView
-            android:text="本次實驗已結束，謝謝幫助!"
-            android:textSize="30dp"
-            android:layout_weight="50"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.4" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/title_vertical_detect_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.6" />
 
-    </LinearLayout>
 
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

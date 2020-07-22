@@ -192,7 +192,7 @@ public class AddFeedbackFrameSetting extends Fragment {
                         + "','" + COLUMN_FeedBackWaySecond
                         + "','" + COLUMN_FeedBackWayStopTipSecond + "' ) " +
                         "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
-                Object[] mValue = new Object[]{edtNameText,spinnerItemText,edtAttentionHighText,edtAttentionLowText,attRadioId,attUri.toString(),
+                Object[] mValue = new Object[]{edtNameText,spinnerItemText,edtAttentionHighText,edtAttentionLowText,attRadioId,attUri,
                                                edtRelaxationHighText,edtRelaxationLowText,relRadioId,"",edtFbwSecText,edtFbwSecTipsText};
                 mDatabase.execSQL(sql,mValue);
 

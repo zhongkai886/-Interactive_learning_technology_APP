@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,208 +10,288 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/FeedBackSetting"/>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="回饋代稱"/>
-        <EditText
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="輸入回饋代稱"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:textSize="14dp"
-            android:text="請選擇要偵測的腦波項目"/>
-        <EditText
-            android:id="@+id/item"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:hint="Attention+Relaxation"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:textSize="14dp"
-            android:text="當Attention水平:高於"/>
+        android:text="@string/FeedBackSetting"
+        android:textStyle="bold"
+        android:textSize="40dp"
+        android:textColor="#000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/title_vertical_detect_id"
+        app:layout_constraintBottom_toBottomOf="@id/title_horizontal"/>
 
-        <EditText
-            android:id="@+id/attentionHigh"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:hint="0-100"/>
-        <TextView
-            android:layout_width="30dp"
-            android:layout_height="50dp"
-            android:textSize="14dp"
-            android:text="低於"/>
-        <EditText
-            android:id="@+id/attentionLow"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:hint="0-100"/>
-        <TextView
-            android:layout_width="30dp"
-            android:layout_height="50dp"
-            android:textSize="14dp"
-            android:text="時"/>
-
-    </LinearLayout>
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/linearLayout5"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/title_horizontal">
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14dp"
-            android:text="回饋方式"/>
-        <RadioGroup
-            android:id="@+id/radioGroupAtt"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="回饋代稱" />
+
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="輸入回饋代稱" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <RadioButton
-                android:id="@+id/attSight"
+
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="視覺" />
-            <RadioButton
-                android:id="@+id/attShock"
+                android:layout_height="50dp"
+                android:text="請選擇要偵測的腦波項目"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/item"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="震動" />
-            <RadioButton
-                android:id="@+id/attVoice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="聲音" />
-        </RadioGroup>
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="mp3"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:textSize="14dp"
-            android:text="當Relaxation水平:高於"/>
-        <EditText
-            android:id="@+id/relaxationHigh"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:hint="0-100"/>
-        <TextView
-            android:layout_width="30dp"
-            android:layout_height="50dp"
-            android:textSize="14dp"
-            android:text="低於"/>
-        <EditText
-            android:id="@+id/relaxationLow"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:hint="0-100"/>
-        <TextView
-            android:layout_width="30dp"
-            android:layout_height="50dp"
-            android:textSize="14dp"
-            android:text="時"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="回饋方式"/>
-        <RadioGroup
-            android:id="@+id/radioGroupRel"
+                android:layout_height="50dp"
+                android:hint="Attention+Relaxation" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <RadioButton
-                android:id="@+id/relSight"
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:text="當Attention水平:高於"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/attentionHigh"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:hint="0-100" />
+
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="50dp"
+                android:text="低於"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/attentionLow"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:hint="0-100" />
+
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="50dp"
+                android:text="時"
+                android:textSize="14dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="視覺" />
-            <RadioButton
-                android:id="@+id/relShock"
+                android:text="回饋方式"
+                android:textSize="14dp" />
+
+            <RadioGroup
+                android:id="@+id/radioGroupAtt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="震動" />
-            <RadioButton
-                android:id="@+id/relVoice"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/attSight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="視覺" />
+
+                <RadioButton
+                    android:id="@+id/attShock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="震動" />
+
+                <RadioButton
+                    android:id="@+id/attVoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="聲音" />
+            </RadioGroup>
+
+            <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="聲音" />
-        </RadioGroup>
-        <EditText
+                android:hint="mp3" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="mp3"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:text="當Relaxation水平:高於"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/relaxationHigh"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:hint="0-100" />
+
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="50dp"
+                android:text="低於"
+                android:textSize="14dp" />
+
+            <EditText
+                android:id="@+id/relaxationLow"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:hint="0-100" />
+
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="50dp"
+                android:text="時"
+                android:textSize="14dp" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="開始測量"/>
-        <EditText
-            android:id="@+id/fbwSec"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="回饋方式" />
+
+            <RadioGroup
+                android:id="@+id/radioGroupRel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/relSight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="視覺" />
+
+                <RadioButton
+                    android:id="@+id/relShock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="震動" />
+
+                <RadioButton
+                    android:id="@+id/relVoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="聲音" />
+            </RadioGroup>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="mp3" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="輸入數字"/>
-        <TextView
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="開始測量" />
+
+            <EditText
+                android:id="@+id/fbwSec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="輸入數字" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="秒後開始回饋" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="秒後開始回饋"/>
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="回饋之後，" />
+
+            <EditText
+                android:id="@+id/fbwSecTips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="輸入數字" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="秒內不會再次提醒" />
+        </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="回饋之後，"/>
-        <EditText
-            android:id="@+id/fbwSecTips"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="輸入數字"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="秒內不會再次提醒"/>
-    </LinearLayout>
     <Button
         android:id="@+id/BackSettingButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="返回"/>
+        android:background="@drawable/shape_button"
+        android:text="返回"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/title_vertical_detect_id"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/title_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/title_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/title_vertical_detect_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.6" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

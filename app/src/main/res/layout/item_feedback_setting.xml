@@ -12,8 +12,10 @@
         android:id="@+id/settingCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/settingId"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -24,26 +26,30 @@
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/AddDelButtonGuideLine2"
-        app:layout_constraintStart_toStartOf="@id/settingCheckbox"
-        app:layout_constraintTop_toTopOf="parent" />
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.571" />
 
     <TextView
-        android:id="@+id/settingItem"
+        android:id="@+id/settingWay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="attent"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/AddDelButtonGuideLine1"
-        app:layout_constraintStart_toStartOf="@+id/AddDelButtonGuideLine2"
+        app:layout_constraintStart_toEndOf="@+id/AddDelButtonGuideLine2"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/settingButton"
+        android:background="@drawable/shape_button"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:text="點此進入"
         android:textSize="8sp"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/AddDelButtonGuideLine"
@@ -53,17 +59,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.75" />
+        app:layout_constraintGuide_percent="0.70" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/AddDelButtonGuideLine1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.55" />
+        app:layout_constraintGuide_percent="0.63" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/AddDelButtonGuideLine2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.25" />
+        app:layout_constraintGuide_percent="0.29" />
 </androidx.constraintlayout.widget.ConstraintLayout>

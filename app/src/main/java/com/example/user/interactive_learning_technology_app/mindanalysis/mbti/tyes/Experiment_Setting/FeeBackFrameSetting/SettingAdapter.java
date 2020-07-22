@@ -37,7 +37,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
     public class SettingViewHolder extends RecyclerView.ViewHolder{
         public CheckBox mCheckbox;
         public TextView mId;
-        public TextView mItem;
+        public TextView mWay;
         public Button mButton;
 
 
@@ -45,7 +45,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
             super(itemView);
             mCheckbox = itemView.findViewById(R.id.settingCheckbox);
             mId = itemView.findViewById(R.id.settingId);
-            mItem = itemView.findViewById(R.id.settingItem);
+            mWay = itemView.findViewById(R.id.settingWay);
             mButton = itemView.findViewById(R.id.settingButton);
         }
     }
@@ -68,7 +68,16 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
         final FeedbackData mFeedbackData = this.mFeedbackDataList.get(position);
 
         holder.mId.setText(mFeedbackDataList.get(position).getId());
-        holder.mItem.setText(mFeedbackDataList.get(position).getItem());
+        Log.d("voice",mFeedbackDataList.get(position).getAttentionWay());
+        if (mFeedbackDataList.get(position).getAttentionWay().equals("0")){
+            holder.mWay.setText("視覺");
+        }
+        else if (mFeedbackDataList.get(position).getAttentionWay().equals("1")){
+            holder.mWay.setText("震動");
+        }else if (mFeedbackDataList.get(position).getAttentionWay().equals("2")){
+            holder.mWay.setText("聲音");
+        }
+
         holder.mCheckbox.setTag(position);
         holder.mCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
