@@ -349,6 +349,7 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
 //        filename="2020-07-23 11:10:57.csv";
 //        driveServiceHelper.fileName(fileName.get(i));
         Log.d("88888",""+sdCardDir+"/"+filename+"/////"+filename);
+        Log.d("OK吧", "uploadFile: "+driveServiceHelper);
                 driveServiceHelper.createFile(sdCardDir+"/"+filename,filename)
 //                    driveServiceHelper.createFile(sdCardDir,filename)
                         .addOnSuccessListener(new OnSuccessListener<String>() {
