@@ -35,6 +35,7 @@ import com.example.user.interactive_learning_technology_app.R;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Main.MainActivity;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBHelper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.Scope;
@@ -45,6 +46,8 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
+
+
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -83,10 +86,10 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
     public ArrayList<DetectData> detectDataList = new ArrayList<DetectData>();
     public RecyclerView recyclerView;
     public SearchAdapter mAdapter;
-    public Button BtnUpload;
+    public Button BtnUpload,BtnDelete;
     public ArrayList<String> row = new ArrayList<>();
     public CharSequence dateTime="";
-    public DriveServiceHelper driveServiceHelper;
+    DriveServiceHelper driveServiceHelper;
     public String sdCardDir;
     private static final int PICK_CSV_FROM_GALLERY_REQUEST_CODE = 100;
     public String filename ="";
@@ -115,7 +118,15 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new SearchAdapter(detectDataList,this);
         recyclerView.setAdapter(mAdapter);
+        BtnDelete = view.findViewById(R.id.dataDelete);
 
+        BtnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadFile();
+                Log.d("87", "onClick: ");
+            }
+        });
         BtnUpload = (Button) view.findViewById(R.id.dataUpload);
         BtnUpload.setOnClickListener(this);
 
@@ -277,7 +288,7 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                                 Toast.makeText(getActivity(), "Exported Successfully.", Toast.LENGTH_SHORT).show();
                                 Log.d("TAG", "onClick: " + driveServiceHelper);
 
-                                uploadFile();
+
                             }
                         } catch (Exception ex) {
                             if (mDatabase.isOpen()) {
@@ -306,18 +317,22 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
     public void requestSignIn(){
         GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+//                .requestId()
+//                .requestIdToken("501226046516-19p6m11sefn604ngarvn50q95fikpnfa.apps.googleusercontent.com")
+//                .requestScopes(new Scope(DriveScopes.DRIVE_FILE),
+//                        new Scope(DriveScopes.DRIVE_APPDATA)).
                 .requestScopes(new Scope(DriveScopes.DRIVE_FILE),
-                        new Scope(DriveScopes.DRIVE_APPDATA))
+                        new Scope(DriveScopes.DRIVE_APPDATA),
+                        new Scope(DriveScopes.DRIVE))
+//                .requestScopes(new Scopes(DriveScopes.))
+//                .requestScopes(new Scope(DriveScopes.all().toString()))
+
                 .build();
 
         GoogleSignInClient client = GoogleSignIn.getClient(getActivity(),signInOptions);
-        Log.d("87登入",""+client.getSignInIntent()+"///???"+signInOptions);
+
         startActivityForResult(client.getSignInIntent(),400);
     }
-//    private void signIn() {
-//        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-//        startActivityForResult(signInIntent,RC_SIGN_IN);
-//    }
 
     public void uploadFile(){
 //        String filePath = "/storage/emulated/0/acx1.csv";
@@ -334,7 +349,7 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
 //        filename="2020-07-23 11:10:57.csv";
 //        driveServiceHelper.fileName(fileName.get(i));
         Log.d("88888",""+sdCardDir+"/"+filename+"/////"+filename);
-                driveServiceHelper.createFile("/storage/emulated/0/2020-07-23 17:46:18.csv","2020-07-23 17:46:18.csv")
+                driveServiceHelper.createFile(sdCardDir+"/"+filename,filename)
 //                    driveServiceHelper.createFile(sdCardDir,filename)
                         .addOnSuccessListener(new OnSuccessListener<String>() {
                             @Override
@@ -352,54 +367,50 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                 });
     }
     private void handleSignInIntent(Intent data) {
-        Log.d("87777",""+data);
+        Log.d("data", "data:"+data);
         GoogleSignIn.getSignedInAccountFromIntent(data)
-                .addOnSuccessListener(googleSignInAccount -> {
+                .addOnSuccessListener(new OnSuccessListener<GoogleSignInAccount>() {
+                    @Override
+                    public void onSuccess(GoogleSignInAccount googleSignInAccount) {
+                        GoogleAccountCredential credential = GoogleAccountCredential
+//                            .usingOAuth2(MainActivity.this, DriveScopes.a);
 
-                    GoogleAccountCredential credential = GoogleAccountCredential
-                            .usingOAuth2(getActivity(), Collections.singleton(DriveScopes.DRIVE_FILE));
+                                .usingOAuth2(getActivity(), Collections.singleton(DriveScopes.DRIVE_FILE));
 
-                    credential.setSelectedAccount(googleSignInAccount.getAccount());
+                        credential.setSelectedAccount(googleSignInAccount.getAccount());
 
-                    Drive googleDriveService =
-                            new Drive.Builder(
-                                    AndroidHttp.newCompatibleTransport(),
-                                    new GsonFactory(),
-                                    credential)
-                                    .setApplicationName("AppName")
-                                    .build();
 
-                    driveServiceHelper = new DriveServiceHelper(googleDriveService);
-                    Log.d("TAG111HANDEL",""+driveServiceHelper);
+                        Drive googleDriveService =
+                                new Drive.Builder(
+                                        AndroidHttp.newCompatibleTransport(),
+                                        new GsonFactory(),
+                                        credential)
+                                        .setApplicationName("AppName")
+                                        .build();
+
+                        driveServiceHelper = new DriveServiceHelper(googleDriveService);
+                        Log.e("aaa", "handleSignInIntent: " + driveServiceHelper.toString());
+
+                    }
                 })
-                .addOnFailureListener(e -> Log.d("e04su3a8", "handleSignInIntent: "+e));
-
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        e.printStackTrace();
+                        Log.d("可以啦", "onFailure: "+e);
+                    }
+                });
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        Log.d("TAG111", "onClick: " + getActivity().RESULT_OK);
-        Log.d("TAG111", "onClick: " + requestCode);
         switch (requestCode)
         {
             case 400:
-                    Log.d("ddddd",""+data);
+//                if(resultCode == RESULT_OK ) {
                     handleSignInIntent(data);
-                    Log.d("TAGACCIN", "onClick: " + driveServiceHelper);
-                break;
-//            case PICK_CSV_FROM_GALLERY_REQUEST_CODE:
-//                Uri selectedCsv =null;
-//                ClipData clipData = null;
-//                if (resultCode == Activity.RESULT_OK && data != null){
-//                    selectedCsv = data.getData();
-//                    if (clipData != null){
-//                        catchFileInApp(selectedCsv,clipData);
-//                    }
-//                    else if (Build.VERSION.SDK_INT>=16 && clipData== null){
-//                        clipData = data.getClipData();
-//                        catchFileInApp(selectedCsv,clipData);
-//                    }
 //                }
-//                break;
+                break;
+
             default:
                 break;
         }

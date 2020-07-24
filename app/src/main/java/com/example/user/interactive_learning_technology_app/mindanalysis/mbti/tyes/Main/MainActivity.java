@@ -1,6 +1,7 @@
 package com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Main;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
@@ -15,6 +16,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +27,7 @@ import com.alchemy.mindcontroller.MindsetValue;
 import com.alchemy.wjk.mind.view.MindsetActivity;
 import com.example.user.interactive_learning_technology_app.BuildConfig;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.DataSearch.Login.ResearchLoginFragment;
+import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.DataSearch.SearchFragment.DriveServiceHelper;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.Login.LoginActivity;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.FeedbackData;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.SettingAdapter;
@@ -33,14 +36,22 @@ import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.ty
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBHelper;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -71,7 +82,7 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.TABLE_NAME;
 
 public class MainActivity extends AppCompatActivity implements Handler.Callback {
-
+    DriveServiceHelper driveServiceHelper;
     public ArrayList<FeedbackData> mFeedbackData = new ArrayList<FeedbackData>();
     public Cursor data;
     public SettingAdapter adapter;
@@ -82,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        requestSignIn();
 //        Stetho.initializeWithDefaults(this);
         View mBottomView = (View) findViewById(R.id.bottom_view_main);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -172,30 +184,6 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         if(BuildConfig.DEBUG)mMindCenter.DEBUG(false);
     }
 
-    private void addItem(){
-        SettingDBHelper dbHelper = new SettingDBHelper(this);
-
-        sqLiteDatabase = dbHelper.getWritableDatabase();
-//        data = mDatabase.rawQuery("SELECT * FROM settingDataList",null);
-//        data.moveToFirst();
-////        mFeedbackData.clear();
-//        for (int i=0 ; i==5;i++){
-//            mFeedbackData.add(
-//                    new FeebackData(
-//                            data.getString(0),data.getString(1),data.getString(2),
-//                            data.getString(3),data.getString(4),data.getString(5),
-//                            data.getString(6),data.getString(7),data.getString(8),
-//                            data.getString(9),data.getString(10))
-//            );
-//            Log.d("幾次了","////"+i+"////"+mFeedbackData.get(i).getId());
-//            data.moveToNext();
-//            adapter.notifyDataSetChanged();
-//        }
-
-
-
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -250,17 +238,8 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         }
         return true;
     }
-    public void requestSignIn(){
-        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestScopes(new Scope(DriveScopes.DRIVE_FILE),
-                        new Scope(DriveScopes.DRIVE_APPDATA))
-                .build();
 
-        GoogleSignInClient client = GoogleSignIn.getClient(this,signInOptions);
 
-        startActivityForResult(client.getSignInIntent(),400);
-    }
     private void _result(){ //測驗資料的19筆欄位
 
         final String SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +
@@ -285,5 +264,77 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
                 COLUMN_PointInTime + " VARCHAR(250)" +
                 ");";
         sqLiteDatabase.execSQL(SQL);
+    }
+    public void requestSignIn(){
+        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+//                .requestId()
+//                .requestIdToken("501226046516-19p6m11sefn604ngarvn50q95fikpnfa.apps.googleusercontent.com")
+//                .requestScopes(new Scope(DriveScopes.DRIVE_FILE),
+//                        new Scope(DriveScopes.DRIVE_APPDATA)).
+                .requestScopes(new Scope(DriveScopes.DRIVE_FILE),
+                        new Scope(DriveScopes.DRIVE_APPDATA),
+                        new Scope(DriveScopes.DRIVE))
+//                .requestScopes(new Scopes(DriveScopes.))
+//                .requestScopes(new Scope(DriveScopes.all().toString()))
+
+                .build();
+
+        GoogleSignInClient client = GoogleSignIn.getClient(this,signInOptions);
+
+        startActivityForResult(client.getSignInIntent(),400);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        switch (requestCode)
+        {
+            case 400:
+                Log.d("dddddddddddd", "onActivityResult: "+resultCode);
+                if(resultCode == RESULT_OK ) {
+                    handleSignInIntent(data);
+                }
+                break;
+
+            default:
+                break;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void handleSignInIntent(Intent data) {
+        Log.d("data", "data:"+data);
+        GoogleSignIn.getSignedInAccountFromIntent(data)
+                .addOnSuccessListener(new OnSuccessListener<GoogleSignInAccount>() {
+                    @Override
+                    public void onSuccess(GoogleSignInAccount googleSignInAccount) {
+                        GoogleAccountCredential credential = GoogleAccountCredential
+//                            .usingOAuth2(MainActivity.this, DriveScopes.a);
+
+                                .usingOAuth2(MainActivity.this, Collections.singleton(DriveScopes.DRIVE_FILE));
+
+                        credential.setSelectedAccount(googleSignInAccount.getAccount());
+
+
+                        Drive googleDriveService =
+                                new Drive.Builder(
+                                        AndroidHttp.newCompatibleTransport(),
+                                        new GsonFactory(),
+                                        credential)
+                                        .setApplicationName("AppName")
+                                        .build();
+
+                        driveServiceHelper = new DriveServiceHelper(googleDriveService);
+                        Log.e("aaa", "handleSignInIntent: " + driveServiceHelper.toString());
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        e.printStackTrace();
+                        Log.d("可以啦", "onFailure: "+e);
+                    }
+                });
     }
 }
