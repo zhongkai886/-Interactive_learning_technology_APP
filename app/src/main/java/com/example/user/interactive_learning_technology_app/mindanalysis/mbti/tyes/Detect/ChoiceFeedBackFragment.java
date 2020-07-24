@@ -70,6 +70,9 @@ public class ChoiceFeedBackFragment extends Fragment {
         final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         final DetectLoginFragment detectLoginFragment = new DetectLoginFragment();
         final String[] timeSpinner= {"5","10","15","20","25","30","35","40","45","50","55","60"};
+        final String[] timeChange= {"300","600","900","1200","1500","1800","2100","2400","2700","3000","3300","3600"};
+
+
         button = view.findViewById(R.id.enterButton);
         spinnerFeedBack = view.findViewById(R.id.FeedBackSpinner);
         spinnerTime = view.findViewById(R.id.TimeSpinner);

@@ -113,6 +113,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     public EditText mUserNameEdit;
     public TextView mTimerText;
     public TextView mPointValue;
+    public TextView mDetectId;
     public MindDetectTool mindDetectTool ;
     public AlertDialog.Builder builder;
     public AlertDialog dialog;
@@ -122,7 +123,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     public ArrayList<String> pointData = new ArrayList<String>();
     Handler handler = new Handler();
     boolean toast = true;
-
+    public Integer mSecondGaps= 0;
     //member
     public NumberAdapter mChartAdapterAtt;
     public NumberAdapter mChartAdapterMed;
@@ -213,6 +214,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+//                    mTimerText.setText(mTimeDetect.getCountdownRound() + "-" + mTimeDetect.getCountdownTime());
                     mTimerText.setText(mTimeDetect.getCountdownRound() + "-" + mTimeDetect.getCountdownTime());
                 }
             });
@@ -289,8 +291,12 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         sqLiteDatabase = dbHelper.getWritableDatabase();
         mTimerText = (TextView) view.findViewById(R.id.fragment_detect_title);
         mStartButton = (Button) view.findViewById(R.id.detectButton);
-        mPauseButton = (Button) view.findViewById(R.id.removeButton);
-        mStopButton = (Button) view.findViewById(R.id.stopButton);
+//        mPauseButton = (Button) view.findViewById(R.id.removeButton);
+//        mStopButton = (Button) view.findViewById(R.id.stopButton);
+
+        mPauseButton = (Button) view.findViewById(R.id.stopButton);
+        mStopButton = (Button) view.findViewById(R.id.removeButton);
+        mDetectId = view.findViewById(R.id.detectId);
         mRecordPointButton = (Button)view.findViewById(R.id.recordPoint);
         mUserNameEdit = (EditText) view.findViewById(R.id.fragment_detect_username);
         mPointValue = (TextView)view.findViewById(R.id.recordPointTx);
@@ -313,6 +319,10 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 
         mp3Uri = feedbackDataList.get(Integer.valueOf(settingId)).getAttentionMp3Uri();
 
+        String detectId = getActivity().getSharedPreferences("detectId",MODE_PRIVATE)
+                .getString("USER","");
+
+        mDetectId.setText(detectId);
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -325,6 +335,8 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 _state("start");
                 fb_Way = Integer.valueOf(getActivity().getSharedPreferences("selectAttentionWay", MODE_PRIVATE)
                         .getString("USER", ""));
+                //取得開始秒數
+                mSecondGaps=Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getWaySecond());
 
                 handler.postDelayed(getData,500);
 
@@ -472,7 +484,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 
         //item
         Log.d("aaaaa",""+feedbackDataList.get(Integer.valueOf(settingId)).getItem());
-        detectItem = feedbackDataList.get(Integer.valueOf(settingId)).getItem();
+        detectItem = feedbackDataList.get(Integer.valueOf(settingId)).getAttentionWay();
         //回饋間隔秒數
         detectSecondGap = feedbackDataList.get(Integer.valueOf(settingId)).getWaySecond();
         //忽略的秒數
@@ -538,62 +550,44 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     }
     private Runnable getData = new Runnable() {
         public void run() {
+            mSecondGaps--;
+            Log.d("Seconds",""+mSecondGaps);
             if (mTimeDetect.getState() == 2){
                 changeTextView(10000);
             }
-
             //偵測時做的資料處理
-            else if (mTimeDetect.getState() == 1){
-                changeTextView(mTimeDetect.getAttention());
-                mAttention =mTimeDetect.getAttention();
-                mAttentionList.add(mTimeDetect.getAttention());
-                mRelaxationList.add(mTimeDetect.getMeditation());
-                if (mAttention >Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionHigh())
-                && mAttention <Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionLow())){
-                    Log.d("detectTTT", "run: WAY"+fb_Way);
-                    if (fb_Way==0){
-                        changeSightColor(mTimeDetect.getAttention());
-                        Log.d("detectTTT", "run: 000000");
-                    }
-                    else if (fb_Way==1){
-                        setVibrate(1000);
-                        Log.d("detectTTT", "run: 111111");
-                    }else if (fb_Way==2){
+            else if (mTimeDetect.getState() == 1) {
+//                if (mSecondGaps == 0) {
+                    changeTextView(mTimeDetect.getAttention());
+                    mAttention = mTimeDetect.getAttention();
+                    mAttentionList.add(mTimeDetect.getAttention());
+                    mRelaxationList.add(mTimeDetect.getMeditation());
+                    if (mAttention > Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionHigh())
+                            && mAttention < Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionLow())) {
+                        Log.d("detectTTT", "run: WAY" + fb_Way);
+                        if (fb_Way == 0) {
+                            changeSightColor(mTimeDetect.getAttention());
+                        } else if (fb_Way == 1) {
+                            setVibrate(1000);
+                        } else if (fb_Way == 2) {
 
-                        if( mp3Uri != null ){
+                            if (mp3Uri != null) {
+                                playBeep();
+                            }
 
-                            Log.d("???","///"+Uri.parse(mp3Uri));
-
-                            playBeep();
-//                            try {
-//                                //撥放音樂
-//                                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//                                AssetFileDescriptor descriptor = getActivity().getAssets().openFd("coin07.mp3");
-//                                mediaPlayer.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength());
-//
-//                                mediaPlayer.prepare();
-//                                mediaPlayer.start();
-//
-//                                descriptor.close();
-//                            }
-//                            catch (Exception e){
-//                                Log.d("///",e+"");
-//                            }
                         }
-                        Log.d("detectTTT", "run: 222222");
+                        detectTotalCount++;
+                        Log.d("detectTTT", "run: Count" + detectTotalCount);
 
                     }
-                    detectTotalCount++;
-                    Log.d("detectTTT", "run: Count"+detectTotalCount);
-
+                    if (mTimeDetect.getData().length() == 0) {
+                        Log.d("%%%", "end");
+                    } else {
+                        attention_ArrayList.add(mTimeDetect.getData());
+                    }
+                    handler.postDelayed(this, 1000);
                 }
-                if (mTimeDetect.getData().length()==0){
-                    Log.d("%%%","end");
-                }else{
-                    attention_ArrayList.add(mTimeDetect.getData());
-                }
-                handler.postDelayed(this, 1000);
-            }
+//            }
             Log.d("%%%need",""+attention_ArrayList); //專門取attention
             Log.d("%%%data",""+mTimeDetect.getData());//取全部數值
         }

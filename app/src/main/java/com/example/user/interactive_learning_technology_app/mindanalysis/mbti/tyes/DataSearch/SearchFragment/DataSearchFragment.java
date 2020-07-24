@@ -55,6 +55,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Locale;
 
+import static android.app.Activity.RESULT_OK;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AttentionHigh;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AttentionLow;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AttentionMax;
@@ -103,13 +104,12 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_data_search, container, false);
-
         SearchDBHelper dbHelper = new SearchDBHelper(getActivity());
         mDatabase = dbHelper.getWritableDatabase(); //寫入
         mDatabase = dbHelper.getReadableDatabase(); //讀取
         InsertTable();
         LoadData();
-
+        requestSignIn();
         getAuthority();
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -218,6 +218,7 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
         switch (v.getId()){
             case R.id.dataUpload:
 
+
                 row = mAdapter.getCheckId();
                 Calendar mCal = Calendar.getInstance();
                 dateTime = DateFormat.format("yyyy-MM-dd kk:mm:ss", mCal.getTime());    // kk:24小時制, hh:12小時制
@@ -230,8 +231,9 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                             c = mDatabase.rawQuery("select * from searchDataList", null);
                             int rowcount = 0;//資料量
                             int colcount = 0;//欄位數量
-//                            String sdCardDir2 = Environment.getExternalStorageDirectory().toString();
-                            sdCardDir = getActivity().getExternalFilesDir(null).getAbsolutePath();
+                            sdCardDir = Environment.getExternalStorageDirectory().toString();
+                            Log.d("有路徑嗎",""+sdCardDir);
+//                            sdCardDir = getActivity().getExternalFilesDir(null).getAbsolutePath();
 //                            Log.d("sdCardDir",sdCardDir2+"////"+sdCardDir);
                             filename = dateTime+".csv";
                             // the name of the file to export with
@@ -273,6 +275,7 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                                 }
                                 bw.flush();
                                 Toast.makeText(getActivity(), "Exported Successfully.", Toast.LENGTH_SHORT).show();
+                                Log.d("TAG", "onClick: " + driveServiceHelper);
 
                                 uploadFile();
                             }
@@ -308,9 +311,13 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                 .build();
 
         GoogleSignInClient client = GoogleSignIn.getClient(getActivity(),signInOptions);
-
+        Log.d("87登入",""+client.getSignInIntent()+"///???"+signInOptions);
         startActivityForResult(client.getSignInIntent(),400);
     }
+//    private void signIn() {
+//        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+//        startActivityForResult(signInIntent,RC_SIGN_IN);
+//    }
 
     public void uploadFile(){
 //        String filePath = "/storage/emulated/0/acx1.csv";
@@ -323,10 +330,12 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
             progressDialog.setMessage("Please wait...");
             progressDialog.show();
 
-
+//        sdCardDir="/storage/emulated/0/Android/data/com.example.user.interactive_learning_technology_app/files/2020-07-23 11:10:57.csv";
+//        filename="2020-07-23 11:10:57.csv";
 //        driveServiceHelper.fileName(fileName.get(i));
         Log.d("88888",""+sdCardDir+"/"+filename+"/////"+filename);
-                driveServiceHelper.createFile(sdCardDir+"/"+filename,filename)
+                driveServiceHelper.createFile("/storage/emulated/0/2020-07-23 17:46:18.csv","2020-07-23 17:46:18.csv")
+//                    driveServiceHelper.createFile(sdCardDir,filename)
                         .addOnSuccessListener(new OnSuccessListener<String>() {
                             @Override
                             public void onSuccess(String s) {
@@ -343,8 +352,10 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                 });
     }
     private void handleSignInIntent(Intent data) {
+        Log.d("87777",""+data);
         GoogleSignIn.getSignedInAccountFromIntent(data)
                 .addOnSuccessListener(googleSignInAccount -> {
+
                     GoogleAccountCredential credential = GoogleAccountCredential
                             .usingOAuth2(getActivity(), Collections.singleton(DriveScopes.DRIVE_FILE));
 
@@ -359,18 +370,21 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                                     .build();
 
                     driveServiceHelper = new DriveServiceHelper(googleDriveService);
-
+                    Log.d("TAG111HANDEL",""+driveServiceHelper);
                 })
-                .addOnFailureListener(e -> e.printStackTrace());
+                .addOnFailureListener(e -> Log.d("e04su3a8", "handleSignInIntent: "+e));
+
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Log.d("TAG111", "onClick: " + getActivity().RESULT_OK);
+        Log.d("TAG111", "onClick: " + requestCode);
         switch (requestCode)
         {
             case 400:
-                if(resultCode == getActivity().RESULT_OK ) {
+                    Log.d("ddddd",""+data);
                     handleSignInIntent(data);
-                }
+                    Log.d("TAGACCIN", "onClick: " + driveServiceHelper);
                 break;
 //            case PICK_CSV_FROM_GALLERY_REQUEST_CODE:
 //                Uri selectedCsv =null;
@@ -390,51 +404,6 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-
-    public void exportCSV(){
-        File carpeta = new File(Environment.getExternalStorageDirectory() + "/ExportarSQLiteCSV");
-        String archivoAgenda = carpeta.toString() + "/" + "Usuarios.csv";
-
-        boolean isCreate = false;
-        if(!carpeta.exists()) {
-            isCreate = carpeta.mkdir();
-        }
-
-        try {
-            FileWriter fileWriter = new FileWriter(archivoAgenda);
-//
-//            AdminSQLiteOpenHelper admin = new AdminSQLiteOpenHelper(getActivity(), "dbSistema", null, 1);
-//
-//            SQLiteDatabase db = admin.getWritableDatabase();
-
-            Cursor fila = mDatabase.rawQuery("select * from usuarios", null);
-
-            if(fila != null && fila.getCount() != 0) {
-                fila.moveToFirst();
-                do {
-
-                    fileWriter.append(fila.getString(0));
-                    fileWriter.append(",");
-                    fileWriter.append(fila.getString(1));
-                    fileWriter.append(",");
-                    fileWriter.append(fila.getString(2));
-                    fileWriter.append("\n");
-
-                } while(fila.moveToNext());
-            } else {
-                Toast.makeText(getActivity(), "No hay registros.", Toast.LENGTH_LONG).show();
-            }
-
-            mDatabase.close();
-            fileWriter.close();
-            Toast.makeText(getActivity(), "SE CREO EL ARCHIVO CSV EXITOSAMENTE", Toast.LENGTH_LONG).show();
-
-        }
-        catch (Exception e) {
-            Log.d("dadada",""+e);
-        }
     }
 }
 

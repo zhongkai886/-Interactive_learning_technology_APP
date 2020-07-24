@@ -7,8 +7,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,7 +29,9 @@ import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.ty
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.FeedbackData;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.SettingAdapter;
 import com.example.user.interactive_learning_technology_app.R;
+import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBHelper;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBHelper;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -44,21 +49,48 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AttentionHigh;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AttentionLow;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AttentionMax;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AttentionMin;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AverageAttention;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AverageRelaxation;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_DetectTime;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_FeedBackCount;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_FeedBackPassSeconds;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_FeedBackSecondsGap;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_ID;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_Item;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_Name;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_Number;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_PointInTime;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationHigh;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationLow;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationMax;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationMin;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.TABLE_NAME;
+
 public class MainActivity extends AppCompatActivity implements Handler.Callback {
-    public SQLiteDatabase mDatabase;
+
     public ArrayList<FeedbackData> mFeedbackData = new ArrayList<FeedbackData>();
     public Cursor data;
     public SettingAdapter adapter;
     private MindController mMindCenter;
     private MenuItem mMindsignMenu;
+    public SQLiteDatabase sqLiteDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        Stetho.initializeWithDefaults(this);
         View mBottomView = (View) findViewById(R.id.bottom_view_main);
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        SearchDBHelper dbHelper = new SearchDBHelper(this);
+        sqLiteDatabase = dbHelper.getWritableDatabase();
         setSupportActionBar(toolbar);
         getSupportActionBar().setIcon(R.drawable.logo_72dpi_removebg_preview);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#d2effa")));
+
 //        getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.logo));
         final Button mExperimentSearchButton = (Button) mBottomView.findViewById(R.id.ExperimentSearchButton);
         final Button mExperimentSettingButton = (Button) mBottomView.findViewById(R.id.ExperimentSettingButton);
@@ -69,7 +101,9 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         MainFragment fragment = new MainFragment();
         fragmentTransaction.add(R.id.center,fragment);
         fragmentTransaction.commit();
-        requestSignIn();
+
+
+//        requestSignIn();
         if (savedInstanceState == null) {
             mMindCenter = MindControllerFactory.obtain(getApplicationContext(), new Handler(this));
             mMindCenter.start();
@@ -141,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
     private void addItem(){
         SettingDBHelper dbHelper = new SettingDBHelper(this);
 
-        mDatabase = dbHelper.getWritableDatabase();
+        sqLiteDatabase = dbHelper.getWritableDatabase();
 //        data = mDatabase.rawQuery("SELECT * FROM settingDataList",null);
 //        data.moveToFirst();
 ////        mFeedbackData.clear();
@@ -184,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
     @Override
     public boolean handleMessage(@NonNull Message message) {
         if (mMindsignMenu == null) {
-            mMindsignMenu.setIcon(R.drawable.icon03);
+            mMindsignMenu.setIcon(R.drawable.icon03_removebg);
             return true;
         }
 
@@ -198,10 +232,10 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
                         mMindsignMenu.setIcon(R.drawable.transparent);
                         break;
                     case MindsetValue.STATE_CONNECTED:
-                        mMindsignMenu.setIcon(R.drawable.icon01);
+                        mMindsignMenu.setIcon(R.drawable.icon01_removebg);
                         break;
                     case MindsetValue.STATE_CONNECTING:
-                        mMindsignMenu.setIcon(R.drawable.icon03);
+                        mMindsignMenu.setIcon(R.drawable.icon03_removebg);
                         break;
                     case MindsetValue.STATE_DISCONNECTED:
                         mMindsignMenu.setIcon(R.drawable.transparent);
@@ -209,9 +243,9 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
                 }
                 break;
             case MindsetValue.MSG_POOR_SIGNAL:
-                if (v > 100) mMindsignMenu.setIcon(R.drawable.icon01);
-                else if (v > 30) mMindsignMenu.setIcon(R.drawable.icon01);
-                else if (v == 0) mMindsignMenu.setIcon(R.drawable.icon01);
+                if (v > 100) mMindsignMenu.setIcon(R.drawable.icon01_removebg);
+                else if (v > 30) mMindsignMenu.setIcon(R.drawable.icon01_removebg);
+                else if (v == 0) mMindsignMenu.setIcon(R.drawable.icon01_removebg);
                 break;
         }
         return true;
@@ -226,5 +260,30 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         GoogleSignInClient client = GoogleSignIn.getClient(this,signInOptions);
 
         startActivityForResult(client.getSignInIntent(),400);
+    }
+    private void _result(){ //測驗資料的19筆欄位
+
+        final String SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_Number + " VARCHAR(250), " +
+                COLUMN_Name + " VARCHAR(250), " +
+                COLUMN_DetectTime + " VARCHAR(250)," +
+                COLUMN_Item + " VARCHAR(250)," +
+                COLUMN_FeedBackCount + " VARCHAR(250)," +
+                COLUMN_AttentionHigh + " VARCHAR(250)," +
+                COLUMN_AttentionLow + " VARCHAR(250)," +
+                COLUMN_RelaxationHigh + " VARCHAR(250)," +
+                COLUMN_RelaxationLow + " VARCHAR(250)," +
+                COLUMN_AttentionMax + " VARCHAR(250)," +
+                COLUMN_AttentionMin + " VARCHAR(250)," +
+                COLUMN_RelaxationMax + " VARCHAR(250)," +
+                COLUMN_RelaxationMin + " VARCHAR(250)," +
+                COLUMN_FeedBackSecondsGap + " VARCHAR(250)," +
+                COLUMN_FeedBackPassSeconds + " VARCHAR(250)," +
+                COLUMN_AverageAttention + " VARCHAR(250)," +
+                COLUMN_AverageRelaxation + " VARCHAR(250)," +
+                COLUMN_PointInTime + " VARCHAR(250)" +
+                ");";
+        sqLiteDatabase.execSQL(SQL);
     }
 }

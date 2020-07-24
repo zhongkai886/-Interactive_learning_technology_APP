@@ -24,7 +24,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="編號"
-        android:textSize="20dp"
+        android:textSize="15dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toStartOf="@+id/recyclerViewGuideLine"
         app:layout_constraintStart_toStartOf="@+id/guideline5"
@@ -36,7 +36,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="回饋方式"
-        android:textSize="20dp"
+        android:textSize="15dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
         app:layout_constraintStart_toEndOf="@+id/recyclerViewGuideLine"
@@ -47,7 +47,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="回饋次數"
-        android:textSize="20dp"
+        android:textSize="15dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toStartOf="@+id/guideline8"
         app:layout_constraintStart_toEndOf="@+id/TextFeedBackWay"
@@ -58,7 +58,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="日期時間"
-        android:textSize="20dp"
+        android:textSize="15dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toStartOf="@+id/TextInformation"
         app:layout_constraintStart_toEndOf="@+id/guideline8"
@@ -69,7 +69,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="詳細資訊"
-        android:textSize="20dp"
+        android:textSize="15dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline2"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toEndOf="@+id/recyclerViewGuideLine2"
@@ -78,6 +78,7 @@
     <Button
         android:id="@+id/dataDelete"
         android:layout_width="0dp"
+        android:background="@drawable/shape_button"
         android:layout_height="0dp"
         app:layout_constraintWidth_percent="1"
         app:layout_constraintHeight_percent="0.10"
@@ -91,6 +92,7 @@
         android:id="@+id/dataUpload"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@drawable/shape_button"
         android:text="上傳資料"
         app:layout_constraintWidth_percent="1"
         app:layout_constraintHeight_percent="0.10"
@@ -111,14 +113,14 @@
         app:layout_constraintStart_toStartOf="@+id/guideline5"
         app:layout_constraintTop_toTopOf="@+id/guideline2"
         app:layout_constraintVertical_bias="0.0"
-        tools:listitem="@layout/item_feedback_setting" />
+        tools:listitem="@layout/item_feedback_search" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.05" />
+        app:layout_constraintGuide_percent="0.0" />
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
@@ -131,20 +133,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.52" />
+        app:layout_constraintGuide_percent="0.37" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.62" />
+        app:layout_constraintGuide_percent="0.56" />
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.95" />
+        app:layout_constraintGuide_percent="1.0" />
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
@@ -170,7 +173,7 @@
         android:layout_height="wrap_content"
         android:background="#000"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.27" />
+        app:layout_constraintGuide_percent="0.2" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/recyclerViewGuideLine2"
@@ -178,14 +181,14 @@
         android:layout_height="wrap_content"
         android:background="#000"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.72" />
+        app:layout_constraintGuide_percent="0.74" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/AddDelButtonGuideLine"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.75" />
+        app:layout_constraintGuide_percent="0.77" />
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/AddDelButtonGuideLine2"
         android:layout_width="wrap_content"

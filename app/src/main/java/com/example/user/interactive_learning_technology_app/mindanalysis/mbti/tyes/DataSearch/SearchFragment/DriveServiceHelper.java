@@ -26,7 +26,7 @@ public class DriveServiceHelper {
         return Tasks.call(mExecutor,() ->{
             File fileMetaData = new File();
             fileMetaData.setName(name);
-
+            Log.d("elolo",filePath+"   "+name);
             java.io.File file = new java.io.File(filePath);
 
             FileContent mediaContent = new FileContent("text/comma-separated-values",file);

@@ -262,7 +262,7 @@ public class AddFeedbackFrameSetting extends Fragment {
                     Log.d("??","///"+attUri);
 
                     try {
-//                        撥放音樂
+//                  撥放音樂
                     MediaPlayer mediaPlayer = new MediaPlayer();
                     mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                     Log.d("??","///"+attUri);

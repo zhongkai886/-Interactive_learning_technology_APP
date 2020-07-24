@@ -17,11 +17,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.user.interactive_learning_technology_app.R;
-import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.Edit_FeedbackWay;
-import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.FeedbackData;
-import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.FeedbackFrameSettingsFragment;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -42,7 +37,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     public class SearchViewHolder extends RecyclerView.ViewHolder{
         public CheckBox mCheckbox;
         public TextView mId;
-        public TextView mItem;
+        public TextView mWay;
         public TextView mCount;
         public TextView mTimeDate;
         public Button mButton;
@@ -52,7 +47,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
             super(itemView);
             mCheckbox = itemView.findViewById(R.id.searchCheckbox);
             mId = itemView.findViewById(R.id.searchId);
-            mItem = itemView.findViewById(R.id.searchItem);
+            mWay = itemView.findViewById(R.id.searchItem);
             mCount = itemView.findViewById(R.id.count);
             mTimeDate = itemView.findViewById(R.id.timeDate);
             mButton = itemView.findViewById(R.id.searchButton);
@@ -75,7 +70,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         final DetectData mDetectData = this.mDetectDataList.get(position);
 
         holder.mId.setText(mDetectDataList.get(position).getId());
-        holder.mItem.setText(mDetectDataList.get(position).getItem());
+        if (mDetectDataList.get(position).getItem().equals("0")){
+            holder.mWay.setText("視覺");
+        }
+        else if (mDetectDataList.get(position).getItem().equals("1")){
+            holder.mWay.setText("震動");
+        }else if (mDetectDataList.get(position).getItem().equals("2")){
+            holder.mWay.setText("聲音");
+        }
+//        holder.mWay.setText(mDetectDataList.get(position).getItem());
         holder.mCount.setText(mDetectDataList.get(position).getFeedBackCount());
         holder.mTimeDate.setText(mDetectDataList.get(position).getDetectTime());
         holder.mCheckbox.setTag(position);

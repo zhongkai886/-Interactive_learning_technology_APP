@@ -14,6 +14,6 @@
         android:id="@+id/action_bluetooth"
         android:orderInCategory="300"
         app:showAsAction="always"
-        android:icon="@drawable/icon01"
+        android:icon="@drawable/icon01_removebg"
         android:title="@null" />
 </menu>
