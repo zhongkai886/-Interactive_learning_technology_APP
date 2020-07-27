@@ -10,6 +10,7 @@ import com.google.api.services.drive.model.File;
 import com.google.api.services.drive.model.FileList;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -20,21 +21,21 @@ public class DriveServiceHelper {
     protected com.google.api.services.drive.Drive mDriveService;
 //    private String name;
 
-    String folderId = "1frxuLY0zAu_XFrpVf8ULLQpMZtM5j9Ua";
+    String folderId = "1N6Z-WaCx3-6zOadMC2tGvZuCwfZ-Iqnk";
     FileList result = null;
 
     public DriveServiceHelper(Drive driveService) {
         this.mDriveService = driveService;
     }
 
-    public Task<String> createFile(final String filePath, final String name){
+    public Task<String> createFile(final String filePath, final String name,String FiledId){
         return Tasks.call(mExecutor, new Callable<String>() {
             @Override
             public String call() throws Exception {
                 File fileMetaData = new File();
                 fileMetaData.setName(name);
-
-//            fileMetaData.setParents((Collections.singletonList(folderId)));
+                Log.d("filedId", "call: "+FiledId);
+            fileMetaData.setParents((Collections.singletonList(folderId)));
 
                 java.io.File file = new java.io.File(filePath);
 

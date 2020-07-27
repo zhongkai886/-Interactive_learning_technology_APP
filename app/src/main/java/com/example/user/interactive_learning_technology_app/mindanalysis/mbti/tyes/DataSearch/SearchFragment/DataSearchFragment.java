@@ -32,6 +32,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.user.interactive_learning_technology_app.R;
+import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.Login.LoginFragment;
+import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.GoogleDriveFunction.SearchFile;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Main.MainActivity;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBHelper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -91,8 +93,11 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
     public CharSequence dateTime="";
     DriveServiceHelper driveServiceHelper;
     public String sdCardDir;
+    ProgressDialog progressDialog;
     private static final int PICK_CSV_FROM_GALLERY_REQUEST_CODE = 100;
     public String filename ="";
+    private SearchFile mSearchFile;
+    String mFiledId="";
     public DataSearchFragment() {
     }
 
@@ -113,17 +118,19 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
         InsertTable();
         LoadData();
         requestSignIn();
+
         getAuthority();
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new SearchAdapter(detectDataList,this);
         recyclerView.setAdapter(mAdapter);
+
         BtnDelete = view.findViewById(R.id.dataDelete);
 
         BtnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadFile();
+
                 Log.d("87", "onClick: ");
             }
         });
@@ -228,7 +235,7 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.dataUpload:
-
+                mSearchFile.searchFile("000");
 
                 row = mAdapter.getCheckId();
                 Calendar mCal = Calendar.getInstance();
@@ -297,7 +304,8 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                             }
 
                         } finally {
-
+                            uploadFile();
+                            Log.d("TAG", "finally: " + driveServiceHelper);
                         }
         }
     }
@@ -340,32 +348,14 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
 //        int j = filepa.size();
 
         //Loading
-            ProgressDialog progressDialog = new ProgressDialog(getActivity());
+            progressDialog = new ProgressDialog(getActivity());
             progressDialog.setTitle("Uploading to Google Drive");
             progressDialog.setMessage("Please wait...");
             progressDialog.show();
+            mFiledId=mSearchFile.getFiledId();
 
-//        sdCardDir="/storage/emulated/0/Android/data/com.example.user.interactive_learning_technology_app/files/2020-07-23 11:10:57.csv";
-//        filename="2020-07-23 11:10:57.csv";
-//        driveServiceHelper.fileName(fileName.get(i));
-        Log.d("88888",""+sdCardDir+"/"+filename+"/////"+filename);
-        Log.d("OK吧", "uploadFile: "+driveServiceHelper);
-                driveServiceHelper.createFile(sdCardDir+"/"+filename,filename)
-//                    driveServiceHelper.createFile(sdCardDir,filename)
-                        .addOnSuccessListener(new OnSuccessListener<String>() {
-                            @Override
-                            public void onSuccess(String s) {
-                                progressDialog.dismiss();
-                                Toast.makeText(getActivity(),"Uploaded successfully",Toast.LENGTH_LONG).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        progressDialog.dismiss();
-                        Toast.makeText(getActivity(),"Check your google api key",Toast.LENGTH_LONG).show();
-                        Log.d("aaa888",""+e);
-                    }
-                });
+        new checkTimer().start();
+
     }
     private void handleSignInIntent(Intent data) {
         Log.d("data", "data:"+data);
@@ -390,6 +380,7 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                                         .build();
 
                         driveServiceHelper = new DriveServiceHelper(googleDriveService);
+                        mSearchFile = new SearchFile(googleDriveService);
                         Log.e("aaa", "handleSignInIntent: " + driveServiceHelper.toString());
 
                     }
@@ -416,6 +407,33 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                 break;
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public class checkTimer extends Thread{
+        public void run(){
+            try {driveServiceHelper.createFile(sdCardDir+"/"+filename,filename,mFiledId)
+//                    driveServiceHelper.createFile(sdCardDir,filename)
+                    .addOnSuccessListener(new OnSuccessListener<String>() {
+                        @Override
+                        public void onSuccess(String s) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getActivity(),"Uploaded successfully",Toast.LENGTH_LONG).show();
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getActivity(),"Check your google api key",Toast.LENGTH_LONG).show();
+                            Log.d("aaa888",""+e);
+                        }
+                    });
+                sleep(2000);
+                progressDialog.dismiss();
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 }
 

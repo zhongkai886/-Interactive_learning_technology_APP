@@ -153,8 +153,15 @@ public class FeedbackFrameSettingsFragment extends Fragment {
 //            mDatabase.execSQL(TABLE_NAME);
             mDatabase.delete(TABLE_NAME, COLUMN_ID + "=" +mCheckBoxDataList.get(i)  , null);
             Log.d("fed","mcheckbox"+mCheckBoxDataList.get(i));
+//            mAdapter.notifyItemRemoved(i);
         }
+
+        feedbackDataList.clear();
         LoadData();
+        mAdapter = new SettingAdapter(feedbackDataList, this);
+        recyclerView.setAdapter(mAdapter);
+
+//        LoadData();
     }
     public void  CreateSetting(){
         final String SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +

@@ -1,5 +1,7 @@
-package com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.DataSearch.Login;
+package com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.Login;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ThemedSpinnerAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,19 +22,20 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.user.interactive_learning_technology_app.R;
-import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.DataSearch.SearchFragment.DataSearchFragment;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.DataSearch.SearchFragment.DriveServiceHelper;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.FeedbackFrameSettingsFragment;
-import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.Login.LoginFragment;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.GoogleDriveFunction.ComparisonUserData;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.GoogleDriveFunction.SearchFile;
+import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Main.MainFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.json.gson.GsonFactory;
@@ -39,31 +43,31 @@ import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 
 import java.util.Collections;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
 
-public class ResearchLoginFragment extends Fragment {
+public class LoginFragment extends Fragment {
     private ComparisonUserData mComparisonUserData = null;
-    private DriveServiceHelper driveServiceHelper;
-    private Drive googleDriveService;
+    private DriveServiceHelper driveServiceHelper = null;
+    private Drive googleDriveService = null ;
+    private SearchFile mSearchFile;
     private Button  mSubmitButton;
     private EditText mAccountEdit;
     private EditText mPasswordEdit;
+    private FragmentTransaction fragmentTransaction;
+    private FeedbackFrameSettingsFragment fragment;
+    private FragmentManager fragmentManager;
     ProgressDialog progressDialog ;
-    FragmentManager fragmentManager;
-    FragmentTransaction fragmentTransaction;
-    DataSearchFragment dataSearchFragment;
     Boolean checkAccount=false;
-
-
-
-    public ResearchLoginFragment() {
+    public LoginFragment() {
         // Required empty public constructor
     }
 
-    public static ResearchLoginFragment newInstance() {
-        ResearchLoginFragment fragment = new ResearchLoginFragment();
+    public static LoginFragment newInstance() {
+        LoginFragment fragment = new LoginFragment();
         return fragment;
     }
 
@@ -76,18 +80,19 @@ public class ResearchLoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
+        requestSignIn();
         mSubmitButton=(Button) view.findViewById(R.id.SubmitButton);
         mAccountEdit=(EditText) view.findViewById(R.id.AccountEdit);
         mPasswordEdit=(EditText) view.findViewById(R.id.PasswordEdit);
         fragmentManager = getActivity().getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        dataSearchFragment = new DataSearchFragment();
-        requestSignIn();
+        fragment = new FeedbackFrameSettingsFragment();
 
         mSubmitButton.setOnClickListener(new Button.OnClickListener(){
+
             @Override
             public void onClick(View view) {
-
+//                mSearchFile.searchFile();
                 mComparisonUserData.createFile(mAccountEdit.getText().toString());
 
                 progressDialog = new ProgressDialog(getActivity());
@@ -97,8 +102,19 @@ public class ResearchLoginFragment extends Fragment {
 
                 new checkTimer().start();
 
+//                ProgressDialog.show(getActivity(), "",
+//                        "Loading. Please wait...", true);
+
+//                mComparisonUserData.createFile(mAccountEdit.getText().toString());
+
+
+
+//                mSearchFile.searchFile();
+
+
 //                if((mAccountEdit.getText().toString().equals("000"))&&(mPasswordEdit.getText().toString().equals("000"))){
-//                    fragmentTransaction.replace(R.id.center,dataSearchFragment);
+//
+//                    fragmentTransaction.replace(R.id.center,fragment);
 //                    fragmentTransaction.commit();
 //                } else{
 //                    Toast.makeText(getActivity(),"帳號密碼有誤，請再試一次!",Toast.LENGTH_SHORT).show();
@@ -135,9 +151,9 @@ public class ResearchLoginFragment extends Fragment {
         {
             case 400:
                 Log.d("dddddddddddd", "onActivityResult: "+resultCode);
-                if(resultCode == RESULT_OK ) {
+//                if(resultCode == RESULT_OK ) {
                     handleSignInIntent(data);
-                }
+//                }
                 break;
 
             default:
@@ -168,13 +184,11 @@ public class ResearchLoginFragment extends Fragment {
                                         .setApplicationName("AppName")
                                         .build();
 
-                        SharedPreferences pref = getActivity().getSharedPreferences("mGoogleDriveService", MODE_PRIVATE);
-                        pref.edit()
-                                .putString("USER", String.valueOf(googleDriveService))
-                                .commit();
                         driveServiceHelper = new DriveServiceHelper(googleDriveService);
                         mComparisonUserData =new ComparisonUserData(googleDriveService);
-//                        mSearchFile = new SearchFile(googleDriveService);
+                        mSearchFile = new SearchFile(googleDriveService);
+                        Log.e("aaa", "handleSignInIntent: " + driveServiceHelper.toString());
+                        Log.e("aaa", "handleSignInIntent: " + mComparisonUserData.toString());
 
                     }
                 })
@@ -194,7 +208,7 @@ public class ResearchLoginFragment extends Fragment {
                 checkAccount =mComparisonUserData.getReturn();
                 Log.d("可以通過嗎",""+mComparisonUserData.getReturn());
                 if (checkAccount.equals(true)){
-                    fragmentTransaction.replace(R.id.center,dataSearchFragment);
+                    fragmentTransaction.replace(R.id.center,fragment);
                     fragmentTransaction.commit();
                 }else if(checkAccount.equals(false)){
                     Log.d("可以",""+mComparisonUserData.getReturn());

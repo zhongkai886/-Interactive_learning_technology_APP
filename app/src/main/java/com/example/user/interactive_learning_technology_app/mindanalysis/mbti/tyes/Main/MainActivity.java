@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -28,12 +27,12 @@ import com.alchemy.wjk.mind.view.MindsetActivity;
 import com.example.user.interactive_learning_technology_app.BuildConfig;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.DataSearch.Login.ResearchLoginFragment;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.DataSearch.SearchFragment.DriveServiceHelper;
-import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.Login.LoginActivity;
+import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.Login.LoginFragment;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.FeedbackData;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.SettingAdapter;
 import com.example.user.interactive_learning_technology_app.R;
+import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.GoogleDriveFunction.ComparisonUserData;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBHelper;
-import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBHelper;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -48,17 +47,8 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AttentionHigh;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_AttentionLow;
@@ -83,6 +73,7 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 
 public class MainActivity extends AppCompatActivity implements Handler.Callback {
     DriveServiceHelper driveServiceHelper;
+    Drive googleDriveService;
     public ArrayList<FeedbackData> mFeedbackData = new ArrayList<FeedbackData>();
     public Cursor data;
     public SettingAdapter adapter;
@@ -125,12 +116,12 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
         mExperimentSettingButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view) {
-                LoginActivity loginActivity =new LoginActivity();
+                LoginFragment loginFragment =new LoginFragment();
 //                DetectFragment detectFragment =new DetectFragment();
 //                FeedbackFrameSettingsActivity frameSettingsActivity = new FeedbackFrameSettingsActivity();
 
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.center, loginActivity);
+                fragmentTransaction.replace(R.id.center, loginFragment);
                 fragmentTransaction.commit();
                 mExperimentSettingButton.setVisibility(View.INVISIBLE); //隱藏
                 mExperimentSearchButton.setVisibility(View.INVISIBLE);
@@ -316,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
                         credential.setSelectedAccount(googleSignInAccount.getAccount());
 
 
-                        Drive googleDriveService =
+                        googleDriveService =
                                 new Drive.Builder(
                                         AndroidHttp.newCompatibleTransport(),
                                         new GsonFactory(),
@@ -325,6 +316,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
                                         .build();
 
                         driveServiceHelper = new DriveServiceHelper(googleDriveService);
+
                         Log.e("aaa", "handleSignInIntent: " + driveServiceHelper.toString());
 
                     }
