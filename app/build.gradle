@@ -24,7 +24,7 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-//            debuggable true
+            debuggable true
         }
     }
 
@@ -79,7 +79,7 @@ dependencies {
 
     implementation 'net.sourceforge.jexcelapi:jxl:2.6.12'
 
-//    implementation 'com.google.android.gms:play-services-auth:18.1.0'
+    implementation 'com.google.android.gms:play-services-auth:18.1.0'
     implementation 'com.google.android.gms:play-services-auth:18.0.0'
     implementation 'com.google.http-client:google-http-client-gson:1.26.0'  //yes
     implementation('com.google.api-client:google-api-client-android:1.26.0')  //yes
@@ -91,6 +91,11 @@ dependencies {
                 exclude group: 'org.apache.httpcomponents'
             }
 
+
+//    implementation 'com.google.android.gms:play-services-auth:18.1.0'
+//    implementation 'com.google.http-client:google-http-client-gson:1.36.0'
+//    implementation 'com.google.api-client:google-api-client-android:1.30.10'
+//    implementation 'com.google.apis:google-api-services-drive:v3-rev99-1.23.0'
 
 //    implementation 'com.facebook.stetho:stetho:1.5.1'
 }

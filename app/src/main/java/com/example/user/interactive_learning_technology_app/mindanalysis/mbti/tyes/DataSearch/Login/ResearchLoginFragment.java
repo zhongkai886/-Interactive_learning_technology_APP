@@ -168,10 +168,6 @@ public class ResearchLoginFragment extends Fragment {
                                         .setApplicationName("AppName")
                                         .build();
 
-                        SharedPreferences pref = getActivity().getSharedPreferences("mGoogleDriveService", MODE_PRIVATE);
-                        pref.edit()
-                                .putString("USER", String.valueOf(googleDriveService))
-                                .commit();
                         driveServiceHelper = new DriveServiceHelper(googleDriveService);
                         mComparisonUserData =new ComparisonUserData(googleDriveService);
 //                        mSearchFile = new SearchFile(googleDriveService);

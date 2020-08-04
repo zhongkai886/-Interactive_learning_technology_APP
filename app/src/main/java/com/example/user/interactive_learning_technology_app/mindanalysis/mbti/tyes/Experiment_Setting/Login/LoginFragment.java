@@ -94,13 +94,13 @@ public class LoginFragment extends Fragment {
             public void onClick(View view) {
 //                mSearchFile.searchFile();
                 mComparisonUserData.createFile(mAccountEdit.getText().toString());
-
+                mSearchFile.searchFile("000");
                 progressDialog = new ProgressDialog(getActivity());
                 progressDialog.setMessage("驗證中");
                 progressDialog.setIndeterminate(true);
                 progressDialog.show();
 
-                new checkTimer().start();
+//                new checkTimer().start();
 
 //                ProgressDialog.show(getActivity(), "",
 //                        "Loading. Please wait...", true);
@@ -151,9 +151,9 @@ public class LoginFragment extends Fragment {
         {
             case 400:
                 Log.d("dddddddddddd", "onActivityResult: "+resultCode);
-//                if(resultCode == RESULT_OK ) {
+                if(resultCode == RESULT_OK ) {
                     handleSignInIntent(data);
-//                }
+                }
                 break;
 
             default:
@@ -205,8 +205,8 @@ public class LoginFragment extends Fragment {
             try {
                 sleep(2000);
                 progressDialog.dismiss();
-                checkAccount =mComparisonUserData.getReturn();
-                Log.d("可以通過嗎",""+mComparisonUserData.getReturn());
+//                checkAccount =mComparisonUserData.getReturn();
+//                Log.d("可以通過嗎",""+mComparisonUserData.getReturn());
                 if (checkAccount.equals(true)){
                     fragmentTransaction.replace(R.id.center,fragment);
                     fragmentTransaction.commit();

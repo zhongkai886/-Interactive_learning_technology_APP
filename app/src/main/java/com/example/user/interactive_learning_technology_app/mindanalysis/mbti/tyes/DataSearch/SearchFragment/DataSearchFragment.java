@@ -241,7 +241,7 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                 Calendar mCal = Calendar.getInstance();
                 dateTime = DateFormat.format("yyyy-MM-dd kk:mm:ss", mCal.getTime());    // kk:24小時制, hh:12小時制
                 Log.d("cvcvcvcvcv",row.size()+"size/////row"+mAdapter.getCheckId());
-                SearchDBHelper dbHelper = new SearchDBHelper(getActivity());
+                    SearchDBHelper dbHelper = new SearchDBHelper(getActivity());
                 mDatabase = dbHelper.getWritableDatabase(); //寫入
                 mDatabase = dbHelper.getReadableDatabase(); //讀取
                 Cursor c = null;

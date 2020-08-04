@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 public class DriveServiceHelper {
     private final Executor mExecutor = Executors.newSingleThreadExecutor();
     //    private Drive mDriveService;
-    protected com.google.api.services.drive.Drive mDriveService;
+    private com.google.api.services.drive.Drive mDriveService;
 //    private String name;
 
     String folderId = "1N6Z-WaCx3-6zOadMC2tGvZuCwfZ-Iqnk";
