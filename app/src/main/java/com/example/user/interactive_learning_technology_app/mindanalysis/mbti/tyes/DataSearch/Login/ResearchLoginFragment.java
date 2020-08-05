@@ -38,6 +38,7 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 import static android.app.Activity.RESULT_OK;
@@ -194,7 +195,12 @@ public class ResearchLoginFragment extends Fragment {
                     fragmentTransaction.commit();
                 }else if(checkAccount.equals(false)){
                     Log.d("可以",""+mComparisonUserData.getReturn());
-                    Toast.makeText(getActivity(),"帳號密碼有誤，請再試一次!",Toast.LENGTH_SHORT).show();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getActivity(),"帳號密碼有誤，請再試一次!",Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }catch (Exception e){
                 e.printStackTrace();

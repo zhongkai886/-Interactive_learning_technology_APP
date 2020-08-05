@@ -100,12 +100,12 @@ public class LoginFragment extends Fragment {
                 progressDialog.setIndeterminate(true);
                 progressDialog.show();
 
-//                new checkTimer().start();
+                new checkTimer().start();
 
 //                ProgressDialog.show(getActivity(), "",
 //                        "Loading. Please wait...", true);
 
-//                mComparisonUserData.createFile(mAccountEdit.getText().toString());
+                mComparisonUserData.createFile(mAccountEdit.getText().toString());
 
 
 
@@ -205,14 +205,19 @@ public class LoginFragment extends Fragment {
             try {
                 sleep(2000);
                 progressDialog.dismiss();
-//                checkAccount =mComparisonUserData.getReturn();
-//                Log.d("可以通過嗎",""+mComparisonUserData.getReturn());
+                checkAccount =mComparisonUserData.getReturn();
+                Log.d("可以通過嗎",""+mComparisonUserData.getReturn());
                 if (checkAccount.equals(true)){
                     fragmentTransaction.replace(R.id.center,fragment);
                     fragmentTransaction.commit();
                 }else if(checkAccount.equals(false)){
                     Log.d("可以",""+mComparisonUserData.getReturn());
-                    Toast.makeText(getActivity(),"帳號密碼有誤，請再試一次!",Toast.LENGTH_SHORT).show();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getActivity(),"帳號密碼有誤，請再試一次!",Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }catch (Exception e){
                 e.printStackTrace();
