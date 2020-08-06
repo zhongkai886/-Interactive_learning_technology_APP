@@ -112,8 +112,8 @@ public class ResultFragment extends Fragment {
         TextView feedBackWay= view.findViewById(R.id.feedBackWay) ;
         TextView fbwSec= view.findViewById(R.id.fbwSec) ;
         TextView fbwSecTips= view.findViewById(R.id.fbwSecTips) ;
-        TextView detectMin= view.findViewById(R.id.detectMin) ;
         TextView detectSec= view.findViewById(R.id.detectSec) ;
+//        TextView detectSec= view.findViewById(R.id.detectSec) ;
         TextView detectRound= view.findViewById(R.id.detectRound) ;
         SettingDBHelper dbHelper = new SettingDBHelper(getActivity());
         saveButton =view.findViewById(R.id.save);
@@ -166,7 +166,7 @@ public class ResultFragment extends Fragment {
         attentionLow.setText(mAttentionLow);
         fbwSec.setText(mFeedBackWaySecond);
         fbwSecTips.setText(mFeedBackWayStopTipSecond);
-        detectMin.setText(timeId);
+        detectSec.setText(timeId);
         detectRound.setText(feedBackCount);
         return view;
     }

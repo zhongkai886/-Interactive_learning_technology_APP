@@ -104,7 +104,7 @@
             android:textSize="20dp" />
 
         <Button
-            android:id="@+id/detectButton"
+            android:id="@+id/fragment_detect_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_button"

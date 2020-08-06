@@ -22,11 +22,12 @@ public class DriveServiceHelper {
 //    private String name;
 
     String folderId = "1N6Z-WaCx3-6zOadMC2tGvZuCwfZ-Iqnk";
-    FileList result = null;
 
     public DriveServiceHelper(Drive driveService) {
         this.mDriveService = driveService;
     }
+
+    //目前FiledId沒接收到東西  所以用指定固定用000資料夾的ID
 
     public Task<String> createFile(final String filePath, final String name,String FiledId){
         return Tasks.call(mExecutor, new Callable<String>() {
@@ -35,7 +36,9 @@ public class DriveServiceHelper {
                 File fileMetaData = new File();
                 fileMetaData.setName(name);
                 Log.d("filedId", "call: "+FiledId);
-            fileMetaData.setParents((Collections.singletonList(folderId)));
+
+            fileMetaData.setParents((Collections.singletonList(folderId)));//folderId 轉換 FiledId
+
 
                 java.io.File file = new java.io.File(filePath);
 

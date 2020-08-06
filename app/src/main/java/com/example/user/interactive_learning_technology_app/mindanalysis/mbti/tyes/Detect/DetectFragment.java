@@ -5,15 +5,11 @@ import android.app.Service;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.AudioAttributes;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
@@ -53,13 +49,10 @@ import com.example.user.interactive_learning_technology_app.widget.PreferencesCe
 import com.example.user.interactive_learning_technology_app.widget.StringMultiple;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SharedPreferencesHelper.SharedPreferencesHelper;
 
-import org.apache.log4j.lf5.util.Resource;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -169,6 +162,8 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 
     public ArrayList<Integer> mRelaxationList = new ArrayList<>();
     //設定檔取值
+
+    public String timeId="";
 
 
 //    public String[] myResArray = getResources().getStringArray(R.array.aE);
@@ -290,12 +285,12 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         SearchDBHelper dbHelper = new SearchDBHelper(getActivity());
         sqLiteDatabase = dbHelper.getWritableDatabase();
         mTimerText = (TextView) view.findViewById(R.id.fragment_detect_title);
-        mStartButton = (Button) view.findViewById(R.id.detectButton);
+        mStartButton = (Button) view.findViewById(R.id.fragment_detect_start);
 //        mPauseButton = (Button) view.findViewById(R.id.removeButton);
 //        mStopButton = (Button) view.findViewById(R.id.stopButton);
 
-        mPauseButton = (Button) view.findViewById(R.id.stopButton);
-        mStopButton = (Button) view.findViewById(R.id.removeButton);
+        mPauseButton = (Button) view.findViewById(R.id.fragment_detect_pause);
+        mStopButton = (Button) view.findViewById(R.id.fragment_detect_stop);
         mDetectId = view.findViewById(R.id.detectId);
         mRecordPointButton = (Button)view.findViewById(R.id.recordPoint);
         mUserNameEdit = (EditText) view.findViewById(R.id.fragment_detect_username);
@@ -311,7 +306,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     public void _initView() {
         LoadData();
         //share選擇的時間
-        String timeId = getActivity().getSharedPreferences("timeSelect", MODE_PRIVATE)
+        timeId = getActivity().getSharedPreferences("timeSelect", MODE_PRIVATE)
                 .getString("USER", "");
         //抽資料要用SqlId 選擇的設定檔id
         settingId = getActivity().getSharedPreferences("selectId", MODE_PRIVATE)
@@ -347,7 +342,25 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         mPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTimeDetect.paustart();
+//                mTimeDetect.paustart();
+                if (mTimeDetect.isRunning()) mTimeDetect.pause();
+                else{
+                    showRestartDialog();
+//                    mTimeDetect.reset();
+//                    int t = Integer.valueOf(timeId);
+//                    mTimeDetect.setTimer(t);
+//
+//                    mTimeDetect.setRound(1);
+//                    mTimeDetect_data = "";
+//                    mTimeDetect.start();
+//                    _state("start");
+//                    fb_Way = Integer.valueOf(getActivity().getSharedPreferences("selectAttentionWay", MODE_PRIVATE)
+//                            .getString("USER", ""));
+//                    //取得開始秒數
+//                    mSecondGaps=Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getWaySecond());
+//
+//                    handler.postDelayed(getData,500);
+                }
                 _state("pause");
             }
         });
@@ -370,14 +383,16 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     private void _state(String state) {
         if (state.equals("start")) {
             mStartButton.setVisibility(View.GONE);
-            mStopButton.setVisibility(View.GONE);
+            mStopButton.setVisibility(View.VISIBLE);
             mPauseButton.setVisibility(View.VISIBLE);
         } else if (state.equals("pause")) {
-            Log.d("??","結束按鈕");
+            mPauseButton.setText(mTimeDetect.isRunning() ?
+                    "暫停" : "繼續");
         } else if (state.equals("stop")) {
             mStartButton.setVisibility(View.VISIBLE);
             mStopButton.setVisibility(View.GONE);
             mPauseButton.setVisibility(View.GONE);
+            _result();
             final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             final ResultFragment resultFragment = new ResultFragment();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -592,6 +607,8 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
             Log.d("%%%data",""+mTimeDetect.getData());//取全部數值
         }
     };
+
+    /*
     public void CallApi() {
         final SharedPreferencesHelper sharedPreferencesHelper = new SharedPreferencesHelper(getContext());
         String UserId = sharedPreferencesHelper.getUserId();
@@ -739,7 +756,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 
 
     }
-
+*/
     protected void showDialog(){
 
         Dialog dialog = new Dialog(getActivity());
@@ -815,6 +832,56 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         });
         dialog.show();
     }
+
+    protected void showRestartDialog(){
+
+        Dialog dialog = new Dialog(getActivity());
+        dialog.setCancelable(true);
+
+        View view  = getActivity().getLayoutInflater().inflate(R.layout.dialog_restart, null);
+        dialog.setContentView(view);
+        Button buttonY = view.findViewById(R.id.buttonY);
+        Button buttonN = view.findViewById(R.id.buttonN);
+
+        buttonY.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Integer timer = mTimeDetect.getTimer();
+//                sqlId=mIdPoint[Integer.valueOf(mId)]+mNumPoint[Integer.valueOf(mNum)];
+//                pointData.add(mTimeDetect.getAttention().toString());
+//                Integer mAttention = mTimeDetect.getAttention();
+//                Integer mRel = mTimeDetect.getMeditation();
+//
+//                Random random = new Random();
+//                int answer = random.nextInt((6 - 0 + 1) + 0);
+//                pointDataSql=pointDataSql+timer+","+mAttention+","+mRel+","+answer+","+""+",";
+                mTimeDetect.reset();
+                int t = Integer.valueOf(timeId);
+                    mTimeDetect.setTimer(t);
+
+                    mTimeDetect.setRound(1);
+                    mTimeDetect_data = "";
+                    mTimeDetect.start();
+                    _state("start");
+                    fb_Way = Integer.valueOf(getActivity().getSharedPreferences("selectAttentionWay", MODE_PRIVATE)
+                            .getString("USER", ""));
+                    //取得開始秒數
+                    mSecondGaps=Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getWaySecond());
+
+                    handler.postDelayed(getData,500);
+                Log.d("aaaaa",""+pointDataSql);
+                dialog.cancel();
+            }
+        });
+        buttonN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+        dialog.show();
+    }
+
     public void LoadData() {
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM settingDataList", null);
         while (cursor.moveToNext()) {

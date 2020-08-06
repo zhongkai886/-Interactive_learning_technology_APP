@@ -31,7 +31,7 @@ public class MainFragment extends Fragment {
         final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         final ChoiceFeedBackFragment choiceFeedBackFragment = new ChoiceFeedBackFragment();
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        detectButton = (ImageButton) view.findViewById(R.id.detectButton);
+        detectButton = (ImageButton) view.findViewById(R.id.fragment_detect_start);
         detectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -90,7 +90,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/detectButton"
+            android:id="@+id/fragment_detect_start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="開始實驗"
@@ -101,14 +101,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/stopButton"
+            android:id="@+id/fragment_detect_pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:background="@drawable/shape_button"
             android:text="暫停"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/detectButton" />
+            app:layout_constraintTop_toBottomOf="@+id/fragment_detect_start" />
 
         <Button
             android:id="@+id/recordPoint"
@@ -121,16 +121,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/removeButton"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_detect_stop"
             app:layout_constraintVertical_bias="0.0" />
 
         <Button
-            android:id="@+id/removeButton"
+            android:id="@+id/fragment_detect_stop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:text="結束"
             android:background="@drawable/shape_button"
-            app:layout_constraintTop_toBottomOf="@+id/stopButton" />
+            app:layout_constraintTop_toBottomOf="@+id/fragment_detect_pause" />
     </LinearLayout>
 
     <LinearLayout

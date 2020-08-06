@@ -216,18 +216,18 @@
                 android:text="此次實驗時間共"
                 android:textSize="20dp" />
 
-            <TextView
-                android:id="@+id/detectMin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textSize="20dp" />
+<!--            <TextView-->
+<!--                android:id="@+id/detectMin"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="0"-->
+<!--                android:textSize="20dp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="分"
-                android:textSize="20dp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="分"-->
+<!--                android:textSize="20dp" />-->
 
             <TextView
                 android:id="@+id/detectSec"

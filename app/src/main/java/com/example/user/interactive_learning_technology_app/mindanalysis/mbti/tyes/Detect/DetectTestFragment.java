@@ -4,7 +4,6 @@ import android.app.Service;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
@@ -21,17 +20,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.user.interactive_learning_technology_app.R;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Experiment_Setting.FeeBackFrameSetting.FeedbackData;
-import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBHelper;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBHelper;
 
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -68,7 +63,7 @@ public class DetectTestFragment extends Fragment {
         testButton = view.findViewById(R.id.testButton);
         againButton = (Button) view.findViewById(R.id.againTestButton);
         detectIdTextView = (TextView) view.findViewById(R.id.detectId);
-        detectButton = (Button) view.findViewById(R.id.detectButton);
+        detectButton = (Button) view.findViewById(R.id.fragment_detect_start);
         SettingDBHelper dbHelper = new SettingDBHelper(getActivity());
         sqLiteDatabase = dbHelper.getWritableDatabase();
         final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -95,6 +90,7 @@ public class DetectTestFragment extends Fragment {
                         handler.removeCallbacks(updateDevice);
                         onClickBoolean=false;
                         testButton.setBackgroundColor(testButton.getContext().getResources().getColor(R.color.white));
+                        testButton.setBackgroundResource(R.drawable.shape_mainfragment);
                     }
                 }
                 else if (fb_Way.equals("1")){
@@ -118,6 +114,8 @@ public class DetectTestFragment extends Fragment {
                         handler.removeCallbacks(updateDevice);
                         onClickBoolean=false;
                         testButton.setBackgroundColor(testButton.getContext().getResources().getColor(R.color.white));
+                        testButton.setBackgroundResource(R.drawable.shape_mainfragment);
+
                     }
                 }
                 else if (fb_Way.equals("1")){
@@ -149,11 +147,15 @@ public class DetectTestFragment extends Fragment {
     private Runnable updateDevice = new Runnable() {
         public void run() {
             if (na==true){
-                testButton.setBackgroundColor(testButton.getContext().getResources().getColor(R.color.colorPrimaryDark));
+//                testButton.setBackgroundColor(testButton.getContext().getResources().getColor(R.color.colorPrimaryDark));
+//                testButton.setBackgroundResource(testButton.getContext().getResources().getDrawable(R.id.testButton,R.drawable.shape_mainfragment));
+                testButton.setBackgroundResource(R.drawable.shape_mainfragment);
                 na=false;
             }else{
-                testButton.setBackgroundColor(testButton.getContext().getResources().getColor(R.color.white));
+//                testButton.setBackgroundColor(testButton.getContext().getResources().getColor(R.color.white));
+                testButton.setBackgroundResource(R.drawable.shape_oval1);
                 na=true;
+
             }
             handler.postDelayed(this, 1000);
         }
