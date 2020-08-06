@@ -117,6 +117,8 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     Handler handler = new Handler();
     boolean toast = true;
     public Integer mSecondGaps= 0;
+    public Integer mSecondPass= 0;
+    public Integer mSecondNeed= 0;
     //member
     public NumberAdapter mChartAdapterAtt;
     public NumberAdapter mChartAdapterMed;
@@ -332,7 +334,9 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                         .getString("USER", ""));
                 //取得開始秒數
                 mSecondGaps=Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getWaySecond());
-
+                mSecondPass=Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getWayStopTipSecond());
+                mSecondNeed=Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getWayStopTipSecond());
+                Log.d("secsecsec",""+mSecondGaps);
                 handler.postDelayed(getData,500);
 
 
@@ -572,7 +576,13 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
             }
             //偵測時做的資料處理
             else if (mTimeDetect.getState() == 1) {
-//                if (mSecondGaps == 0) {
+                Log.d("Seconds","進入測試");
+                if (mSecondGaps < 0) {
+                    Log.d("Seconds", "開始秒數通過 偵測中");
+                    if (mSecondPass==mSecondNeed){
+
+                        handler.postDelayed(passSecond,500);
+
                     changeTextView(mTimeDetect.getAttention());
                     mAttention = mTimeDetect.getAttention();
                     mAttentionList.add(mTimeDetect.getAttention());
@@ -600,11 +610,29 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                     } else {
                         attention_ArrayList.add(mTimeDetect.getData());
                     }
-                    handler.postDelayed(this, 1000);
                 }
-//            }
+
+
+                }
+                handler.postDelayed(this, 1000);
+            }
             Log.d("%%%need",""+attention_ArrayList); //專門取attention
             Log.d("%%%data",""+mTimeDetect.getData());//取全部數值
+        }
+    };
+
+    private Runnable passSecond = new Runnable() {
+        @Override
+        public void run() {
+
+            mSecondPass--;
+            Log.d("second",mSecondNeed+"");
+            if (mSecondPass!=0){
+                handler.postDelayed(this,1000);
+            }else if(mSecondPass==0){
+                mSecondPass=mSecondNeed;
+            }
+
         }
     };
 

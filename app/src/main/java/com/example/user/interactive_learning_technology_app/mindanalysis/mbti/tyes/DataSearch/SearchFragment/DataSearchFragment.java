@@ -281,7 +281,7 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                                 for (int i = 0; i <= row.size()-1; i++) {
                                     Log.d("cvcvcvcvcv",""+Integer.valueOf(row.get(i)));
 
-                                    c.moveToPosition(Integer.valueOf(row.get(i)));
+                                    c.moveToPosition(Integer.valueOf(row.get(i))-1);
 
                                     for (int j = 0; j < colcount; j++) {
                                         if (j != colcount - 1)
