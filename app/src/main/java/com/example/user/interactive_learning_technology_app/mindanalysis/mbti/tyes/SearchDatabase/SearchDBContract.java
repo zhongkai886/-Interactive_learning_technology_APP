@@ -24,6 +24,11 @@ public class SearchDBContract {
         public static final String  COLUMN_FeedBackPassSeconds ="feedback_Pass_Second";
         public static final String  COLUMN_AverageAttention ="average_Attention";
         public static final String  COLUMN_AverageRelaxation ="average_Relaxation";
+
+        public static final String  COLUMN_DetectTimeCount ="detect_Time_Count";
+        public static final String  COLUMN_SecondsOutput ="seconds_Output";
+        public static final String  COLUMN_FeedBackSecondOutput ="feedback_Second_Output";
+
         public static final String  COLUMN_PointInTime = "point_In_Time";
 
         public static final String  TABLE_NAME2 ="data";

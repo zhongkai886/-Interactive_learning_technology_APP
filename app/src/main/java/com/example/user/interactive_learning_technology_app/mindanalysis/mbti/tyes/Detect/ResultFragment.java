@@ -147,6 +147,10 @@ public class ResultFragment extends Fragment {
         String feedBackCount = getActivity().getSharedPreferences("feedbackCount", MODE_PRIVATE)
                 .getString("USER", "");
 
+        String endTime = getActivity().getSharedPreferences("endTime", MODE_PRIVATE)
+                .getString("USER", "");
+        Log.d("eeeoooo",""+endTime);
+
         detectName.setText(loginId);
         selectId = Integer.valueOf(userId);
 
@@ -166,7 +170,7 @@ public class ResultFragment extends Fragment {
         attentionLow.setText(mAttentionLow);
         fbwSec.setText(mFeedBackWaySecond);
         fbwSecTips.setText(mFeedBackWayStopTipSecond);
-        detectSec.setText(timeId);
+        detectSec.setText(endTime);  //修改處
         detectRound.setText(feedBackCount);
         return view;
     }

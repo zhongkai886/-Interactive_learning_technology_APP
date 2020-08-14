@@ -50,10 +50,16 @@ public class DetectLoginFragment extends Fragment {
                     Toast.makeText(getActivity(),"請完整輸入編號及姓名!",Toast.LENGTH_SHORT).show();
                 } else{
                     String user = loginId.getText().toString();
+                    String user2 = loginName.getText().toString();
                     SharedPreferences pref = getActivity().getSharedPreferences("detectId",MODE_PRIVATE);
                     pref.edit()
                             .putString("USER", user)
                             .commit();
+                    SharedPreferences pref2 = getActivity().getSharedPreferences("detectName",MODE_PRIVATE);
+                    pref2.edit()
+                            .putString("USER", user2)
+                            .commit();
+
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     fragmentTransaction.replace(R.id.center, detectTestFragment);
                     fragmentTransaction.commit();
