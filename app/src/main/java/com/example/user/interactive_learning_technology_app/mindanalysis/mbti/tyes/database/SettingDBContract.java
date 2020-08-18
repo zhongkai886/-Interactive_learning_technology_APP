@@ -18,6 +18,9 @@ public class SettingDBContract {
         public static final String  COLUMN_RelaxationFeedBackWay ="relaxation_FeedBackWay";
         public static final String  COLUMN_RelaxationMp3Uri ="relaxation_Mp3Uri";
         public static final String  COLUMN_FeedBackWaySecond ="feedBackWay_Second";
+
+        public static final String  COLUMN_HoldSecond ="holder_Second";
+
         public static final String  COLUMN_FeedBackWayStopTipSecond ="feedBackWay_StopTip_Second";
     }
 }

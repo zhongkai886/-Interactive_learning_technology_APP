@@ -15,6 +15,7 @@ public class FeedbackData {
     private String RelaxationWay;
     private String RelaxationMp3Uri;
     private String WaySecond;
+    private String HoldSecond;
     private String WayStopTipSecond;
 
 
@@ -23,7 +24,7 @@ public class FeedbackData {
                         String AttentionMp3Uri,
                         String RelaxationHigh, String RelaxationLow, String RelaxationWay,
                         String RelaxationMp3Uri,
-                        String WaySecond, String WayStopTipSecond){
+                        String WaySecond, String HoldSecond , String WayStopTipSecond){
         this.Id=Id;
         this.Name=Name;
         this.Item=Item;
@@ -36,6 +37,7 @@ public class FeedbackData {
         this.RelaxationWay=RelaxationWay;
         this.RelaxationMp3Uri=RelaxationMp3Uri;
         this.WaySecond=WaySecond;
+        this.HoldSecond=HoldSecond;
         this.WayStopTipSecond=WayStopTipSecond;
     }
 
@@ -77,6 +79,10 @@ public class FeedbackData {
 
     public String getWaySecond() {
         return WaySecond;
+    }
+
+    public String getHoldSecond() {
+        return HoldSecond;
     }
 
     public String getWayStopTipSecond() {

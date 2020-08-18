@@ -27,11 +27,13 @@ public class Edit_FeedbackWay extends Fragment {
     private String mRelaxationLow;
     private String mRelaxationWay;
     private String mWaySecond;
+    private String mWayHoldSecond;
+
     private String mWayStopTipSecond;
 
     public Edit_FeedbackWay(String Id,String Name,String Item ,String AttentionHigh ,String AttentionLow,
                             String AttentionWay, String RelaxationHigh,String RelaxationLow,
-                            String RelaxationWay,String WaySecond,String WayStopTipSecond) {
+                            String RelaxationWay,String WaySecond,String WayHoldSecond,String WayStopTipSecond) {
         this.mId = Id;
         this.mName=Name;
         this.mItem=Item;
@@ -42,6 +44,7 @@ public class Edit_FeedbackWay extends Fragment {
         this.mRelaxationLow=RelaxationLow;
         this.mRelaxationWay=RelaxationWay;
         this.mWaySecond=WaySecond;
+        this.mWayHoldSecond=WayHoldSecond;
         this.mWayStopTipSecond=WayStopTipSecond;
 
     }
@@ -63,6 +66,7 @@ public class Edit_FeedbackWay extends Fragment {
         final EditText EdtRelaxationHigh =(EditText) view.findViewById(R.id.relaxationHigh);
         final EditText EdtRelaxationLow =(EditText) view.findViewById(R.id.relaxationLow);
         final EditText EdtFbwSec =(EditText) view.findViewById(R.id.fbwSec);
+        final EditText EdtFbwHoldSec =(EditText) view.findViewById(R.id.fbwHoldSec);
         final EditText EdtFbwSecTips =(EditText) view.findViewById(R.id.fbwSecTips);
         RadioButton attSight = (RadioButton) view.findViewById(R.id.attSight);
         RadioButton attShock = (RadioButton) view.findViewById(R.id.attShock);
@@ -107,6 +111,7 @@ public class Edit_FeedbackWay extends Fragment {
         EdtRelaxationHigh.setText(mRelaxationHigh);
         EdtRelaxationLow.setText(mRelaxationLow);
         EdtFbwSec.setText(mWaySecond);
+        EdtFbwHoldSec.setText(mWayHoldSecond);
         EdtFbwSecTips.setText(mWayStopTipSecond);
         BackButton.setOnClickListener(new View.OnClickListener() {
             @Override

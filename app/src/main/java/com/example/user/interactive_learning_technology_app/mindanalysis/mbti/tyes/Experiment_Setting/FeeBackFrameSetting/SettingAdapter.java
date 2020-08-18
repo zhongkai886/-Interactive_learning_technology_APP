@@ -114,6 +114,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
                         mFeedbackData.getRelaxationLow(),
                         mFeedbackData.getRelaxationWay(),
                         mFeedbackData.getWaySecond(),
+                        mFeedbackData.getHoldSecond(),
                         mFeedbackData.getWayStopTipSecond());
 
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

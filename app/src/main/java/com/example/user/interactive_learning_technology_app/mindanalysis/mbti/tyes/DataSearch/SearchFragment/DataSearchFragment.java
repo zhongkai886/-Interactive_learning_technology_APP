@@ -178,7 +178,7 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                     averageAttention,averageRelaxation,detectTimeCount,secondsOutput,feedbackSecondOutput,pointInTime);
             detectDataList.add(detectData);
             Log.d("刷新",""+detectData.getDetectTime());
-            Log.d("LOLOLOLO",""+relaxationMax);
+            Log.d("LOLOLOLO",""+feedBackSecondsGap);
 
         }
         cursor.close();

@@ -38,6 +38,7 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionMp3Uri;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_FeedBackWaySecond;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_FeedBackWayStopTipSecond;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_HoldSecond;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_ID;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_Item;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_Name;
@@ -85,6 +86,8 @@ public class AddFeedbackFrameSetting extends Fragment {
         final EditText EdtRelaxationHigh =(EditText) view.findViewById(R.id.relaxationHigh);
         final EditText EdtRelaxationLow =(EditText) view.findViewById(R.id.relaxationLow);
         final EditText EdtFbwSec =(EditText) view.findViewById(R.id.fbwSec);
+        final EditText EdtFbwHoldSecond =(EditText) view.findViewById(R.id.holdSecond);
+
         final EditText EdtFbwSecTips =(EditText) view.findViewById(R.id.fbwSecTips);
         //選取mp3
         final String mimeType = "audio/*";
@@ -167,15 +170,14 @@ public class AddFeedbackFrameSetting extends Fragment {
             public void onClick(View view) {
                 SettingDBHelper dbHelper = new SettingDBHelper(getActivity());
                 mDatabase = dbHelper.getWritableDatabase();
-                ContentValues cv = new ContentValues();
                 final String edtNameText = EdtName.getText().toString();
                 final String spinnerItemText = SpinnerItem.getSelectedItem().toString();;
                 final String edtAttentionHighText = EdtAttentionHigh.getText().toString();
                 final String edtAttentionLowText = EdtAttentionLow.getText().toString();
-//                final String AttWay;
                 final String edtRelaxationHighText = EdtRelaxationHigh.getText().toString();
                 final String edtRelaxationLowText = EdtRelaxationLow.getText().toString();
                 final String edtFbwSecText = EdtFbwSec.getText().toString();
+                final String edtFbwHoldSecText = EdtFbwHoldSecond.getText().toString();
                 final String edtFbwSecTipsText = EdtFbwSecTips.getText().toString();
 
 
@@ -190,10 +192,11 @@ public class AddFeedbackFrameSetting extends Fragment {
                         + "','" + COLUMN_RelaxationFeedBackWay
                         + "','" + COLUMN_RelaxationMp3Uri
                         + "','" + COLUMN_FeedBackWaySecond
+                        + "','" + COLUMN_HoldSecond
                         + "','" + COLUMN_FeedBackWayStopTipSecond + "' ) " +
-                        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+                        "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 Object[] mValue = new Object[]{edtNameText,spinnerItemText,edtAttentionHighText,edtAttentionLowText,attRadioId,attUri,
-                                               edtRelaxationHighText,edtRelaxationLowText,relRadioId,"",edtFbwSecText,edtFbwSecTipsText};
+                                               edtRelaxationHighText,edtRelaxationLowText,relRadioId,"",edtFbwSecText,edtFbwHoldSecText,edtFbwSecTipsText};
                 mDatabase.execSQL(sql,mValue);
 
                 Cursor c = mDatabase.query(TABLE_NAME,                                         // 資料表名字
@@ -209,6 +212,7 @@ public class AddFeedbackFrameSetting extends Fragment {
                                 COLUMN_RelaxationFeedBackWay,
                                 COLUMN_RelaxationMp3Uri,
                                 COLUMN_FeedBackWaySecond,
+                                COLUMN_HoldSecond,
                                 COLUMN_FeedBackWayStopTipSecond},  // 要取出的欄位資料
                         null,                                              // 查詢條件式
                         null,                                              // 查詢條件值字串陣列
@@ -219,11 +223,8 @@ public class AddFeedbackFrameSetting extends Fragment {
 
                 while(c.moveToNext())
                 {
-                    String id = c.getString(c.getColumnIndex(COLUMN_ID));    // 取出名字欄位資料
-                    String mp3 = c.getString(c.getColumnIndex(COLUMN_AttentionMp3Uri));
-                    String relWay = c.getString(c.getColumnIndex(COLUMN_RelaxationFeedBackWay));
-                    String attWay = c.getString(c.getColumnIndex(COLUMN_AttentionFeedBackWay));
-                    Log.v("7788",mp3+"//////"+mp3+"////"+mp3);
+                    String attWay = c.getString(c.getColumnIndex(COLUMN_HoldSecond));
+                    Log.v("7788",attWay);
 
                 }
                 final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -235,16 +236,6 @@ public class AddFeedbackFrameSetting extends Fragment {
             }
         });
         return view;
-    }
-    private Cursor getAllItems(){
-        return mDatabase.query(TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                COLUMN_ID + " DESC"
-        );
     }
 
     @Override

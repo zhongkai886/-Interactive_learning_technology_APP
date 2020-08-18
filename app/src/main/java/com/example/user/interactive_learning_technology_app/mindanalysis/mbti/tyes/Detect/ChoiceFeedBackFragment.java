@@ -114,7 +114,7 @@ public class ChoiceFeedBackFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Integer time = parent.getPositionForView(view);
-                String timerSelect = timeSpinner[time];
+                String timerSelect = timeChange[time];
                 SharedPreferences pref = getActivity().getSharedPreferences("timeSelect", MODE_PRIVATE);
                 pref.edit()
                         .putString("USER", timerSelect)

@@ -27,6 +27,7 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionMp3Uri;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_FeedBackWaySecond;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_FeedBackWayStopTipSecond;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_HoldSecond;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_ID;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_Item;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_Name;
@@ -136,9 +137,10 @@ public class FeedbackFrameSettingsFragment extends Fragment {
             String relaxationFeedBackWay = cursor.getString(cursor.getColumnIndex(COLUMN_RelaxationFeedBackWay));
             String relaxationMp3Uri = cursor.getString(cursor.getColumnIndex(COLUMN_RelaxationMp3Uri));
             String feedBackWaySecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWaySecond));
+            String feedBackWayHoldSecond = cursor.getString(cursor.getColumnIndex(COLUMN_HoldSecond));
             String feedBackWayStopTipSecond = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackWayStopTipSecond));
             FeedbackData feedbackData = new FeedbackData(id, name, item, attentionHigh, attentionLow, attentionFeedBackWay,
-                    attentionMp3Uri,relaxationHigh, relaxationLow, relaxationFeedBackWay,relaxationMp3Uri,feedBackWaySecond, feedBackWayStopTipSecond);
+                    attentionMp3Uri,relaxationHigh, relaxationLow, relaxationFeedBackWay,relaxationMp3Uri,feedBackWaySecond, feedBackWayHoldSecond, feedBackWayStopTipSecond);
             feedbackDataList.add(feedbackData);
             Log.d("刷新",""+feedbackData);
         }
@@ -177,6 +179,7 @@ public class FeedbackFrameSettingsFragment extends Fragment {
                 COLUMN_RelaxationFeedBackWay + " VARCHAR(250)," +
                 COLUMN_RelaxationMp3Uri + " VARCHAR(250)," +
                 COLUMN_FeedBackWaySecond + " VARCHAR(250)," +
+                COLUMN_HoldSecond + " VARCHAR(250)," +
                 COLUMN_FeedBackWayStopTipSecond + " VARCHAR(250)" +
                 ");";
         mDatabase.execSQL(SQL);

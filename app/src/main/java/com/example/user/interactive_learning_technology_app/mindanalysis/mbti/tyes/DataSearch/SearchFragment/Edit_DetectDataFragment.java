@@ -75,6 +75,8 @@ public class Edit_DetectDataFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit__detect_data, container, false);
 //        final TextView TvId = (TextView) view.findViewById(R.id.id);
+        Log.d("question2",""+mFeedBackSecondsGap+mFeedBackPassSeconds);
+
         final TextView TvNumber = (TextView) view.findViewById(R.id.number);
         final TextView TvTimeDate =(TextView) view.findViewById(R.id.timeDate);
         final TextView TvFeedBackWay = (TextView) view.findViewById(R.id.feedBackWay);
@@ -107,9 +109,9 @@ public class Edit_DetectDataFragment extends Fragment {
         TvRelaxationMax.setText(mRelaxationMax);
 
         TvRelaxationMin.setText(mRelaxationMin);
-        TvFeedBackSecondsGap.setText(mFeedBackSecondsGap);
+        TvFeedBackSecondsGap.setText(mFeedBackSecondsGap); //間隔
 
-        TvFeedBackPassSeconds.setText(mFeedBackPassSeconds);
+        TvFeedBackPassSeconds.setText(mFeedBackPassSeconds); //開始忽略的秒數
         Log.d("lololololooooo",""+mFeedBackPassSeconds);
         TvAverageAttention.setText(mAverageAttention);
         TvAverageRelaxation.setText(mAverageRelaxation);

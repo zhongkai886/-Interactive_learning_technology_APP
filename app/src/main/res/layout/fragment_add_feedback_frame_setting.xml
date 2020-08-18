@@ -247,7 +247,28 @@
                 android:layout_height="wrap_content"
                 android:text="秒後開始回饋" />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="當數值維持" />
+
+            <EditText
+                android:id="@+id/holdSecond"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="輸入數字"
+                android:numeric="integer" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="秒後即給予回饋，" />
+        </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
