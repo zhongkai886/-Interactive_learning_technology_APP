@@ -617,14 +617,17 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
             }
             //實驗狀態開始
             else if (mTimeDetect.getState() == 1) {
+                //08_21 修正過 每秒更新數值
+                changeTextView(mTimeDetect.getAttention());
                 //低於0進入實驗開始收集資料
                 if (mSecondStart < 0) {
                     Log.d("Seconds", "開始秒數通過 偵測中");
                     //開始實驗後第一次回饋 時間間隔預設為3 (會遞減)   mSecondNeed (固定間隔時間3)
-                    if (mSecondGap ==mSecondNeed){
+                    if (mSecondGap == mSecondNeed){
                         //呼叫gapSecond (mSecondGap開始遞減)
                         handler.postDelayed(gapSecond,500);
-                        changeTextView(mTimeDetect.getAttention());
+                        //原先設定更改數值在 開始時間 和 間隔時間後
+//                        changeTextView(mTimeDetect.getAttention());
 
                         //取腦波資料專注跟放鬆值
                         mAttention = mTimeDetect.getAttention();
@@ -639,7 +642,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 //                            pointDataSql=pointDataSql+endTime+","+mIdPoint[Integer.valueOf(mId)]+","+mNumPoint[Integer.valueOf(mNum)]+","+mAttention+",";
 
                             //收集回饋總資料
-                            mFeedBackSecondOutput = mFeedBackSecondOutput + detectTotalCount +","+endTime+ ","+mAttention+",";
+                            mFeedBackSecondOutput = mFeedBackSecondOutput + detectTotalCount +";"+endTime+ ";"+mAttention+";";
                             Log.d("多少",""+mFeedBackSecondOutput);
 
                             //回饋三種方式 視覺 震動 聲音
@@ -664,7 +667,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                                 mSecondHold=mSecondHoldNeed;
                                 Log.d("thisthis偵測",""+mSecondHold);
                                 //收集回饋總資料
-                                mFeedBackSecondOutput = mFeedBackSecondOutput + detectTotalCount +","+endTime+ ","+mAttention+",";
+                                mFeedBackSecondOutput = mFeedBackSecondOutput + detectTotalCount +";"+endTime+ ";"+mAttention+";";
 
                                 //回饋三種方式 視覺 震動 聲音
                                 if (fb_Way == 0) {
@@ -924,7 +927,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 Random random = new Random();
                 int answer = random.nextInt((6 - 0 + 1) + 0);
 //                pointDataSql=pointDataSql+endTime+","+mIdPoint[Integer.valueOf(mId)]+","+mNumPoint[Integer.valueOf(mNum)]+","+mAttention+","+mRel+""+",";
-                pointDataSql=pointDataSql+endTime+","+mIdPoint[Integer.valueOf(mId)]+","+mNumPoint[Integer.valueOf(mNum)]+","+mAttention+",";
+                pointDataSql=pointDataSql+endTime+";"+mIdPoint[Integer.valueOf(mId)]+";"+mNumPoint[Integer.valueOf(mNum)]+";"+mAttention+";";
 
                 Log.d("aaaaa",""+pointDataSql);
             }

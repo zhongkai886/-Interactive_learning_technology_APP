@@ -59,10 +59,6 @@ public class Edit_DetectDataFragment extends Fragment {
         this.mAverageAttention=AverageAttention;
         this.mAverageRelaxation=AverageRelaxation;
         this.mData=Data;
-
-
-
-
     }
 
     @Override
