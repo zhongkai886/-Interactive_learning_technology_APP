@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.text.format.DateFormat;
@@ -43,6 +44,14 @@ import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.ty
 import com.example.user.interactive_learning_technology_app.widget.PreferencesCenter;
 import com.example.user.interactive_learning_technology_app.widget.StringMultiple;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -292,6 +301,8 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detect, container, false);
 
+
+
         SearchDBHelper dbHelper = new SearchDBHelper(getActivity());
         sqLiteDatabase = dbHelper.getWritableDatabase();
         mTimerText = (TextView) view.findViewById(R.id.fragment_detect_title);
@@ -441,7 +452,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 
                 COLUMN_DetectTimeCount + " VARCHAR(250)," +
 
-                COLUMN_SecondsOutput + " VARCHAR(250)," +
+                COLUMN_SecondsOutput + " VARCHAR(65535)," +
 
                 COLUMN_FeedBackSecondOutput + " VARCHAR(3000)," +
 
@@ -479,7 +490,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 detectTotalCount,mAttentionHigh,mAttentionLow,mRelaxationHigh,
                 mRelaxationLow,mAttentionMax,mAttentionMin,mRelaxationMax,
                 mRelaxationMin,detectSecondGap, detectSecond,mAverageAttention,
-                mAverageRelaxation,mDetectTimeCount,"暫時為空",mFeedBackSecondOutput,pointDataSql};
+                mAverageRelaxation,mDetectTimeCount,mSecondsOutput,mFeedBackSecondOutput,pointDataSql};
 
         //測試用資料
 
@@ -517,6 +528,9 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 
     }
     public void dataHandle(){
+
+//        outputCsv(); //測試用
+
         Log.d("eee1",""+endTime);
         endTime = Integer.valueOf(timeId) - endTime -1;
         Log.d("eee2",""+endTime);
@@ -619,6 +633,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
             else if (mTimeDetect.getState() == 1) {
                 //08_21 修正過 每秒更新數值
                 changeTextView(mTimeDetect.getAttention());
+                mSecondsOutput = mSecondsOutput + mTimeDetect.getAttention()+";"+mTimeDetect.getMeditation()+";";
                 //低於0進入實驗開始收集資料
                 if (mSecondStart < 0) {
                     Log.d("Seconds", "開始秒數通過 偵測中");
@@ -1015,11 +1030,12 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         cursor.close();
     }
 
-    //振動方式
+    //回饋[振動]
     public void setVibrate(int time){
         Vibrator vibrator =(Vibrator) getActivity().getSystemService(Service.VIBRATOR_SERVICE);
         vibrator.vibrate(time);
     }
+    //回饋[聲音]
     public void playBeep() {
         try {
 //            if (mediaPlayer.isPlaying()) {
@@ -1038,6 +1054,35 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
             mediaPlayer.start();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void outputCsv(){
+
+
+        Calendar mCal = Calendar.getInstance();
+        dateTime = DateFormat.format("yyyy-MM-dd kk:mm:ss", mCal.getTime())+"_data";    // kk:24小時制, hh:12小時制
+
+        try {
+
+            String sdCardDir = Environment.getExternalStorageDirectory().toString();
+            Log.d("有路徑嗎",""+sdCardDir);
+            String filename = dateTime+".csv";
+            File saveFile = new File(sdCardDir, filename);
+            FileWriter fw = new FileWriter(saveFile);
+
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            bw.write(mSecondsOutput);
+
+            bw.newLine();
+            bw.flush();
+            Toast.makeText(getActivity(), "Exported Successfully.", Toast.LENGTH_SHORT).show();
+
+        } catch (Exception ex) {
+            Log.d("error",""+ex);
+        } finally {
+            Log.d("finally","finally");
         }
     }
 

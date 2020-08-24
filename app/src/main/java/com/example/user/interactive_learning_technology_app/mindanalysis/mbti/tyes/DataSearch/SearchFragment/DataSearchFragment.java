@@ -206,7 +206,7 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
 
                 COLUMN_DetectTimeCount + " VARCHAR(250)," +
 
-                COLUMN_SecondsOutput + " VARCHAR(250)," +
+                COLUMN_SecondsOutput + " VARCHAR(65535)," +
 
                 COLUMN_FeedBackSecondOutput + " VARCHAR(3000)," +
 

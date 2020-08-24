@@ -61,7 +61,7 @@ public class SearchDBHelper extends SQLiteOpenHelper {
 
                 COLUMN_DetectTimeCount + " VARCHAR(250)," +
 
-                COLUMN_SecondsOutput + " VARCHAR(250)," +
+                COLUMN_SecondsOutput + " VARCHAR(65535)," +
 
                 COLUMN_FeedBackSecondOutput + " VARCHAR(3000)," +
 
