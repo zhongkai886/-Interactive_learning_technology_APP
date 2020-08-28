@@ -635,10 +635,12 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 changeTextView(mTimeDetect.getAttention());
                 mSecondsOutput = mSecondsOutput + mTimeDetect.getAttention()+";"+mTimeDetect.getMeditation()+";";
                 //低於0進入實驗開始收集資料
+                Log.d("Seconds", "開始秒數多少"+mSecondStart);
                 if (mSecondStart < 0) {
-                    Log.d("Seconds", "開始秒數通過 偵測中");
+//                    Log.d("Seconds", "開始秒數通過 偵測中");
                     //開始實驗後第一次回饋 時間間隔預設為3 (會遞減)   mSecondNeed (固定間隔時間3)
                     if (mSecondGap == mSecondNeed){
+//                        Log.d("Seconds", "在間隔時間內");
                         //呼叫gapSecond (mSecondGap開始遞減)
                         handler.postDelayed(gapSecond,500);
                         //原先設定更改數值在 開始時間 和 間隔時間後
@@ -649,54 +651,45 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                         mAttentionList.add(mTimeDetect.getAttention());
                         mRelaxationList.add(mTimeDetect.getMeditation());
 
-                        //情況1 數值維持在範圍內直接回饋  假設 20-80
-
-                        //情況2 數值在水平內並且維持幾秒  假設 80以下 維持5秒
+                        //情況1 數值維持在範圍內計秒  假設 20-80
                         if (mAttention > Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionHigh())
                             && mAttention < Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionLow())) {
 //                            pointDataSql=pointDataSql+endTime+","+mIdPoint[Integer.valueOf(mId)]+","+mNumPoint[Integer.valueOf(mNum)]+","+mAttention+",";
-
-                            //收集回饋總資料
-                            mFeedBackSecondOutput = mFeedBackSecondOutput + detectTotalCount +";"+endTime+ ";"+mAttention+";";
-                            Log.d("多少",""+mFeedBackSecondOutput);
-
-                            //回饋三種方式 視覺 震動 聲音
-                            if (fb_Way == 0) {
-                                changeSightColor(mTimeDetect.getAttention());
-                            } else if (fb_Way == 1) {
-                                setVibrate(1000);
-                            } else if (fb_Way == 2) {
-                                if (mp3Uri != null) {
-                                    playBeep();
-                                }
-
-                            }
-                            //回饋次數累計
-                            detectTotalCount++;
-                            Log.d("detectTTT", "run: Count" + detectTotalCount);
-                        }
-                        else if (mAttention < Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionLow())){
-                            Log.d("thisthis",""+mSecondHold);
+                            Log.d("Seconds", "通過數值條件 維持秒數:"+mSecondHold);
                             mSecondHold--;
-                            if (mSecondHold.equals(0)){
-                                mSecondHold=mSecondHoldNeed;
-                                Log.d("thisthis偵測",""+mSecondHold);
+                            if(mSecondHold.equals(0)){
+                                Log.d("Seconds", "通過維持秒數=0 開始回饋"+mSecondHold);
                                 //收集回饋總資料
                                 mFeedBackSecondOutput = mFeedBackSecondOutput + detectTotalCount +";"+endTime+ ";"+mAttention+";";
+                                Log.d("多少",""+mFeedBackSecondOutput);
+
 
                                 //回饋三種方式 視覺 震動 聲音
                                 if (fb_Way == 0) {
+                                    Log.d("Seconds", "視覺換色");
                                     changeSightColor(mTimeDetect.getAttention());
                                 } else if (fb_Way == 1) {
+                                    Log.d("Seconds", "震動");
                                     setVibrate(1000);
                                 } else if (fb_Way == 2) {
-                                    if (mp3Uri != null) {
+//                                    if (mp3Uri != null) {
+                                        Log.d("Seconds", "聲音逼逼");
                                         playBeep();
-                                    }
+//                                    }
                                 }
+                                //回饋完成也要重新計時
+                                mSecondHold = mSecondHoldNeed;
                                 //回饋次數累計
                                 detectTotalCount++;
+                                Log.d("detectTTT", "run: Count" + detectTotalCount);
+                                Log.d("Seconds", "回饋次數增加"+ detectTotalCount);
                             }
+                        }
+                        //情況2 數值在水平外  假設 80以上或是20以下 重新計秒
+                        else if (mAttention > Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionLow())
+                        || mAttention < Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionHigh())){
+                            mSecondHold = mSecondHoldNeed;
+                            Log.d("Seconds", "數值不在條件內重新計時"+ mSecondHold);
                         }
 
 //                    if (mTimeDetect.getData().length() == 0) {
@@ -986,8 +979,8 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                     mTimeDetect_data = "";
                     mTimeDetect.start();
                     _state("start");
-                    fb_Way = Integer.valueOf(getActivity().getSharedPreferences("selectAttentionWay", MODE_PRIVATE)
-                            .getString("USER", ""));
+//                    fb_Way = Integer.valueOf(getActivity().getSharedPreferences("selectAttentionWay", MODE_PRIVATE)
+//                            .getString("USER", ""));
                     //取得開始秒數
                     mSecondStart =Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getWaySecond());
 
@@ -1058,7 +1051,6 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     }
 
     public void outputCsv(){
-
 
         Calendar mCal = Calendar.getInstance();
         dateTime = DateFormat.format("yyyy-MM-dd kk:mm:ss", mCal.getTime())+"_data";    // kk:24小時制, hh:12小時制
