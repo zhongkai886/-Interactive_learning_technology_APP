@@ -82,7 +82,8 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationLow;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationMax;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationMin;
-import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_SecondsOutput;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_SecondsAttentionOutput;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_SecondsRelaxationOutput;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.TABLE_NAME;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionFeedBackWay;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionMp3Uri;
@@ -165,7 +166,9 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 
     public String mDetectTimeCount="";
 
-    public String mSecondsOutput="";
+//    public String mSecondsOutput="";
+    public String mSecondsAttentionOutput="";
+    public String mSecondsRelaxationOutput="";
 
     public String mFeedBackSecondOutput="";
 
@@ -452,7 +455,9 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 
                 COLUMN_DetectTimeCount + " VARCHAR(250)," +
 
-                COLUMN_SecondsOutput + " VARCHAR(65535)," +
+                COLUMN_SecondsAttentionOutput + " VARCHAR(65535)," +
+
+                COLUMN_SecondsRelaxationOutput + " VARCHAR(65535)," +
 
                 COLUMN_FeedBackSecondOutput + " VARCHAR(3000)," +
 
@@ -480,17 +485,20 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 + "','" + COLUMN_AverageRelaxation
 
                 + "','" + COLUMN_DetectTimeCount
-                + "','" + COLUMN_SecondsOutput
+
+                + "','" + COLUMN_SecondsAttentionOutput
+                + "','" + COLUMN_SecondsRelaxationOutput
+
                 + "','" + COLUMN_FeedBackSecondOutput
 
                 + "','" + COLUMN_PointInTime + "' ) " +
-                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         //缺少三格
         Object[] mValue = new Object[]{detectName,detectId,dateTime,detectItem,
                 detectTotalCount,mAttentionHigh,mAttentionLow,mRelaxationHigh,
                 mRelaxationLow,mAttentionMax,mAttentionMin,mRelaxationMax,
                 mRelaxationMin,detectSecondGap, detectSecond,mAverageAttention,
-                mAverageRelaxation,mDetectTimeCount,mSecondsOutput,mFeedBackSecondOutput,pointDataSql};
+                mAverageRelaxation,mDetectTimeCount,mSecondsAttentionOutput,mSecondsRelaxationOutput,mFeedBackSecondOutput,pointDataSql};
 
         //測試用資料
 
@@ -500,13 +508,13 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 "R最大","間隔秒數","忽略秒數","平均A",
                 "平均R","資料"};
 //        Log.d("sss",""+mAttentionHighCount);
-
+        sqLiteDatabase.execSQL(sql,mValue);
 
 
 //        SQLiteCenter center = new SQLiteCenter(getActivity());
 //        UserTable values = new UserTable();
 //        values.data = mTimeDetect_data;
-        sqLiteDatabase.execSQL(sql,mValue);
+
 //        values.date = System.currentTimeMillis();
 //        values.name = mUserNameEdit.getText().toString();
 //        Log.d("yoyoyyo",""+values.data);
@@ -633,19 +641,21 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
             else if (mTimeDetect.getState() == 1) {
                 //08_21 修正過 每秒更新數值
                 changeTextView(mTimeDetect.getAttention());
-                mSecondsOutput = mSecondsOutput + mTimeDetect.getAttention()+";"+mTimeDetect.getMeditation()+";";
+//                mSecondsOutput = mSecondsOutput + mTimeDetect.getAttention()+";"+mTimeDetect.getMeditation()+";";
+                mSecondsAttentionOutput = mSecondsAttentionOutput + mTimeDetect.getAttention()+";";
+                mSecondsRelaxationOutput = mSecondsRelaxationOutput + mTimeDetect.getMeditation()+";";
+
                 //低於0進入實驗開始收集資料
                 Log.d("Seconds", "開始秒數多少"+mSecondStart);
                 if (mSecondStart < 0) {
 //                    Log.d("Seconds", "開始秒數通過 偵測中");
                     //開始實驗後第一次回饋 時間間隔預設為3 (會遞減)   mSecondNeed (固定間隔時間3)
+                    Log.d("Seconds", "間隔秒數"+mSecondGap);
                     if (mSecondGap == mSecondNeed){
 //                        Log.d("Seconds", "在間隔時間內");
-                        //呼叫gapSecond (mSecondGap開始遞減)
-                        handler.postDelayed(gapSecond,500);
                         //原先設定更改數值在 開始時間 和 間隔時間後
 //                        changeTextView(mTimeDetect.getAttention());
-
+                        Log.d("Seconds", "間隔秒數通過"+mSecondGap);
                         //取腦波資料專注跟放鬆值
                         mAttention = mTimeDetect.getAttention();
                         mAttentionList.add(mTimeDetect.getAttention());
@@ -655,6 +665,9 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                         if (mAttention > Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionHigh())
                             && mAttention < Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionLow())) {
 //                            pointDataSql=pointDataSql+endTime+","+mIdPoint[Integer.valueOf(mId)]+","+mNumPoint[Integer.valueOf(mNum)]+","+mAttention+",";
+                            //呼叫gapSecond (mSecondGap開始遞減)
+                            handler.postDelayed(gapSecond,500);
+                            Log.d("Seconds", "間隔秒數開始計時"+mSecondGap);
                             Log.d("Seconds", "通過數值條件 維持秒數:"+mSecondHold);
                             mSecondHold--;
                             if(mSecondHold.equals(0)){
@@ -1050,32 +1063,32 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         }
     }
 
-    public void outputCsv(){
-
-        Calendar mCal = Calendar.getInstance();
-        dateTime = DateFormat.format("yyyy-MM-dd kk:mm:ss", mCal.getTime())+"_data";    // kk:24小時制, hh:12小時制
-
-        try {
-
-            String sdCardDir = Environment.getExternalStorageDirectory().toString();
-            Log.d("有路徑嗎",""+sdCardDir);
-            String filename = dateTime+".csv";
-            File saveFile = new File(sdCardDir, filename);
-            FileWriter fw = new FileWriter(saveFile);
-
-            BufferedWriter bw = new BufferedWriter(fw);
-
-            bw.write(mSecondsOutput);
-
-            bw.newLine();
-            bw.flush();
-            Toast.makeText(getActivity(), "Exported Successfully.", Toast.LENGTH_SHORT).show();
-
-        } catch (Exception ex) {
-            Log.d("error",""+ex);
-        } finally {
-            Log.d("finally","finally");
-        }
-    }
+//    public void outputCsv(){
+//
+//        Calendar mCal = Calendar.getInstance();
+//        dateTime = DateFormat.format("yyyy-MM-dd kk:mm:ss", mCal.getTime())+"_data";    // kk:24小時制, hh:12小時制
+//
+//        try {
+//
+//            String sdCardDir = Environment.getExternalStorageDirectory().toString();
+//            Log.d("有路徑嗎",""+sdCardDir);
+//            String filename = dateTime+".csv";
+//            File saveFile = new File(sdCardDir, filename);
+//            FileWriter fw = new FileWriter(saveFile);
+//
+//            BufferedWriter bw = new BufferedWriter(fw);
+//
+//            bw.write(mSecondsOutput);
+//
+//            bw.newLine();
+//            bw.flush();
+//            Toast.makeText(getActivity(), "Exported Successfully.", Toast.LENGTH_SHORT).show();
+//
+//        } catch (Exception ex) {
+//            Log.d("error",""+ex);
+//        } finally {
+//            Log.d("finally","finally");
+//        }
+//    }
 
 }

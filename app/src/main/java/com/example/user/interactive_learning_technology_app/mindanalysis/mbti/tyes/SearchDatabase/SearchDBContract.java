@@ -26,17 +26,17 @@ public class SearchDBContract {
         public static final String  COLUMN_AverageRelaxation ="average_Relaxation";
 
         public static final String  COLUMN_DetectTimeCount ="detect_Time_Count";
+
         public static final String  COLUMN_SecondsOutput ="seconds_Output";
+
+        public static final String  COLUMN_SecondsAttentionOutput ="seconds_Attention_Output";
+
+        public static final String  COLUMN_SecondsRelaxationOutput ="seconds_Relaxation_Output";
+
+
         public static final String  COLUMN_FeedBackSecondOutput ="feedback_Second_Output";
 
         public static final String  COLUMN_PointInTime = "point_In_Time";
 
-        public static final String  TABLE_NAME2 ="data";
-        public static final String  COLUMN_ID2 ="id";
-        public static final String  COLUMN_Time ="pointTime";
-        public static final String  COLUMN_Attention ="attention";
-        public static final String  COLUMN_Relaxation ="relaxation";
-        public static final String  COLUMN_Seconds ="seconds";
-        public static final String  COLUMN_Other ="other";
     }
 }

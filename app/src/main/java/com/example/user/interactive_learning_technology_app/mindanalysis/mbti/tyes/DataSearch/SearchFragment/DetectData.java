@@ -22,7 +22,10 @@ public class DetectData {
     private String AverageRelaxation;
 
     private String DetectTimeCount;
-    private String SecondsOutput;
+    private String SecondsAttentionOutput;
+    private String SecondsRelaxationOutput;
+
+
     private String FeedBackSecondOutput;
 
     private String PointInTime;
@@ -35,7 +38,8 @@ public class DetectData {
                       String FeedbackSecondsGap , String FeedbackPassSecond,
                       String AverageAttention , String AverageRelaxation,
                       String DetectTimeCount,
-                      String SecondsOutput,
+                      String SecondsAttentionOutput,
+                      String SecondsRelaxationOutput,
                       String FeedBackSecondOutput,
                       String PointInTime){
         this.Id=Id;
@@ -56,11 +60,10 @@ public class DetectData {
         this.FeedbackPassSecond=FeedbackPassSecond;
         this.AverageAttention=AverageAttention;
         this.AverageRelaxation=AverageRelaxation;
-
         this.DetectTimeCount=DetectTimeCount;
-        this.SecondsOutput=SecondsOutput;
+        this.SecondsAttentionOutput=SecondsAttentionOutput;
+        this.SecondsRelaxationOutput=SecondsRelaxationOutput ;
         this.FeedBackSecondOutput=FeedBackSecondOutput;
-
         this.PointInTime=PointInTime;
     }
 
@@ -138,8 +141,13 @@ public class DetectData {
         return DetectTimeCount;
     }
 
-    public String getSecondsOutput() {
-        return SecondsOutput;
+    public String getSecondsAttentionOutput() {
+        return SecondsAttentionOutput;
+    }
+
+
+    public String getSecondsRelaxationOutput() {
+        return SecondsRelaxationOutput;
     }
 
     public String getFeedBackSecondOutput() {

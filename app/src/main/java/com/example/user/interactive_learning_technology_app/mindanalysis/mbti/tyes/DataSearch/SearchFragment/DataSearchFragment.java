@@ -82,7 +82,8 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationLow;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationMax;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_RelaxationMin;
-import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_SecondsOutput;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_SecondsAttentionOutput;
+import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_SecondsRelaxationOutput;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.TABLE_NAME;
 
 public class DataSearchFragment extends Fragment implements View.OnClickListener {
@@ -165,7 +166,9 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
             String averageRelaxation = cursor.getString(cursor.getColumnIndex(COLUMN_AverageRelaxation));
 
             String detectTimeCount = cursor.getString(cursor.getColumnIndex(COLUMN_DetectTimeCount));
-            String secondsOutput = cursor.getString(cursor.getColumnIndex(COLUMN_SecondsOutput));
+            String secondsAttentionOutput = cursor.getString(cursor.getColumnIndex(COLUMN_SecondsAttentionOutput));
+
+            String secondsRelaxationOutput = cursor.getString(cursor.getColumnIndex(COLUMN_SecondsRelaxationOutput));
             String feedbackSecondOutput = cursor.getString(cursor.getColumnIndex(COLUMN_FeedBackSecondOutput));
 
 
@@ -175,7 +178,7 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
                     feedBackCount,attentionHigh,attentionLow,
                     relaxationHigh,relaxationLow,attentionMax,attentionMin,
                     relaxationMax,relaxationMin,feedBackSecondsGap,feedBackPassSeconds,
-                    averageAttention,averageRelaxation,detectTimeCount,secondsOutput,feedbackSecondOutput,pointInTime);
+                    averageAttention,averageRelaxation,detectTimeCount,secondsAttentionOutput,secondsRelaxationOutput,feedbackSecondOutput,pointInTime);
             detectDataList.add(detectData);
             Log.d("刷新",""+detectData.getDetectTime());
             Log.d("LOLOLOLO",""+feedBackSecondsGap);
@@ -206,7 +209,9 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
 
                 COLUMN_DetectTimeCount + " VARCHAR(250)," +
 
-                COLUMN_SecondsOutput + " VARCHAR(65535)," +
+                COLUMN_SecondsAttentionOutput + " VARCHAR(65535)," +
+
+                COLUMN_SecondsRelaxationOutput + " VARCHAR(65535)," +
 
                 COLUMN_FeedBackSecondOutput + " VARCHAR(3000)," +
 
