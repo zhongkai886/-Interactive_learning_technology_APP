@@ -186,6 +186,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 
     public String timeId="";
 
+    public Integer timeCount=0;
 
 //    public String[] myResArray = getResources().getStringArray(R.array.aE);
 //    public List<String> idArray = Arrays.asList(myResArray);
@@ -346,7 +347,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         mStartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int t = Integer.valueOf(timeId);
+                int t = Integer.valueOf(timeId)-1;
                 mTimeDetect.setTimer(t);
 
                 mTimeDetect.setRound(1);
@@ -362,7 +363,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 mSecondHold=Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getHoldSecond());
                 mSecondHoldNeed=Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getHoldSecond());
                 Log.d("secsecsec",""+mSecondHold);
-                handler.postDelayed(getData,500);
+                handler.postDelayed(getData,1000);
 
 
 
@@ -539,12 +540,12 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 
 //        outputCsv(); //測試用
 
-        Log.d("eee1",""+endTime);
+        Log.d("eee1",""+timeCount);
         endTime = Integer.valueOf(timeId) - endTime -1;
         Log.d("eee2",""+endTime);
         SharedPreferences pref = getActivity().getSharedPreferences("endTime", MODE_PRIVATE);
         pref.edit()
-                .putString("USER",String.valueOf(endTime))
+                .putString("USER",String.valueOf(timeCount))
                 .commit();
 
         //登入編號
@@ -589,7 +590,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         mAverageRelaxation = calculateAverage(mRelaxationList);
 
 
-        mDetectTimeCount = String.valueOf(endTime);
+        mDetectTimeCount = String.valueOf(timeCount);
 
         Log.d("maxmaxatt",""+mAttentionList);
         Log.d("maxmaxrel",""+mRelaxationList);
@@ -641,41 +642,38 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
             else if (mTimeDetect.getState() == 1) {
                 //08_21 修正過 每秒更新數值
                 changeTextView(mTimeDetect.getAttention());
+                //計時用
+                timeCount++;
 //                mSecondsOutput = mSecondsOutput + mTimeDetect.getAttention()+";"+mTimeDetect.getMeditation()+";";
                 mSecondsAttentionOutput = mSecondsAttentionOutput + mTimeDetect.getAttention()+";";
                 mSecondsRelaxationOutput = mSecondsRelaxationOutput + mTimeDetect.getMeditation()+";";
-
+                //取腦波資料專注跟放鬆值
+                mAttentionList.add(mTimeDetect.getAttention());
+                mRelaxationList.add(mTimeDetect.getMeditation());
                 //低於0進入實驗開始收集資料
                 Log.d("Seconds", "開始秒數多少"+mSecondStart);
                 if (mSecondStart < 0) {
 //                    Log.d("Seconds", "開始秒數通過 偵測中");
                     //開始實驗後第一次回饋 時間間隔預設為3 (會遞減)   mSecondNeed (固定間隔時間3)
-                    Log.d("Seconds", "間隔秒數"+mSecondGap);
+                    Log.d("Secondseeeee", "間隔秒數"+mSecondGap);
                     if (mSecondGap == mSecondNeed){
 //                        Log.d("Seconds", "在間隔時間內");
-                        //原先設定更改數值在 開始時間 和 間隔時間後
+                        //原先設定更改數值在 開始時間 和 間隔時間後detect_Time_Count
 //                        changeTextView(mTimeDetect.getAttention());
                         Log.d("Seconds", "間隔秒數通過"+mSecondGap);
-                        //取腦波資料專注跟放鬆值
-                        mAttention = mTimeDetect.getAttention();
-                        mAttentionList.add(mTimeDetect.getAttention());
-                        mRelaxationList.add(mTimeDetect.getMeditation());
 
+                        mAttention = mTimeDetect.getAttention();
                         //情況1 數值維持在範圍內計秒  假設 20-80
                         if (mAttention > Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionHigh())
                             && mAttention < Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionLow())) {
-//                            pointDataSql=pointDataSql+endTime+","+mIdPoint[Integer.valueOf(mId)]+","+mNumPoint[Integer.valueOf(mNum)]+","+mAttention+",";
-                            //呼叫gapSecond (mSecondGap開始遞減)
-                            handler.postDelayed(gapSecond,500);
+//
                             Log.d("Seconds", "間隔秒數開始計時"+mSecondGap);
                             Log.d("Seconds", "通過數值條件 維持秒數:"+mSecondHold);
                             mSecondHold--;
                             if(mSecondHold.equals(0)){
                                 Log.d("Seconds", "通過維持秒數=0 開始回饋"+mSecondHold);
-                                //收集回饋總資料
-                                mFeedBackSecondOutput = mFeedBackSecondOutput + detectTotalCount +";"+endTime+ ";"+mAttention+";";
-                                Log.d("多少",""+mFeedBackSecondOutput);
-
+                                //呼叫gapSecond (mSecondGap開始遞減)
+                                handler.postDelayed(gapSecond,1000);
 
                                 //回饋三種方式 視覺 震動 聲音
                                 if (fb_Way == 0) {
@@ -685,15 +683,17 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                                     Log.d("Seconds", "震動");
                                     setVibrate(1000);
                                 } else if (fb_Way == 2) {
-//                                    if (mp3Uri != null) {
                                         Log.d("Seconds", "聲音逼逼");
                                         playBeep();
-//                                    }
                                 }
                                 //回饋完成也要重新計時
                                 mSecondHold = mSecondHoldNeed;
                                 //回饋次數累計
                                 detectTotalCount++;
+                                //收集回饋總資料
+                                mFeedBackSecondOutput = mFeedBackSecondOutput + detectTotalCount +";"+timeCount+ ";"+mAttention+";";
+                                Log.d("多少",""+mFeedBackSecondOutput);
+
                                 Log.d("detectTTT", "run: Count" + detectTotalCount);
                                 Log.d("Seconds", "回饋次數增加"+ detectTotalCount);
                             }
@@ -985,7 +985,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 //                int answer = random.nextInt((6 - 0 + 1) + 0);
 //                pointDataSql=pointDataSql+timer+","+mAttention+","+mRel+","+answer+","+""+",";
                 mTimeDetect.reset();
-                int t = Integer.valueOf(timeId);
+                int t = Integer.valueOf(timeId)-1;
                     mTimeDetect.setTimer(t);
 
                     mTimeDetect.setRound(1);
@@ -997,7 +997,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                     //取得開始秒數
                     mSecondStart =Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getWaySecond());
 
-                    handler.postDelayed(getData,500);
+                    handler.postDelayed(getData,1000);
                 Log.d("aaaaa",""+pointDataSql);
                 dialog.cancel();
             }
