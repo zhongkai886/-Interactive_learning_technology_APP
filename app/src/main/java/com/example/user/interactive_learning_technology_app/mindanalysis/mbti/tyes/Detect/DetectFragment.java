@@ -663,6 +663,34 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                         Log.d("Seconds", "間隔秒數通過"+mSecondGap);
 
                         mAttention = mTimeDetect.getAttention();
+
+                        if(mSecondHold.equals(0)){
+                            Log.d("Seconds", "通過維持秒數=0 開始回饋"+mSecondHold);
+                            //呼叫gapSecond (mSecondGap開始遞減)
+                            handler.postDelayed(gapSecond,1000);
+
+                            //回饋三種方式 視覺 震動 聲音
+                            if (fb_Way == 0) {
+                                Log.d("Seconds", "視覺換色");
+                                changeSightColor(mTimeDetect.getAttention());
+                            } else if (fb_Way == 1) {
+                                Log.d("Seconds", "震動");
+                                setVibrate(1000);
+                            } else if (fb_Way == 2) {
+                                Log.d("Seconds", "聲音逼逼");
+                                playBeep();
+                            }
+                            //回饋完成也要重新計時
+                            mSecondHold = mSecondHoldNeed;
+                            //回饋次數累計
+                            detectTotalCount++;
+                            //收集回饋總資料
+                            mFeedBackSecondOutput = mFeedBackSecondOutput + detectTotalCount +";"+timeCount+ ";"+mAttention+";";
+                            Log.d("多少",""+mFeedBackSecondOutput);
+
+                            Log.d("detectTTT", "run: Count" + detectTotalCount);
+                            Log.d("Seconds", "回饋次數增加"+ detectTotalCount);
+                        }
                         //情況1 數值維持在範圍內計秒  假設 20-80
                         if (mAttention > Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionHigh())
                             && mAttention < Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionLow())) {
@@ -670,33 +698,6 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                             Log.d("Seconds", "間隔秒數開始計時"+mSecondGap);
                             Log.d("Seconds", "通過數值條件 維持秒數:"+mSecondHold);
                             mSecondHold--;
-                            if(mSecondHold.equals(0)){
-                                Log.d("Seconds", "通過維持秒數=0 開始回饋"+mSecondHold);
-                                //呼叫gapSecond (mSecondGap開始遞減)
-                                handler.postDelayed(gapSecond,1000);
-
-                                //回饋三種方式 視覺 震動 聲音
-                                if (fb_Way == 0) {
-                                    Log.d("Seconds", "視覺換色");
-                                    changeSightColor(mTimeDetect.getAttention());
-                                } else if (fb_Way == 1) {
-                                    Log.d("Seconds", "震動");
-                                    setVibrate(1000);
-                                } else if (fb_Way == 2) {
-                                        Log.d("Seconds", "聲音逼逼");
-                                        playBeep();
-                                }
-                                //回饋完成也要重新計時
-                                mSecondHold = mSecondHoldNeed;
-                                //回饋次數累計
-                                detectTotalCount++;
-                                //收集回饋總資料
-                                mFeedBackSecondOutput = mFeedBackSecondOutput + detectTotalCount +";"+timeCount+ ";"+mAttention+";";
-                                Log.d("多少",""+mFeedBackSecondOutput);
-
-                                Log.d("detectTTT", "run: Count" + detectTotalCount);
-                                Log.d("Seconds", "回饋次數增加"+ detectTotalCount);
-                            }
                         }
                         //情況2 數值在水平外  假設 80以上或是20以下 重新計秒
                         else if (mAttention > Integer.valueOf(feedbackDataList.get(Integer.valueOf(settingId)).getAttentionLow())
