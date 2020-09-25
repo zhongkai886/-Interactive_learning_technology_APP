@@ -889,7 +889,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
     }
 */
     protected void showDialog(Integer recordTime){
-
+        Log.d("oopoo",""+recordTime);
         Dialog dialog = new Dialog(getActivity());
         dialog.setCancelable(true);
 
@@ -901,7 +901,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         Button buttonY = view.findViewById(R.id.buttonY);
         Button buttonN = view.findViewById(R.id.buttonN);
 
-        timeNow.setText(recordTime);
+        timeNow.setText(String.valueOf(recordTime));
         //Spinner 註冊adapter
         ArrayAdapter<CharSequence> idAdapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.aE, android.R.layout.simple_spinner_item);
