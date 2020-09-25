@@ -86,7 +86,7 @@ public class DetectTestFragment extends Fragment {
                 if (fb_Way.equals("0")){
                     if (onClickBoolean==false){
                         onClickBoolean=true;
-                        handler.postDelayed(updateDevice,500);
+                        handler.postDelayed(updateDevice,1000);
                     }else{
                         handler.removeCallbacks(updateDevice);
                         onClickBoolean=false;
@@ -110,7 +110,7 @@ public class DetectTestFragment extends Fragment {
                 if (fb_Way.equals("0")){
                     if (onClickBoolean==false){
                         onClickBoolean=true;
-                        handler.postDelayed(updateDevice,500);
+                        handler.postDelayed(updateDevice,1000);
                     }else{
                         handler.removeCallbacks(updateDevice);
                         onClickBoolean=false;

@@ -19,18 +19,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.user.interactive_learning_technology_app.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingViewHolder> {
-    private ArrayList<FeedbackData> mFeedbackDataList;
+    private List<FeedbackData> mFeedbackDataList;
     FeedbackFrameSettingsFragment feedbackFrameSettingsActivity;
     public ArrayList<String> mCheckBoxDataList = new ArrayList<String>();
+    public ArrayList<Integer> mCheckBoxPositionList = new ArrayList<Integer>();
     private Context mContext;
     private Cursor mCursor;
 
-    public SettingAdapter(ArrayList<FeedbackData> feedbackData,
+    public SettingAdapter(List<FeedbackData> mFeedbackDataList,
                           FeedbackFrameSettingsFragment feedbackFrameSettingsActivity){
-        this.mFeedbackDataList =  feedbackData;
+        this.mFeedbackDataList =  mFeedbackDataList;
         this.feedbackFrameSettingsActivity = feedbackFrameSettingsActivity;
     }
 
@@ -65,6 +67,7 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
 //        if(!mCursor.move(position)){
 //            return;
 //        }
+        Log.d("notifyyyyy","test");
         final FeedbackData mFeedbackData = this.mFeedbackDataList.get(position);
 
         holder.mId.setText(mFeedbackDataList.get(position).getId());
@@ -79,23 +82,35 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
         }
 
         holder.mCheckbox.setTag(position);
-        holder.mCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        //由mFeedbackData中的Check欄位取是否打勾
+        holder.mCheckbox.setChecked(mFeedbackData.getCheck());
+        //點擊後把mFeedbackData中的Check欄位設定為true(勾選)
+        holder.mCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Object position1 = compoundButton.getTag();
-
-                if (holder.mCheckbox.isChecked()){
-                    mCheckBoxDataList.add(mFeedbackData.getId());
-                    Log.d("yoyo",""+position1);
-                    Log.d("yoyoCheck",""+mCheckBoxDataList);
-                } else{
-                    mCheckBoxDataList.remove(position1.toString());
-                    Log.d("yoyo",""+position1);
-                    Log.d("yoyoCheck",""+mCheckBoxDataList);
-
-                }
+            public void onClick(View v) {
+                boolean b = ((CheckBox) v).isChecked();
+                holder.mCheckbox.setChecked(b);
+                mFeedbackData.setCheck(b);
             }
         });
+//        holder.mCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+////                Object position1 = compoundButton.getTag();
+//                mCheckBoxPositionList.clear();
+//                mCheckBoxDataList.clear();
+//                if (holder.mCheckbox.isChecked()){
+//                    mCheckBoxDataList.add(mFeedbackData.getId());
+//                    mCheckBoxPositionList.add(position);
+//                } else{
+//                    mCheckBoxDataList.remove(mFeedbackData.getId());
+//                    mCheckBoxPositionList.remove(position);
+//
+//                }
+//                Log.d("YOYOYO",""+mCheckBoxDataList.size()+"///"+mCheckBoxPositionList);
+//            }
+//        });
 
 
         holder.mButton.setOnClickListener(new View.OnClickListener() {
@@ -136,9 +151,13 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
     public ArrayList<String> getId(){
         return  mCheckBoxDataList;
     }
+    public ArrayList<Integer> getCheckBoxPositionList(){
+        return mCheckBoxPositionList;
+    }
 
     @Override
     public int getItemCount() {
+        Log.d("77777777",""+mFeedbackDataList.size());
         return mFeedbackDataList.size();
 
     }
@@ -146,6 +165,10 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingV
     public void removeItem(int position){
         mFeedbackDataList.remove(position);
         notifyItemRemoved(position);
+    }
+
+    public List<FeedbackData> getmFeedbackDataList(){
+        return mFeedbackDataList;
     }
 
 //    public void swapCursor (Cursor newCursor ){

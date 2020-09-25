@@ -20,6 +20,7 @@ import com.example.user.interactive_learning_technology_app.R;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionFeedBackWay;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract.SettingDataEntry.COLUMN_AttentionHigh;
@@ -41,7 +42,8 @@ public class FeedbackFrameSettingsFragment extends Fragment {
     public SQLiteDatabase mDatabase;
     public SettingAdapter mAdapter;
     public ArrayList<String> mCheckBoxDataList = new ArrayList<String>();
-    public ArrayList<FeedbackData> feedbackDataList = new ArrayList<FeedbackData>();
+    public ArrayList<Integer> mCheckBoxPositionList = new ArrayList<Integer>();
+    public List<FeedbackData> feedbackDataList = new ArrayList<FeedbackData>();
     public RecyclerView recyclerView;
 
 
@@ -93,14 +95,15 @@ public class FeedbackFrameSettingsFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 DeleteData();
-                Log.d("click", "" + mAdapter.getId());
+//                updateData(feedbackDataList);
+
             }
         });
         return view;
     }
 
     private Cursor getAllItems() {
-        return mDatabase.query(TABLE_NAME,                                         // 資料表名字
+        return mDatabase.query(TABLE_NAME,  // 資料表名字
                 new String[]{COLUMN_ID,
                         COLUMN_Name,
                         COLUMN_Item,
@@ -149,22 +152,43 @@ public class FeedbackFrameSettingsFragment extends Fragment {
 
     private void DeleteData() {
 
-        mCheckBoxDataList=mAdapter.getId();
-        Log.d("list", "mcheckbox" + mCheckBoxDataList);
-        for (int i=0 ;i<mCheckBoxDataList.size();i++){
-//            mDatabase.execSQL(TABLE_NAME);
-            mDatabase.delete(TABLE_NAME, COLUMN_ID + "=" +mCheckBoxDataList.get(i)  , null);
-            Log.d("fed","mcheckbox"+mCheckBoxDataList.get(i));
-//            mAdapter.notifyItemRemoved(i);
+//        mCheckBoxDataList=mAdapter.getId();
+//        mCheckBoxPositionList = mAdapter.getCheckBoxPositionList();
+//        Log.d("list", "mcheckbox" + mCheckBoxDataList);
+//        for (int i=0 ;i<mCheckBoxDataList.size();i++){
+////            mDatabase.execSQL(TABLE_NAME);
+//            mDatabase.delete(TABLE_NAME, COLUMN_ID + "=" +mCheckBoxDataList.get(i)  , null);
+//            Log.d("fed","mcheckbox"+mCheckBoxDataList.get(i));
+//            feedbackDataList.remove(feedbackDataList.get(mCheckBoxPositionList.get(i)));
+////            mAdapter.notifyItemRemoved(i);
+//            Log.d("xxxx",""+feedbackDataList.size());
+//        }
+
+        //從adapter中取回更新後資料
+        feedbackDataList=mAdapter.getmFeedbackDataList();
+        List<Integer> removeList=new ArrayList<>();
+        //勾選項目List驗證check
+        Log.d("qqqqqqqqqqqqq", "qqqqqqqqqqqqqqsize: "+feedbackDataList.size());
+        for (int i=0;i<feedbackDataList.size();i++){
+            Log.d("qqqqqqqqqqqqq", "i:"+i+"DeleteData: "+feedbackDataList.get(i).getCheck());
+            if (feedbackDataList.get(i).getCheck()){
+                mDatabase.delete(TABLE_NAME, COLUMN_ID + "=" +feedbackDataList.get(i).getId()  , null);
+//                feedbackDataList.remove(feedbackDataList.get(i));
+                //remove集合收集Check過的資料
+                removeList.add(i);
+
+            }
         }
 
-        feedbackDataList.clear();
-        LoadData();
-        mAdapter = new SettingAdapter(feedbackDataList, this);
-        recyclerView.setAdapter(mAdapter);
+        Log.d("eee",""+removeList);
+        //刪除Check過的每筆資料
+        for (int i=removeList.size()-1;i>=0;i--){
+            feedbackDataList.remove(feedbackDataList.get(removeList.get(i)));
 
-//        LoadData();
+        }
+        mAdapter.notifyDataSetChanged();
     }
+
     public void  CreateSetting(){
         final String SQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + "( " +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +

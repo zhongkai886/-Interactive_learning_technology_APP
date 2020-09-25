@@ -20,15 +20,20 @@ public class DetectData {
     private String FeedbackPassSecond;
     private String AverageAttention;
     private String AverageRelaxation;
-
     private String DetectTimeCount;
     private String SecondsAttentionOutput;
     private String SecondsRelaxationOutput;
-
-
     private String FeedBackSecondOutput;
-
     private String PointInTime;
+    private Boolean Check =false;
+
+    public Boolean getCheck() {
+        return Check;
+    }
+
+    public void setCheck(Boolean check) {
+        Check = check;
+    }
 
     public DetectData(String Id , String Number, String Name , String DetectTime, String Item, String FeedBackCount,
                       String AttentionHigh, String AttentionLow,

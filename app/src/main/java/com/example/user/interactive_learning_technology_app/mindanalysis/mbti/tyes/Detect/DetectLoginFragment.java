@@ -1,6 +1,5 @@
 package com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Detect;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -8,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +33,7 @@ public class DetectLoginFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_detect_loginfragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_detect_login_fragment, container, false);
         final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         final DetectTestFragment detectTestFragment = new DetectTestFragment();
         final DetectFragment detectFragment = new DetectFragment();

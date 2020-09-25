@@ -8,4 +8,7 @@
     <color name="chart_meditation">#fd563d</color>
     <color name="white">#fff</color>
     <color name="main">#d2effa</color>
+
+    <color name="text_color">#153740</color>
+    <color name="detect_main">#d0ebf4</color>
 </resources>

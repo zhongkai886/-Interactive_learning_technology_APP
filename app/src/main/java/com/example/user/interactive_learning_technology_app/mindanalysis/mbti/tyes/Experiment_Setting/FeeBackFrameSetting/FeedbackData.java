@@ -17,6 +17,17 @@ public class FeedbackData {
     private String WaySecond;
     private String HoldSecond;
     private String WayStopTipSecond;
+    private Boolean check=false;
+
+    public Boolean getCheck() {
+        return check;
+    }
+
+    public void setCheck(Boolean check) {
+        this.check = check;
+    }
+
+
 
 
     public FeedbackData(String Id , String Name , String Item,

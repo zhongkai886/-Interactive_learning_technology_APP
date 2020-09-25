@@ -19,16 +19,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.user.interactive_learning_technology_app.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchViewHolder> {
-    private ArrayList<DetectData> mDetectDataList;
+    private List<DetectData> mDetectDataList;
     DataSearchFragment dataSearchFragment;
     public ArrayList<String> mCheckBoxDataList = new ArrayList<String>();
     private Context mContext;
     private Cursor mCursor;
 
-    public SearchAdapter(ArrayList<DetectData> detectData,
+    public SearchAdapter(List<DetectData> detectData,
                          DataSearchFragment dataSearchFragment){
         this.mDetectDataList =  detectData;
         this.dataSearchFragment = dataSearchFragment;
@@ -78,27 +79,38 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         }else if (mDetectDataList.get(position).getItem().equals("2")){
             holder.mWay.setText("聲音");
         }
-//        holder.mWay.setText(mDetectDataList.get(position).getItem());
+
         holder.mCount.setText(mDetectDataList.get(position).getFeedBackCount());
         holder.mTimeDate.setText(mDetectDataList.get(position).getDetectTime());
-        holder.mCheckbox.setTag(position);
-        holder.mCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        holder.mCheckbox.setChecked(mDetectData.getCheck());
+        holder.mCheckbox.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Object position1 = compoundButton.getTag();
-
-                if (holder.mCheckbox.isChecked()){
-                    mCheckBoxDataList.add(mDetectData.getId());
-                    Log.d("yoyo",""+position1);
-                    Log.d("yoyoCheck",""+mCheckBoxDataList);
-                } else{
-                    mCheckBoxDataList.remove(position1.toString());
-                    Log.d("yoyo",""+position1);
-                    Log.d("yoyoCheck",""+mCheckBoxDataList);
-
-                }
+            public void onClick(View v) {
+                boolean b = ((CheckBox) v).isChecked();
+                holder.mCheckbox.setChecked(b);
+                mDetectData.setCheck(b);
             }
         });
+//        holder.mCheckbox.setTag(position);
+//        holder.mCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+//                Object position1 = compoundButton.getTag();
+//
+//                if (holder.mCheckbox.isChecked()){
+//                    mCheckBoxDataList.add(mDetectData.getId());
+//                    Log.d("yoyo",""+position1);
+//                    Log.d("yoyoCheck",""+mCheckBoxDataList);
+//                } else{
+//                    mCheckBoxDataList.remove(position1.toString());
+//                    Log.d("yoyo",""+position1);
+//                    Log.d("yoyoCheck",""+mCheckBoxDataList);
+//
+//                }
+//            }
+//        }
+//        );
 
 
         holder.mButton.setOnClickListener(new View.OnClickListener() {
@@ -149,5 +161,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         return mCheckBoxDataList;
     }
 
-
+    public List<DetectData> getDetectData(){
+        return mDetectDataList;
+    }
 }

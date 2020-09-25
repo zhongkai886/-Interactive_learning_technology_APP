@@ -44,6 +44,8 @@ import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.ty
 import com.example.user.interactive_learning_technology_app.widget.PreferencesCenter;
 import com.example.user.interactive_learning_technology_app.widget.StringMultiple;
 
+import org.w3c.dom.Text;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -405,7 +407,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
         mRecordPointButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog();
+                showDialog(endTime);
             }
         });
     }
@@ -886,18 +888,20 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
 
     }
 */
-    protected void showDialog(){
+    protected void showDialog(Integer recordTime){
 
         Dialog dialog = new Dialog(getActivity());
         dialog.setCancelable(true);
 
         View view  = getActivity().getLayoutInflater().inflate(R.layout.dialog_checkpoint, null);
         dialog.setContentView(view);
+        TextView timeNow = view.findViewById(R.id.pointTime);
         Spinner spinnerId = view.findViewById(R.id.pointId);
         Spinner spinnerNum = view.findViewById(R.id.pointNum);
         Button buttonY = view.findViewById(R.id.buttonY);
         Button buttonN = view.findViewById(R.id.buttonN);
 
+        timeNow.setText(recordTime);
         //Spinner 註冊adapter
         ArrayAdapter<CharSequence> idAdapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.aE, android.R.layout.simple_spinner_item);
@@ -908,6 +912,7 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 android.R.layout.simple_spinner_item,mNumPoint);
         numAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerNum.setAdapter(numAdapter);
+
 
         spinnerId.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -952,6 +957,8 @@ public class DetectFragment extends Fragment implements MindDetectToolMulti.List
                 pointDataSql=pointDataSql+endTime+";"+mIdPoint[Integer.valueOf(mId)]+";"+mNumPoint[Integer.valueOf(mNum)]+";"+mAttention+";";
 
                 Log.d("aaaaa",""+pointDataSql);
+                dialog.cancel();
+                Toast.makeText(getActivity(), "時間點已記錄", Toast.LENGTH_SHORT).show();
             }
         });
         buttonN.setOnClickListener(new View.OnClickListener() {

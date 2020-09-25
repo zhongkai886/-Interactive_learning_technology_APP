@@ -36,6 +36,7 @@ import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.ty
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.GoogleDriveFunction.SearchFile;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.Main.MainActivity;
 import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBHelper;
+import com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.database.SettingDBContract;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -58,6 +59,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
@@ -89,7 +91,7 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 public class DataSearchFragment extends Fragment implements View.OnClickListener {
     public SQLiteDatabase mDatabase;
     public ArrayList<String> mCheckBoxDataList = new ArrayList<String>();
-    public ArrayList<DetectData> detectDataList = new ArrayList<DetectData>();
+    public List<DetectData> detectDataList = new ArrayList<DetectData>();
     public RecyclerView recyclerView;
     public SearchAdapter mAdapter;
     public Button BtnUpload,BtnDelete;
@@ -134,14 +136,40 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
         BtnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Log.d("87", "onClick: ");
+                DeleteData();
             }
         });
         BtnUpload = (Button) view.findViewById(R.id.dataUpload);
         BtnUpload.setOnClickListener(this);
 
         return view;
+    }
+
+    private void DeleteData() {
+
+        //從adapter中取回更新後資料
+        detectDataList=mAdapter.getDetectData();
+        List<Integer> removeList=new ArrayList<>();
+        //勾選項目List驗證check
+        Log.d("qqqqqqqqqqqqq", "qqqqqqqqqqqqqqsize: "+detectDataList.size());
+        for (int i=0;i<detectDataList.size();i++){
+            Log.d("qqqqqqqqqqqqq", "i:"+i+"DeleteData: "+detectDataList.get(i).getCheck());
+            if (detectDataList.get(i).getCheck()){
+                mDatabase.delete(TABLE_NAME, COLUMN_ID + "=" +detectDataList.get(i).getId()  , null);
+//                feedbackDataList.remove(feedbackDataList.get(i));
+                //remove集合收集Check過的資料
+                removeList.add(i);
+
+            }
+        }
+
+        Log.d("eee",""+removeList);
+        //刪除Check過的每筆資料
+        for (int i=removeList.size()-1;i>=0;i--){
+            detectDataList.remove(detectDataList.get(removeList.get(i)));
+
+        }
+        mAdapter.notifyDataSetChanged();
     }
     public void LoadData(){
         Cursor cursor = mDatabase.rawQuery("SELECT * FROM searchDataList", null);
