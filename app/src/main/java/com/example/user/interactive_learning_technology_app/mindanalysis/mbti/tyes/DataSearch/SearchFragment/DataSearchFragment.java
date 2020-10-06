@@ -88,7 +88,7 @@ import static com.example.user.interactive_learning_technology_app.mindanalysis.
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.COLUMN_SecondsRelaxationOutput;
 import static com.example.user.interactive_learning_technology_app.mindanalysis.mbti.tyes.SearchDatabase.SearchDBContract.SearchDataEntry.TABLE_NAME;
 
-public class DataSearchFragment extends Fragment implements View.OnClickListener {
+public class DataSearchFragment extends Fragment {
     public SQLiteDatabase mDatabase;
     public ArrayList<String> mCheckBoxDataList = new ArrayList<String>();
     public List<DetectData> detectDataList = new ArrayList<DetectData>();
@@ -96,6 +96,7 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
     public SearchAdapter mAdapter;
     public Button BtnUpload,BtnDelete;
     public ArrayList<String> row = new ArrayList<>();
+    public ArrayList<Integer> row_position = new ArrayList<>();
     public CharSequence dateTime="";
     DriveServiceHelper driveServiceHelper;
     public String sdCardDir;
@@ -140,7 +141,112 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
             }
         });
         BtnUpload = (Button) view.findViewById(R.id.dataUpload);
-        BtnUpload.setOnClickListener(this);
+        BtnUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSearchFile.searchFile("000");
+
+                //從adapter中取回更新後資料
+                detectDataList=mAdapter.getDetectData();
+                List<Integer> updateList=new ArrayList<>();
+                //勾選項目List驗證check
+                Log.d("qqqqqqqqqqqqq", "qqqqqqqqqqqqqqsize: "+detectDataList.size());
+                for (int i=0;i<detectDataList.size();i++){
+                    Log.d("qqqqqqqqqqqqq", "i:"+i+"DeleteData: "+detectDataList.get(i).getCheck());
+                    if (detectDataList.get(i).getCheck()){
+                        //remove集合收集Check過的資料
+                        updateList.add(i);
+
+                    }
+                }
+
+//                Log.d("eee",""+removeList);
+//                //刪除Check過的每筆資料
+//                for (int i=removeList.size()-1;i>=0;i--){
+//                    detectDataList.remove(detectDataList.get(removeList.get(i)));
+//
+//                }
+//                mAdapter.notifyDataSetChanged();
+
+
+                row = mAdapter.getCheckId();
+                row_position = mAdapter.getCheckPosition();
+                Calendar mCal = Calendar.getInstance();
+                dateTime = DateFormat.format("yyyy-MM-dd kk:mm:ss", mCal.getTime());    // kk:24小時制, hh:12小時制
+//                Log.d("cvcvcvcvcv",row.size()+"size/////row"+mAdapter.getCheckId());
+                SearchDBHelper dbHelper = new SearchDBHelper(getActivity());
+                mDatabase = dbHelper.getWritableDatabase(); //寫入
+                mDatabase = dbHelper.getReadableDatabase(); //讀取
+                Cursor c = null;
+                try {
+                    c = mDatabase.rawQuery("select * from searchDataList", null);
+                    int rowcount = 0;//資料量
+                    int colcount = 0;//欄位數量
+                    sdCardDir = String.valueOf(Environment.getExternalStorageDirectory());
+                    Log.d("有路徑嗎",""+sdCardDir);
+//                            sdCardDir = getActivity().getExternalFilesDir(null).getAbsolutePath();
+//                            Log.d("sdCardDir",sdCardDir2+"////"+sdCardDir);
+                    filename = dateTime+".csv";
+//                    sdCardDir += filename;
+                    // the name of the file to export with
+                    File saveFile = new File(sdCardDir, filename);
+                    FileWriter fw = new FileWriter(saveFile);
+
+                    Log.d("有路徑嗎",""+sdCardDir+"****"+filename);
+
+                    BufferedWriter bw = new BufferedWriter(fw);
+                    rowcount = c.getCount();
+                    colcount = c.getColumnCount();
+                    Log.d("excel",""+rowcount+"////"+colcount);
+
+                    if (rowcount > 0) {
+                        c.moveToFirst();
+
+                        for (int i = 0; i < colcount; i++) {
+                            if (i != colcount - 1) {
+
+                                bw.write(c.getColumnName(i) + ",");
+
+                            } else {
+
+                                bw.write(c.getColumnName(i));
+
+                            }
+                        }
+                        bw.newLine();
+
+                        for (int i = 0; i <= row.size()-1; i++) {
+                            Log.d("cvcvcvcvcv",""+Integer.valueOf(row.get(i)));
+
+//                            c.moveToPosition(Integer.valueOf(row.get(i))-1);
+                            c.moveToPosition(row_position.get(i));
+
+                            for (int j = 0; j < colcount; j++) {
+                                if (j != colcount - 1)
+                                    bw.write(c.getString(j) + ",");
+                                else
+                                    bw.write(c.getString(j));
+                            }
+                            bw.newLine();
+                        }
+                        bw.flush();
+                        Toast.makeText(getActivity(), "Exported Successfully.", Toast.LENGTH_SHORT).show();
+                        Log.d("TAG", "onClick: " + driveServiceHelper);
+
+
+                    }
+                } catch (Exception ex) {
+                    if (mDatabase.isOpen()) {
+                        mDatabase.close();
+                        Log.d("有吧?", "onClick: "+ex);
+                    }
+
+                } finally {
+                    uploadFile();
+                    Log.d("TAG", "finally: " + driveServiceHelper);
+                }
+            }
+        });
 
         return view;
     }
@@ -280,84 +386,12 @@ public class DataSearchFragment extends Fragment implements View.OnClickListener
 //        }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.dataUpload:
-                mSearchFile.searchFile("000");
-
-                row = mAdapter.getCheckId();
-                Calendar mCal = Calendar.getInstance();
-                dateTime = DateFormat.format("yyyy-MM-dd kk:mm:ss", mCal.getTime());    // kk:24小時制, hh:12小時制
-                Log.d("cvcvcvcvcv",row.size()+"size/////row"+mAdapter.getCheckId());
-                    SearchDBHelper dbHelper = new SearchDBHelper(getActivity());
-                mDatabase = dbHelper.getWritableDatabase(); //寫入
-                mDatabase = dbHelper.getReadableDatabase(); //讀取
-                Cursor c = null;
-                        try {
-                            c = mDatabase.rawQuery("select * from searchDataList", null);
-                            int rowcount = 0;//資料量
-                            int colcount = 0;//欄位數量
-                            sdCardDir = Environment.getExternalStorageDirectory().toString();
-                            Log.d("有路徑嗎",""+sdCardDir);
-//                            sdCardDir = getActivity().getExternalFilesDir(null).getAbsolutePath();
-//                            Log.d("sdCardDir",sdCardDir2+"////"+sdCardDir);
-                            filename = dateTime+".csv";
-                            // the name of the file to export with
-                            File saveFile = new File(sdCardDir, filename);
-                            FileWriter fw = new FileWriter(saveFile);
-
-                            BufferedWriter bw = new BufferedWriter(fw);
-                            rowcount = c.getCount();
-                            colcount = c.getColumnCount();
-                            Log.d("excel",""+rowcount+"////"+colcount);
-                            if (rowcount > 0) {
-                                c.moveToFirst();
-
-                                for (int i = 0; i < colcount; i++) {
-                                    if (i != colcount - 1) {
-
-                                        bw.write(c.getColumnName(i) + ",");
-
-                                    } else {
-
-                                        bw.write(c.getColumnName(i));
-
-                                    }
-                                }
-                                bw.newLine();
-
-                                for (int i = 0; i <= row.size()-1; i++) {
-                                    Log.d("cvcvcvcvcv",""+Integer.valueOf(row.get(i)));
-
-                                    c.moveToPosition(Integer.valueOf(row.get(i))-1);
-
-                                    for (int j = 0; j < colcount; j++) {
-                                        if (j != colcount - 1)
-                                            bw.write(c.getString(j) + ",");
-                                        else
-                                            bw.write(c.getString(j));
-                                    }
-                                    bw.newLine();
-                                }
-                                bw.flush();
-                                Toast.makeText(getActivity(), "Exported Successfully.", Toast.LENGTH_SHORT).show();
-                                Log.d("TAG", "onClick: " + driveServiceHelper);
-
-
-                            }
-                        } catch (Exception ex) {
-                            if (mDatabase.isOpen()) {
-                                mDatabase.close();
-                                Log.d("有吧?", "onClick: "+ex);
-                            }
-
-                        } finally {
-                            uploadFile();
-                            Log.d("TAG", "finally: " + driveServiceHelper);
-                        }
-        }
-    }
+//    @Override
+//    public void onClick(View v) {
+//        switch (v.getId()) {
+////            case R.id.dataUpload:
+//        }
+//    }
     public void getAuthority(){
         if(ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {

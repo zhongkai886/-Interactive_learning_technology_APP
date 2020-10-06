@@ -26,6 +26,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
     private List<DetectData> mDetectDataList;
     DataSearchFragment dataSearchFragment;
     public ArrayList<String> mCheckBoxDataList = new ArrayList<String>();
+    public ArrayList<Integer> mCheckBoxDataListPosition = new ArrayList<Integer>();
+
     private Context mContext;
     private Cursor mCursor;
 
@@ -92,25 +94,29 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
                 mDetectData.setCheck(b);
             }
         });
-//        holder.mCheckbox.setTag(position);
-//        holder.mCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                Object position1 = compoundButton.getTag();
-//
-//                if (holder.mCheckbox.isChecked()){
-//                    mCheckBoxDataList.add(mDetectData.getId());
-//                    Log.d("yoyo",""+position1);
-//                    Log.d("yoyoCheck",""+mCheckBoxDataList);
-//                } else{
-//                    mCheckBoxDataList.remove(position1.toString());
-//                    Log.d("yoyo",""+position1);
-//                    Log.d("yoyoCheck",""+mCheckBoxDataList);
-//
-//                }
-//            }
-//        }
-//        );
+        holder.mCheckbox.setTag(position);
+        holder.mCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Object position1 = compoundButton.getTag();
+
+                if (holder.mCheckbox.isChecked()){
+                    mCheckBoxDataList.add(mDetectData.getId());
+                    mCheckBoxDataListPosition.add(position);
+
+                    Log.d("yoyo",""+position1);
+                    Log.d("yoyoCheck",""+mCheckBoxDataList);
+                } else{
+                    mCheckBoxDataList.remove(position1.toString());
+                    mCheckBoxDataListPosition.remove(position);
+
+                    Log.d("yoyo",""+position1);
+                    Log.d("yoyoCheck",""+mCheckBoxDataList);
+
+                }
+            }
+        }
+        );
 
 
         holder.mButton.setOnClickListener(new View.OnClickListener() {
@@ -161,6 +167,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchView
         return mCheckBoxDataList;
     }
 
+    public ArrayList<Integer> getCheckPosition(){
+        return mCheckBoxDataListPosition;
+    }
     public List<DetectData> getDetectData(){
         return mDetectDataList;
     }
